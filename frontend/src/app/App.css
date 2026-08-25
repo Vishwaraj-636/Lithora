@@ -1,1 +1,20 @@
 @import "tailwindcss";
+
+/* ── Tailwind v4: enable class-based dark mode ── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ── Autofill overrides so Chrome doesn't inject blue background ── */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #181818 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1B1B1B inset !important;
+  -webkit-text-fill-color: #F2F0EB !important;
+}

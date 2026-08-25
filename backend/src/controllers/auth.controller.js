@@ -1,19 +1,19 @@
 import userModel from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
-import {config} from '../config/config.js';
+import { config } from '../config/config.js';
 
 
-async function sendTokenResponse(user,res){
+async function sendTokenResponse(user, res) {
   const token = jwt.sign({
     id: user._id,
 
-  },config.JWT_SECRET,{
+  }, config.JWT_SECRET, {
     expiresIn: '7d'
   })
 
   res.status(200).json({
     token,
-    user:{
+    user: {
       id: user._id,
       email: user.email,
       contact: user.contact,
@@ -26,18 +26,18 @@ async function sendTokenResponse(user,res){
 export const register = async (req, res) => {
   const { email, contact, password, fullname, isSeller } = req.body;
   try {
-    const existingUser = await userModel.findOne({ 
+    const existingUser = await userModel.findOne({
       $or: [
-        { email }, 
+        { email },
         { contact }
       ]
     })
 
-    if(existingUser){
-      return res.status(400).json({message:"User already exists"});
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const user = await new userModel({
+    const user = new userModel({
       email,
       contact,
       password,
@@ -45,11 +45,37 @@ export const register = async (req, res) => {
       role: isSeller ? "seller" : "buyer"
     })
 
-    await sendTokenResponse(user,res,"User registered successfully");
-    
+    await user.save();
+    await sendTokenResponse(user, res, "User registered successfully");
+
   }
-  catch(err){
+  catch (err) {
     console.log(err);
-    res.status(500).json({message:"Internal server error"});
+    res.status(500).json({ message: "Internal server error" });
   }
+}
+
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    await sendTokenResponse(user, res, "User logged in successfully");
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+
+
 }
