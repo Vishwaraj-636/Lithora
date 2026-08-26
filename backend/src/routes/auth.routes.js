@@ -2,7 +2,7 @@ import express from 'express';
 import { validateLogin, validateRegister } from '../validator/auth.validator.js';
 import { googleCallback, login, register } from '../controllers/auth.controller.js';
 import passport from 'passport';
-
+import { config } from '../config/config.js';
 
 
 const router = express.Router();
@@ -17,21 +17,11 @@ router.get('/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }))
 
 router.get('/google/callback',
-  (req, res, next) => passport.authenticate('google', { session: false }, (error, user, info) => {
-    if (error) {
-      console.error('Google authentication failed:', error);
-      return next(error);
-    }
-
-    if (!user) {
-      console.error('Google authentication returned no user:', info);
-      return res.status(401).json({ message: 'Google authentication failed' });
-    }
-
-    req.user = user;
-    next();
-  })(req, res, next),
-  googleCallback
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: config.NODE_ENV === 'development' ? 'http://localhost:5173/login' : "/login"
+  }),
+  googleCallback  
 )
 
 

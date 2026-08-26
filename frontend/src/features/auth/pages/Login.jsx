@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from "../hook/useAuth.js";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ContinueWithGoogle from "../components/ContinueWithGoogle.jsx";
 
 /* ─────────────────────────────────────────────
    Dark-mode hook — persists to localStorage and
@@ -247,6 +248,7 @@ const Login = () => {
           </form>
 
           <div className="mt-6 text-center">
+            <ContinueWithGoogle/>
             <p className="text-xs text-[#6F6B64] dark:text-[#A9A49B] transition-colors duration-200">
               Don't have an account?{' '}
               <Link
