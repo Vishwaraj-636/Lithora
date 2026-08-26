@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from "../hook/useAuth.js";
-import {useNavigate} from "react-router";
+import { useNavigate } from "react-router";
 
 /* ─────────────────────────────────────────────
    Dark-mode hook — persists to localStorage and
@@ -262,7 +262,15 @@ const Register = () => {
             </div>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center gap-2">
+            <p className="text-xs text-[#6F6B64] dark:text-[#A9A49B] transition-colors duration-200 pb-2">
+              <a
+                href="/api/auth/google"
+                className="text-[#181818] dark:text-[#F2F0EB] border-b border-[#DEDAD2] dark:border-[#30302E] hover:border-[#9A7652] dark:hover:border-[#B58A5A] pb-0.5 transition-colors duration-200"
+              >
+                Continue with Google
+              </a>
+            </p>
             <p className="text-xs text-[#6F6B64] dark:text-[#A9A49B] transition-colors duration-200">
               Already have an account?{' '}
               <a

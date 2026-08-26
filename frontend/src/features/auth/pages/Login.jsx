@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
    ───────────────────────────────────────────── */
 function useDarkMode() {
   const [isDark, setIsDark] = useState(() => {
-    const stored = localStorage.getItem('lithora-theme');
+    const stored = localStorage.getItem('meera-mg-theme');
     if (stored) return stored === 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
@@ -18,10 +18,10 @@ function useDarkMode() {
     const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
-      localStorage.setItem('lithora-theme', 'dark');
+      localStorage.setItem('meera-mg-theme', 'dark');
     } else {
       root.classList.remove('dark');
-      localStorage.setItem('lithora-theme', 'light');
+      localStorage.setItem('meera-mg-theme', 'light');
     }
   }, [isDark]);
 
@@ -139,7 +139,7 @@ const Login = () => {
             className="text-2xl tracking-[-0.04em] text-[#181818] dark:text-[#F2F0EB]"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
           >
-            Lithora
+            Meera M&G
           </span>
         </header>
 
@@ -168,7 +168,7 @@ const Login = () => {
             className="block md:hidden text-xl tracking-[-0.04em] text-[#181818] dark:text-[#F2F0EB]"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
           >
-            Lithora
+            Meera M&G
           </span>
           <button
             type="button"
@@ -191,7 +191,7 @@ const Login = () => {
               Sign in
             </h1>
             <p className="text-sm text-[#6F6B64] dark:text-[#A9A49B] transition-colors duration-300">
-              Welcome back to Lithora.
+              Welcome back to Meera M&G.
             </p>
           </div>
 
@@ -226,12 +226,12 @@ const Login = () => {
               </button>
             </div>
 
-            {/* Forgot password link */}
+            {/* Forgot password link
             <div className="flex justify-end pt-1">
               <a href="#" className="text-xs text-[#6F6B64] dark:text-[#A9A49B] hover:text-[#181818] dark:hover:text-[#F2F0EB] transition-colors duration-200">
                 Forgot password?
               </a>
-            </div>
+            </div> */}
 
             {/* CTA */}
             <div className="pt-2">
