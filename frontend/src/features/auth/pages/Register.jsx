@@ -42,7 +42,7 @@ function FloatingInput({ id, label, type = 'text', value, onChange, required = f
         value={value}
         onChange={onChange}
         className={[
-          'peer block w-full border-0 border-b py-[14px] px-0 pr-8 bg-transparent',
+          'peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent',
           'text-[#181818] dark:text-[#F2F0EB]',
           'border-[#DEDAD2] dark:border-[#30302E]',
           'focus:border-[#9A7652] dark:focus:border-[#B58A5A]',
@@ -52,7 +52,7 @@ function FloatingInput({ id, label, type = 'text', value, onChange, required = f
       <label
         htmlFor={id}
         className={[
-          'absolute left-0 top-[14px] text-sm text-[#6F6B64] dark:text-[#A9A49B] cursor-text',
+          'absolute left-0 top-3.5 text-sm text-[#6F6B64] dark:text-[#A9A49B] cursor-text',
           'transition-all duration-200',
           '-translate-y-6 peer-placeholder-shown:translate-y-0',
           'peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm',
@@ -182,7 +182,7 @@ const Register = () => {
             type="button"
             onClick={toggleDark}
             aria-label="Toggle dark mode"
-            className="flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-semibold uppercase tracking-[0.1em] border-[#DEDAD2] dark:border-[#30302E] text-[#6F6B64] dark:text-[#A9A49B] hover:border-[#9A7652] dark:hover:border-[#B58A5A] hover:text-[#9A7652] dark:hover:text-[#B58A5A] transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 rounded-full border text-[11px] font-semibold uppercase tracking-widest border-[#DEDAD2] dark:border-[#30302E] text-[#6F6B64] dark:text-[#A9A49B] hover:border-[#9A7652] dark:hover:border-[#B58A5A] hover:text-[#9A7652] dark:hover:text-[#B58A5A] transition-all duration-200"
           >
             {isDark ? <SunIcon /> : <MoonIcon />}
             {isDark ? 'Light' : 'Dark'}
@@ -216,11 +216,11 @@ const Register = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="peer block w-full border-0 border-b py-[14px] px-0 pr-8 bg-transparent text-[#181818] dark:text-[#F2F0EB] border-[#DEDAD2] dark:border-[#30302E] focus:border-[#9A7652] dark:focus:border-[#B58A5A] focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base"
+                className="peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent text-[#181818] dark:text-[#F2F0EB] border-[#DEDAD2] dark:border-[#30302E] focus:border-[#9A7652] dark:focus:border-[#B58A5A] focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base"
               />
               <label
                 htmlFor="password"
-                className="absolute left-0 top-[14px] text-sm text-[#6F6B64] dark:text-[#A9A49B] cursor-text transition-all duration-200 -translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm"
+                className="absolute left-0 top-3.5 text-sm text-[#6F6B64] dark:text-[#A9A49B] cursor-text transition-all duration-200 -translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm"
               >
                 Password
               </label>
@@ -228,7 +228,7 @@ const Register = () => {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label="Toggle password visibility"
-                className="absolute right-0 top-[14px] text-[#6F6B64] dark:text-[#A9A49B] hover:text-[#181818] dark:hover:text-[#F2F0EB] transition-colors duration-200"
+                className="absolute right-0 top-3.5 text-[#6F6B64] dark:text-[#A9A49B] hover:text-[#181818] dark:hover:text-[#F2F0EB] transition-colors duration-200"
               >
                 {showPassword ? <EyeOffIcon /> : <EyeIcon />}
               </button>
@@ -242,7 +242,7 @@ const Register = () => {
                 type="checkbox"
                 checked={formData.isSeller}
                 onChange={handleChange}
-                className="h-[15px] w-[15px] rounded-[3px] border-[#DEDAD2] dark:border-[#30302E] bg-transparent text-[#9A7652] dark:text-[#B58A5A] focus:ring-[#9A7652] dark:focus:ring-[#B58A5A] cursor-pointer transition-colors duration-200"
+                className="h-3.75 w-3.75 rounded-[3px] border-[#DEDAD2] dark:border-[#30302E] bg-transparent text-[#9A7652] dark:text-[#B58A5A] focus:ring-[#9A7652] dark:focus:ring-[#B58A5A] cursor-pointer transition-colors duration-200"
               />
               <label htmlFor="isSeller" className="ml-3 text-sm text-[#181818] dark:text-[#F2F0EB] cursor-pointer transition-colors duration-200">
                 Register as a seller
@@ -255,7 +255,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-[14px] px-6 rounded bg-[#9A7652] dark:bg-[#B58A5A] hover:bg-[#7F5F40] dark:hover:bg-[#C49A68] text-white text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#9A7652] dark:focus:ring-[#B58A5A] disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full py-3.5 px-6 rounded bg-[#9A7652] dark:bg-[#B58A5A] hover:bg-[#7F5F40] dark:hover:bg-[#C49A68] text-white text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#9A7652] dark:focus:ring-[#B58A5A] disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {loading ? 'Creating...' : 'Create Account'}
               </button>
