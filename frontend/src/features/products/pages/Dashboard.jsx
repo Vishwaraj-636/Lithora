@@ -59,7 +59,7 @@ const ProductCard = ({ product }) => {
     <div className="bg-[#211f1b] border border-[#3a322c] rounded-xl overflow-hidden flex flex-col hover:border-[#b58a5a] transition-colors group">
 
       {/* Cover image */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#1a1815]">
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-[#1a1815]">
         {coverUrl ? (
           <img
             src={coverUrl}
