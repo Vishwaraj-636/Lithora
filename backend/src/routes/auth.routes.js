@@ -13,8 +13,7 @@ router.post('/register', validateRegister, register);
 
 router.post('/login', validateLogin, login);
 
-router.get('/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] }))
+router.get('/google',passport.authenticate('google', { scope: ['profile', 'email'] }))
 
 router.get('/google/callback',
   passport.authenticate('google', {
@@ -23,12 +22,6 @@ router.get('/google/callback',
   }),
   googleCallback  
 )
-
-/**
- * @route GET /auth/me
- * @desc Get the authenticated user's information
- * @access Private
- */
 
 router.get("/me", authenticateUser,getMe)
 

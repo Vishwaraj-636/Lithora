@@ -178,7 +178,7 @@ const Login = () => {
 
             {/* CTA */}
             <div className="pt-2">
-              {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+              {/* {error && <p className="text-red-400 text-sm mb-3">{error}</p>} */}
               <button
                 type="submit"
                 disabled={loading}

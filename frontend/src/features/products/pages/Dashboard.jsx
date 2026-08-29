@@ -125,6 +125,18 @@ const Dashboard = () => {
       className="min-h-screen bg-[#18150f] text-[#f2ede6]"
       style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
     >
+      {/* ── Navbar ── */}
+      <nav className="sticky top-0 z-10 bg-[#18150f]/90 backdrop-blur border-b border-[#3a322c]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center">
+          <span
+            className="text-2xl tracking-[-0.04em] text-[#f2ede6]"
+            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
+          >
+            Meera M&amp;G
+          </span>
+        </div>
+      </nav>
+
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
 
         {/* ── Page Header ── */}

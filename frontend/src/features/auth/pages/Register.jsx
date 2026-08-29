@@ -196,7 +196,7 @@ const Register = () => {
 
             {/* CTA */}
             <div className="pt-4">
-              {error && <p className="text-red-400 text-sm mb-3">{error}</p>}
+              {/* {error && <p className="text-red-400 text-sm mb-3">{error}</p>} */}
               <button
                 type="submit"
                 disabled={loading}
