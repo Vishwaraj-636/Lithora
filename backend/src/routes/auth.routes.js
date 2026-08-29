@@ -1,9 +1,9 @@
 import express from 'express';
 import { validateLogin, validateRegister } from '../validator/auth.validator.js';
-import { googleCallback, login, register } from '../controllers/auth.controller.js';
+import { getMe, googleCallback, login, register } from '../controllers/auth.controller.js';
 import passport from 'passport';
 import { config } from '../config/config.js';
-
+import { authenticateUser } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
@@ -24,6 +24,13 @@ router.get('/google/callback',
   googleCallback  
 )
 
+/**
+ * @route GET /auth/me
+ * @desc Get the authenticated user's information
+ * @access Private
+ */
+
+router.get("/me", authenticateUser,getMe)
 
 
 

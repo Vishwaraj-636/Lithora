@@ -93,7 +93,7 @@ const CreateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    try{
+    try {
       const data = new FormData();
       data.append('title', formData.title);
       data.append('description', formData.description);
@@ -101,12 +101,12 @@ const CreateProduct = () => {
       data.append('priceCurrency', formData.priceCurrency);
       images.forEach((img) => data.append('images', img.file));
       await handleCreateProduct(data);
-      navigate('/');
+      navigate('/seller/dashboard');
     }
-    catch(err){
+    catch (err) {
       console.error(err);
     }
-    finally{
+    finally {
       setIsSubmitting(false);
     }
   };
@@ -309,6 +309,7 @@ const CreateProduct = () => {
           <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-6 pt-6 border-t border-[#3a322c] pb-10">
             <button
               type="button"
+              onClick={() => navigate(-1)}
               className="w-full sm:w-auto px-6 py-2.5 rounded-lg border border-[#3a322c] text-[#f2ede6] text-[13px] sm:text-[14px] font-semibold hover:bg-[#2a2218] transition-colors"
             >
               Cancel
