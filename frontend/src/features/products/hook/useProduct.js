@@ -5,6 +5,7 @@ import {
    createProduct,
    getAllProducts,
    getProductById,
+   addProductVariant,
 } from "../sevices/product.api.js";
 
 export const useProduct = () => {
@@ -32,10 +33,16 @@ export const useProduct = () => {
       return data.product;
    }
 
+   async function handleAddProductVariant(productId, newProductVariant) {
+      const data = await addProductVariant(productId, newProductVariant);
+      return data.variant;
+   }
+
    return {
       handleCreateProduct,
       handleGetProduct,
       handleGetAllProducts,
       handleGetProductById,
+      handleAddProductVariant,
    };
 };

@@ -97,9 +97,13 @@ const ProductCard = ({ product }) => {
       CURRENCY_SYMBOLS[product.price?.currency] ?? product.price?.currency ?? "";
    const coverUrl = product.images?.[0]?.url ?? null;
    const extraImages = (product.images?.length ?? 0) - 1;
+   const navigate = useNavigate();
+
 
    return (
-      <div className="bg-[#211f1b] border border-[#3a322c] rounded-xl overflow-hidden flex flex-col hover:border-[#b58a5a] transition-colors group">
+      <div 
+      onClick={()=>{navigate(`/seller/product/${product._id}`)}}
+      className="bg-[#211f1b] border border-[#3a322c] rounded-xl overflow-hidden flex flex-col hover:border-[#b58a5a] transition-colors group">
          {/* Cover image */}
          <div className="relative aspect-4/3 w-full overflow-hidden bg-[#1a1815]">
             {coverUrl ? (
