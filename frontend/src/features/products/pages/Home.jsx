@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useProduct } from '../hook/useProduct';
+import { useNavigate } from 'react-router';
+
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
@@ -32,9 +34,12 @@ const BagIcon = () => (
 const ProductCard = ({ product }) => {
   const symbol = CURRENCY_SYMBOLS[product.price?.currency] ?? product.price?.currency ?? '';
   const coverUrl = product.images?.[0]?.url ?? null;
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-[#211f1b] border border-[#3a322c] rounded-xl overflow-hidden flex flex-col hover:border-[#b58a5a] transition-colors duration-200 group">
+    <div
+      onClick={() => navigate(`/product/${product._id}`)}
+      className="bg-[#211f1b] border border-[#3a322c] rounded-xl overflow-hidden flex flex-col hover:border-[#b58a5a] transition-colors duration-200 group">
 
       {/* Cover image */}
       <div className="relative aspect-4/3 w-full overflow-hidden bg-[#1a1815]">
@@ -113,7 +118,7 @@ const Home = () => {
       >
         <div className="flex flex-col items-center gap-4">
           <div className="w-8 h-8 border-2 border-[#3a322c] border-t-[#b58a5a] rounded-full animate-spin" />
-          <p className="text-[13px] text-[#a9a49b] tracking-wide">Loading collection…</p>
+          <p className="text-[13px] text-[#a9a49b] tracking-wide">Loading catalogue…</p>
         </div>
       </div>
     );
@@ -129,7 +134,7 @@ const Home = () => {
         <div className="text-center">
           <p className="text-[32px] mb-3">🛍️</p>
           <h2 className="text-[18px] font-semibold text-[#f2ede6]">No products yet</h2>
-          <p className="mt-2 text-[13px] text-[#a9a49b]">Check back soon — new items are on the way.</p>
+          <p className="mt-2 text-[13px] text-[#a9a49b]">Check back soon — new slabs are being added.</p>
         </div>
       </div>
     );
@@ -137,7 +142,7 @@ const Home = () => {
 
   return (
     <div
-      className="min-h-screen bg-[#18150f] text-[#f2ede6]"
+      className="min-h-screen bg-[#18150f] text-[#f2ede6] flex flex-col"
       style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
     >
 
@@ -174,16 +179,16 @@ const Home = () => {
           <span className="text-[#f2ede6]">All Products</span>
         </p>
         <h1 className="text-[28px] sm:text-[36px] lg:text-[48px] font-semibold text-[#f2ede6] leading-tight tracking-tight mb-2">
-          Our Collection
+          Our Stone Collection
         </h1>
         <p className="text-[14px] sm:text-[16px] text-[#a9a49b] leading-relaxed max-w-xl">
-          Handpicked pieces crafted with intention. Discover artisan quality in every listing.
+          Premium marble and granite slabs sourced directly from the quarry. Quality stone for every space.
         </p>
         <div className="h-px bg-[#3a322c] w-full mt-8" />
       </div>
 
       {/* ── Products Grid ── */}
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-16">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-16">
         <p className="text-[11px] text-[#5a5048] uppercase tracking-[0.08em] font-semibold mb-5">
           {products.length} {products.length === 1 ? 'item' : 'items'}
         </p>

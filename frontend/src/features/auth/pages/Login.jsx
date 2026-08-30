@@ -75,10 +75,10 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = await handleLogin({ email: formData.email, password: formData.password });
-    if(user.role=="buyer"){
+    if (user.role == "buyer") {
       navigate('/');
     }
-    else if(user.role=="seller"){
+    else if (user.role == "seller") {
       navigate('/seller/dashboard');
     }
   };
@@ -104,13 +104,13 @@ const Login = () => {
             className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#f2ede6] whitespace-pre-line"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
           >
-            {'Return to\nyour\ncollection.'}
+            {'Crafted from\nthe earth,\nbuilt to last.'}
           </h2>
         </div>
 
         <footer>
           <p className="text-sm tracking-wide text-[#81756b]">
-            The curated marketplace for rare objects.
+            The trusted source for premium marble &amp; granite.
           </p>
         </footer>
       </div>

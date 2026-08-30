@@ -122,7 +122,7 @@ const Dashboard = () => {
 
   return (
     <div
-      className="min-h-screen bg-[#18150f] text-[#f2ede6]"
+      className="min-h-screen bg-[#18150f] text-[#f2ede6] flex flex-col"
       style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
     >
       {/* ── Navbar ── */}
@@ -137,7 +137,7 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
+      <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
 
         {/* ── Page Header ── */}
         <div className="mb-8 sm:mb-10">
@@ -156,7 +156,7 @@ const Dashboard = () => {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#b58a5a] text-white text-[13px] sm:text-[14px] font-semibold hover:bg-[#c49a68] transition-colors active:scale-[0.98] self-start sm:self-auto"
             >
               <PlusIcon />
-              Add Product
+              Add Slab
             </button>
           </div>
 
@@ -184,16 +184,16 @@ const Dashboard = () => {
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <EmptyBoxIcon />
-            <h2 className="mt-6 text-[18px] font-semibold text-[#f2ede6]">No products yet</h2>
+            <h2 className="mt-6 text-[18px] font-semibold text-[#f2ede6]">No slabs listed yet</h2>
             <p className="mt-2 text-[13px] text-[#a9a49b] max-w-xs">
-              You haven't listed any products. Start by adding your first product to the store.
+              You haven't listed any slabs yet. Add your first marble or granite product to start selling.
             </p>
             <button
               onClick={() => navigate('/seller/create-product')}
               className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors active:scale-[0.98]"
             >
               <PlusIcon />
-              Create First Product
+              List Your First Slab
             </button>
           </div>
         ) : (
@@ -208,8 +208,24 @@ const Dashboard = () => {
         )}
 
       </div>
+
+      {/* ── Footer ── */}
+      <footer className="border-t border-[#3a322c] py-6 sm:py-8 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
+          <span
+            className="text-lg sm:text-xl tracking-[-0.04em] text-[#f2ede6]"
+            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
+          >
+            Meera M&amp;G
+          </span>
+          <p className="text-[10px] sm:text-[11px] text-[#5a5048]">
+            © {new Date().getFullYear()} Meera M&amp;G. All rights reserved.
+          </p>
+        </div>
+      </footer>
+
     </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard;

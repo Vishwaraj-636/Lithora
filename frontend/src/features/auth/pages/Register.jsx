@@ -111,13 +111,13 @@ const Register = () => {
             className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#f2ede6] whitespace-pre-line"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
           >
-            {'Where rare\nfinds a\nhome.'}
+            {'Where stone\nmeets\nelegance.'}
           </h2>
         </div>
 
         <footer>
           <p className="text-sm tracking-wide text-[#81756b]">
-            Join to discover and collect.
+            Join India's premier marble &amp; granite marketplace.
           </p>
         </footer>
       </div>
