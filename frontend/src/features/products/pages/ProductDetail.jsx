@@ -195,8 +195,8 @@ const ProductDetail = () => {
       {/* ══════════════════════════════
           Breadcrumb
       ══════════════════════════════ */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 sm:pt-6 pb-2">
-        <p className="text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-[#a9a49b] font-semibold truncate">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 sm:pt-6 pb-2 flex justify-start">
+        <p className="text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-[#a9a49b] font-semibold truncate text-left">
           <span
             className="hover:text-[#f2ede6] cursor-pointer transition-colors"
             onClick={() => navigate('/')}
@@ -222,17 +222,45 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 xl:gap-20">
 
           {/* ── LEFT: Image Gallery ── */}
-          <div className="flex flex-col gap-3 sm:gap-4">
+          <div className="flex flex-col-reverse md:flex-row gap-3 sm:gap-4 h-full">
+
+            {/* Thumbnail strip — vertically scrollable on desktop, horizontally on mobile */}
+            {hasMultiple && (
+              <div className="flex md:flex-col gap-2 sm:gap-3 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden pb-1 md:pb-0 md:pr-1 scrollbar-hide shrink-0 md:max-h-[500px]">
+                {images.map((img, idx) => (
+                  <button
+                    key={img._id ?? idx}
+                    onClick={() => setActiveImage(idx)}
+                    className={`
+                      relative shrink-0
+                      w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24
+                      rounded-lg sm:rounded-xl overflow-hidden border-2
+                      transition-all duration-200
+                      ${idx === activeImage
+                        ? 'border-[#b58a5a] opacity-100 ring-1 ring-[#b58a5a]/30'
+                        : 'border-[#3a322c] opacity-50 hover:opacity-80 hover:border-[#7a6040]'
+                      }
+                    `}
+                  >
+                    <img
+                      src={img.url}
+                      alt={`${product.title} view ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Main image with slider controls */}
-            <div className="relative w-full aspect-4/3 sm:aspect-square bg-[#211f1b] border border-[#3a322c] rounded-xl sm:rounded-2xl overflow-hidden group/slider">
+            <div className="relative w-full aspect-4/3 sm:aspect-square bg-[#211f1b] border border-[#3a322c] rounded-xl sm:rounded-2xl overflow-hidden group/slider md:flex-1">
 
               {/* Image */}
               {activeImageUrl ? (
                 <img
                   src={activeImageUrl}
                   alt={product.title}
-                  className="w-full h-full object-cover transition-opacity duration-300"
+                  className="w-full h-full object-contain transition-opacity duration-300"
                 />
               ) : (
                 <ImagePlaceholder />
@@ -296,34 +324,6 @@ const ProductDetail = () => {
                 </>
               )}
             </div>
-
-            {/* Thumbnail strip — horizontally scrollable on mobile */}
-            {hasMultiple && (
-              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-1 scrollbar-hide">
-                {images.map((img, idx) => (
-                  <button
-                    key={img._id ?? idx}
-                    onClick={() => setActiveImage(idx)}
-                    className={`
-                      relative shrink-0
-                      w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24
-                      rounded-lg sm:rounded-xl overflow-hidden border-2
-                      transition-all duration-200
-                      ${idx === activeImage
-                        ? 'border-[#b58a5a] opacity-100 ring-1 ring-[#b58a5a]/30'
-                        : 'border-[#3a322c] opacity-50 hover:opacity-80 hover:border-[#7a6040]'
-                      }
-                    `}
-                  >
-                    <img
-                      src={img.url}
-                      alt={`${product.title} view ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* ── RIGHT: Product Details ── */}
