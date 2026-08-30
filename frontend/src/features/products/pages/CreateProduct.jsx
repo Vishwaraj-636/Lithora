@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
-import { useProduct } from '../hook/useProduct';
-import { useNavigate } from 'react-router';
+import React, { useState, useRef } from "react";
+import { useProduct } from "../hook/useProduct";
+import { useNavigate } from "react-router";
 
 const MAX_IMAGES = 7;
 const MAX_CHARS = 1000;
@@ -8,8 +8,14 @@ const MAX_CHARS = 1000;
 /* ── Chevron SVG ── */
 const ChevronDown = () => (
   <svg
-    width="16" height="16" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   >
     <polyline points="6 9 12 15 18 9" />
   </svg>
@@ -17,8 +23,15 @@ const ChevronDown = () => (
 
 /* ── Upload Cloud SVG ── */
 const UploadIcon = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-    stroke="#b58a5a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#b58a5a"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
   >
     <polyline points="16 16 12 12 8 16" />
     <line x1="12" y1="12" x2="12" y2="21" />
@@ -29,7 +42,10 @@ const UploadIcon = () => (
 /* ── Reusable label + input wrapper ── */
 const Field = ({ label, htmlFor, children }) => (
   <div className="flex flex-col gap-1.5">
-    <label htmlFor={htmlFor} className="text-[13px] font-semibold text-[#f2ede6]">
+    <label
+      htmlFor={htmlFor}
+      className="text-[13px] font-semibold text-[#f2ede6]"
+    >
       {label}
     </label>
     {children}
@@ -38,7 +54,7 @@ const Field = ({ label, htmlFor, children }) => (
 
 /* ── Shared input class ── */
 const inputCls =
-  'w-full bg-[#2a2620] border border-[#3a322c] rounded-lg px-3.5 py-2.5 text-[14px] sm:text-[15px] text-[#f2ede6] placeholder:text-[#5a5048] focus:outline-none focus:border-[#b58a5a] focus:ring-1 focus:ring-[#b58a5a] transition-colors';
+  "w-full bg-[#2a2620] border border-[#3a322c] rounded-lg px-3.5 py-2.5 text-[14px] sm:text-[15px] text-[#f2ede6] placeholder:text-[#5a5048] focus:outline-none focus:border-[#b58a5a] focus:ring-1 focus:ring-[#b58a5a] transition-colors";
 
 /* ── Section heading ── */
 const SectionHeading = ({ children }) => (
@@ -54,12 +70,12 @@ const CreateProduct = () => {
   const { handleCreateProduct } = useProduct();
 
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    priceAmount: '',
-    priceCurrency: 'INR',
+    title: "",
+    description: "",
+    priceAmount: "",
+    priceCurrency: "INR",
   });
-  const [images, setImages] = useState([]);   // { file, preview }[]
+  const [images, setImages] = useState([]); // { file, preview }[]
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -95,18 +111,16 @@ const CreateProduct = () => {
     setIsSubmitting(true);
     try {
       const data = new FormData();
-      data.append('title', formData.title);
-      data.append('description', formData.description);
-      data.append('priceAmount', formData.priceAmount);
-      data.append('priceCurrency', formData.priceCurrency);
-      images.forEach((img) => data.append('images', img.file));
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("priceAmount", formData.priceAmount);
+      data.append("priceCurrency", formData.priceCurrency);
+      images.forEach((img) => data.append("images", img.file));
       await handleCreateProduct(data);
-      navigate('/seller/dashboard');
-    }
-    catch (err) {
+      navigate("/seller/dashboard");
+    } catch (err) {
       console.error(err);
-    }
-    finally {
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -130,7 +144,6 @@ const CreateProduct = () => {
       </nav>
 
       <div className="w-full max-w-300 mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
-
         {/* ── Page Header ── */}
         <div className="mb-8 sm:mb-10">
           <p className="text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-[#a9a49b] font-semibold mb-3">
@@ -147,27 +160,32 @@ const CreateProduct = () => {
         {/* ── Form ── */}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-
             {/* ══ LEFT COLUMN ══════════════════════════════════════════ */}
             <div className="lg:col-span-5 flex flex-col gap-5">
-
               {/* Card 1 — Basic Information */}
               <div className="bg-[#211f1b] border border-[#3a322c] rounded-xl p-5 sm:p-7">
                 <SectionHeading>Basic Information</SectionHeading>
                 <div className="flex flex-col gap-5">
                   <Field label="Product Title" htmlFor="title">
                     <input
-                      id="title" name="title" type="text"
-                      value={formData.title} onChange={handleChange}
+                      id="title"
+                      name="title"
+                      type="text"
+                      value={formData.title}
+                      onChange={handleChange}
                       placeholder="e.g. Handcrafted Ceramic Mug"
-                      className={inputCls} required
+                      className={inputCls}
+                      required
                     />
                   </Field>
 
                   <Field label="Description" htmlFor="description">
                     <textarea
-                      id="description" name="description" rows={5}
-                      value={formData.description} onChange={handleChange}
+                      id="description"
+                      name="description"
+                      rows={5}
+                      value={formData.description}
+                      onChange={handleChange}
                       maxLength={MAX_CHARS}
                       placeholder="Describe your product — materials, craftsmanship, dimensions..."
                       className={`${inputCls} resize-y`}
@@ -186,8 +204,10 @@ const CreateProduct = () => {
                   <Field label="Currency" htmlFor="priceCurrency">
                     <div className="relative sm:w-36">
                       <select
-                        id="priceCurrency" name="priceCurrency"
-                        value={formData.priceCurrency} onChange={handleChange}
+                        id="priceCurrency"
+                        name="priceCurrency"
+                        value={formData.priceCurrency}
+                        onChange={handleChange}
                         className={`${inputCls} appearance-none pr-9`}
                       >
                         <option value="INR">INR — ₹</option>
@@ -204,23 +224,27 @@ const CreateProduct = () => {
                   <div className="flex-1">
                     <Field label="Price Amount" htmlFor="priceAmount">
                       <input
-                        id="priceAmount" name="priceAmount" type="number"
-                        min="0" step="0.01"
-                        value={formData.priceAmount} onChange={handleChange}
+                        id="priceAmount"
+                        name="priceAmount"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={formData.priceAmount}
+                        onChange={handleChange}
                         placeholder="0.00"
-                        className={inputCls} required
+                        className={inputCls}
+                        required
                       />
                     </Field>
                   </div>
                 </div>
               </div>
-
-            </div>{/* /LEFT COLUMN */}
+            </div>
+            {/* /LEFT COLUMN */}
 
             {/* ══ RIGHT COLUMN — Images ════════════════════════════════ */}
             <div className="lg:col-span-7">
               <div className="bg-[#211f1b] border border-[#3a322c] rounded-xl p-5 sm:p-7 h-full">
-
                 <div className="flex justify-between items-center mb-1">
                   <SectionHeading>Product Images</SectionHeading>
                   <span className="text-[11px] text-[#a9a49b] -mt-4 sm:-mt-5">
@@ -228,15 +252,20 @@ const CreateProduct = () => {
                   </span>
                 </div>
                 <p className="text-[12px] sm:text-[13px] text-[#a9a49b] mb-5">
-                  Upload up to {MAX_IMAGES} images.{' '}
-                  <span className="whitespace-nowrap">First image = cover.</span>
+                  Upload up to {MAX_IMAGES} images.{" "}
+                  <span className="whitespace-nowrap">
+                    First image = cover.
+                  </span>
                 </p>
 
                 {/* Drop Zone */}
                 {images.length < MAX_IMAGES && (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      setDragOver(true);
+                    }}
                     onDragLeave={() => setDragOver(false)}
                     onDrop={handleDrop}
                     className={`
@@ -244,9 +273,10 @@ const CreateProduct = () => {
                       flex flex-col items-center justify-center
                       cursor-pointer transition-colors mb-5
                       h-35 sm:h-45 lg:h-50
-                      ${dragOver
-                        ? 'border-[#b58a5a] bg-[#2a2218]'
-                        : 'border-[#3a322c] bg-[#1e1c18] hover:bg-[#2a2218] hover:border-[#b58a5a]'
+                      ${
+                        dragOver
+                          ? "border-[#b58a5a] bg-[#2a2218]"
+                          : "border-[#3a322c] bg-[#1e1c18] hover:bg-[#2a2218] hover:border-[#b58a5a]"
                       }
                     `}
                   >
@@ -254,15 +284,20 @@ const CreateProduct = () => {
                       <UploadIcon />
                     </div>
                     <p className="text-[13px] sm:text-[14px] font-medium text-[#f2ede6] mb-1 text-center px-4">
-                      Drag &amp; drop or{' '}
-                      <span className="text-[#b58a5a] underline underline-offset-2">browse</span>
+                      Drag &amp; drop or{" "}
+                      <span className="text-[#b58a5a] underline underline-offset-2">
+                        browse
+                      </span>
                     </p>
                     <p className="text-[11px] sm:text-[12px] text-[#a9a49b]">
                       PNG, JPG, WEBP — max 10 MB each
                     </p>
                     <input
-                      ref={fileInputRef} type="file" accept="image/*"
-                      multiple className="hidden"
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
                       onChange={(e) => addFiles(e.target.files)}
                     />
                   </div>
@@ -271,12 +306,15 @@ const CreateProduct = () => {
                 {/* Thumbnail grid */}
                 <div
                   className="grid gap-2.5 mb-3"
-                  style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(72px, 1fr))' }}
+                  style={{
+                    gridTemplateColumns: "repeat(auto-fill, minmax(72px, 1fr))",
+                  }}
                 >
                   {images.map((img, idx) => (
                     <div key={idx} className="relative group aspect-square">
                       <img
-                        src={img.preview} alt={`Product image ${idx + 1}`}
+                        src={img.preview}
+                        alt={`Product image ${idx + 1}`}
                         className="w-full h-full object-cover rounded-lg border border-[#3a322c]"
                       />
                       {idx === 0 && (
@@ -285,37 +323,59 @@ const CreateProduct = () => {
                         </span>
                       )}
                       <button
-                        type="button" onClick={() => removeImage(idx)}
+                        type="button"
+                        onClick={() => removeImage(idx)}
                         className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-[#211f1b] border border-[#3a322c] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-950"
                         aria-label="Remove image"
                       >
-                        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a9a49b" strokeWidth="2.5" strokeLinecap="round">
-                          <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                        <svg
+                          width="9"
+                          height="9"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#a9a49b"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                       </button>
                     </div>
                   ))}
 
-                  {Array.from({ length: MAX_IMAGES - images.length }).map((_, i) => (
-                    <div
-                      key={`empty-${i}`}
-                      onClick={() => fileInputRef.current?.click()}
-                      className="aspect-square rounded-lg border border-dashed border-[#3a322c] bg-[#2a2218] flex items-center justify-center cursor-pointer hover:border-[#b58a5a] hover:bg-[#2e261c] transition-colors"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a9a49b" strokeWidth="2" strokeLinecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                    </div>
-                  ))}
+                  {Array.from({ length: MAX_IMAGES - images.length }).map(
+                    (_, i) => (
+                      <div
+                        key={`empty-${i}`}
+                        onClick={() => fileInputRef.current?.click()}
+                        className="aspect-square rounded-lg border border-dashed border-[#3a322c] bg-[#2a2218] flex items-center justify-center cursor-pointer hover:border-[#b58a5a] hover:bg-[#2e261c] transition-colors"
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#a9a49b"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        >
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      </div>
+                    ),
+                  )}
                 </div>
 
                 <p className="text-[11px] text-[#a9a49b] italic">
                   Drag thumbnails to reorder.
                 </p>
               </div>
-            </div>{/* /RIGHT COLUMN */}
-
-          </div>{/* /grid */}
+            </div>
+            {/* /RIGHT COLUMN */}
+          </div>
+          {/* /grid */}
 
           {/* ── Footer Actions ── */}
           <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 mt-6 pt-6 border-t border-[#3a322c] pb-10">
@@ -333,7 +393,6 @@ const CreateProduct = () => {
               Create Product
             </button>
           </div>
-
         </form>
       </div>
     </div>

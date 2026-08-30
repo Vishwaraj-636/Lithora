@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
 const ContinueWithGoogle = () => {
   return (
@@ -28,7 +28,10 @@ const ContinueWithGoogle = () => {
           fill="#EA4335"
         />
       </svg>
-      <span className="text-sm font-medium text-[#1f1f1f] dark:text-[#e3e3e3]" style={{ fontFamily: 'Roboto, sans-serif' }}>
+      <span
+        className="text-sm font-medium text-[#1f1f1f] dark:text-[#e3e3e3]"
+        style={{ fontFamily: "Roboto, sans-serif" }}
+      >
         Continue with Google
       </span>
     </a>

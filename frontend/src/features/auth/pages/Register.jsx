@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
-import { useAuth } from '../hook/useAuth.js';
-import { useNavigate } from 'react-router';
-import { useSelector } from 'react-redux';
-import ContinueWithGoogle from '../components/ContinueWithGoogle.jsx';
+import React, { useState } from "react";
+import { useAuth } from "../hook/useAuth.js";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import ContinueWithGoogle from "../components/ContinueWithGoogle.jsx";
 
 /* ── Icons ── */
 const EyeIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" />
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
   </svg>
 );
 const EyeOffIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
     <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
     <line x1="1" y1="1" x2="23" y2="23" />
@@ -21,7 +38,15 @@ const EyeOffIcon = () => (
 );
 
 /* ── Floating-label input ── */
-function FloatingInput({ id, label, type = 'text', value, onChange, required = false, children }) {
+function FloatingInput({
+  id,
+  label,
+  type = "text",
+  value,
+  onChange,
+  required = false,
+  children,
+}) {
   return (
     <div className="relative">
       <input
@@ -33,21 +58,21 @@ function FloatingInput({ id, label, type = 'text', value, onChange, required = f
         value={value}
         onChange={onChange}
         className={[
-          'peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent',
-          'text-[#f2ede6]',
-          'border-[#3a322c]',
-          'focus:border-[#b58a5a]',
-          'focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base',
-        ].join(' ')}
+          "peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent",
+          "text-[#f2ede6]",
+          "border-[#3a322c]",
+          "focus:border-[#b58a5a]",
+          "focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base",
+        ].join(" ")}
       />
       <label
         htmlFor={id}
         className={[
-          'absolute left-0 top-3.5 text-sm text-[#a9a49b] cursor-text',
-          'transition-all duration-200',
-          '-translate-y-6 peer-placeholder-shown:translate-y-0',
-          'peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm',
-        ].join(' ')}
+          "absolute left-0 top-3.5 text-sm text-[#a9a49b] cursor-text",
+          "transition-all duration-200",
+          "-translate-y-6 peer-placeholder-shown:translate-y-0",
+          "peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm",
+        ].join(" ")}
       >
         {label}
       </label>
@@ -66,16 +91,19 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: '',
-    contactNumber: '',
-    email: '',
-    password: '',
+    fullName: "",
+    contactNumber: "",
+    email: "",
+    password: "",
     isSeller: false,
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -87,7 +115,7 @@ const Register = () => {
       contactNumber: formData.contactNumber,
       isSeller: formData.isSeller,
     });
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -111,7 +139,7 @@ const Register = () => {
             className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#f2ede6] whitespace-pre-line"
             style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
           >
-            {'Where stone\nmeets\nelegance.'}
+            {"Where stone\nmeets\nelegance."}
           </h2>
         </div>
 
@@ -124,7 +152,6 @@ const Register = () => {
 
       {/* ── RIGHT PANEL — form ── */}
       <div className="w-full md:w-[45%] bg-[#211f1b] flex flex-col justify-center p-6 sm:p-12 md:p-16 min-h-screen relative">
-
         {/* Mobile logo */}
         <div className="absolute top-6 right-6 md:top-10 md:right-10">
           <span
@@ -140,23 +167,45 @@ const Register = () => {
           <div className="mb-12">
             <h1
               className="text-[32px] leading-[1.3] text-[#f2ede6] mb-2"
-              style={{ fontFamily: "'Playfair Display', serif", fontWeight: 500 }}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                fontWeight: 500,
+              }}
             >
               Create account
             </h1>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-7">
-            <FloatingInput id="fullName" label="Full Name" value={formData.fullName} onChange={handleChange} required />
-            <FloatingInput id="email" label="Email Address" type="email" value={formData.email} onChange={handleChange} required />
-            <FloatingInput id="contactNumber" label="Contact Number" type="tel" value={formData.contactNumber} onChange={handleChange} />
+            <FloatingInput
+              id="fullName"
+              label="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              id="email"
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <FloatingInput
+              id="contactNumber"
+              label="Contact Number"
+              type="tel"
+              value={formData.contactNumber}
+              onChange={handleChange}
+            />
 
             {/* Password with show/hide */}
             <div className="relative">
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 required
                 value={formData.password}
@@ -189,7 +238,10 @@ const Register = () => {
                 onChange={handleChange}
                 className="h-3.5 w-3.5 rounded-[3px] border-[#3a322c] bg-transparent text-[#b58a5a] focus:ring-[#b58a5a] cursor-pointer transition-colors duration-200"
               />
-              <label htmlFor="isSeller" className="ml-3 text-sm text-[#f2ede6] cursor-pointer">
+              <label
+                htmlFor="isSeller"
+                className="ml-3 text-sm text-[#f2ede6] cursor-pointer"
+              >
                 Register as a seller
               </label>
             </div>
@@ -202,7 +254,7 @@ const Register = () => {
                 disabled={loading}
                 className="w-full py-3.5 px-6 rounded bg-[#b58a5a] hover:bg-[#c49a68] text-white text-xs font-semibold uppercase tracking-[0.12em] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#b58a5a] focus:ring-offset-[#211f1b] disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {loading ? 'Creating...' : 'Create Account'}
+                {loading ? "Creating..." : "Create Account"}
               </button>
             </div>
           </form>
@@ -210,7 +262,7 @@ const Register = () => {
           <div className="mt-6 text-center gap-2">
             <ContinueWithGoogle />
             <p className="text-xs text-[#a9a49b]">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <a
                 href="/login"
                 className="text-[#f2ede6] border-b border-[#3a322c] hover:border-[#b58a5a] pb-0.5 transition-colors duration-200"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 /**
  * Shared dark-mode hook for Meera M&G.
@@ -7,22 +7,21 @@ import { useState, useEffect } from 'react';
  */
 export function useDarkMode() {
   const [isDark, setIsDark] = useState(() => {
-    const stored = localStorage.getItem('meera-mg-theme');
-    if (stored) return stored === 'dark';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const stored = localStorage.getItem("meera-mg-theme");
+    if (stored) return stored === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
   useEffect(() => {
     const root = document.documentElement;
     if (isDark) {
-      root.classList.add('dark');
-      localStorage.setItem('meera-mg-theme', 'dark');
+      root.classList.add("dark");
+      localStorage.setItem("meera-mg-theme", "dark");
     } else {
-      root.classList.remove('dark');
-      localStorage.setItem('meera-mg-theme', 'light');
+      root.classList.remove("dark");
+      localStorage.setItem("meera-mg-theme", "light");
     }
   }, [isDark]);
 
   return [isDark, () => setIsDark((v) => !v)];
 }
-

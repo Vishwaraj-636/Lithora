@@ -1,13 +1,17 @@
 import { setError, setLoading, setUser } from "../state/auth.slice.js";
-import { register,login,getMe } from "../services/auth.api.js";
+import { register, login, getMe } from "../services/auth.api.js";
 import { useDispatch } from "react-redux";
 
-
 export const useAuth = () => {
-
   const dispatch = useDispatch();
 
-  async function handleRegister({ email, contactNumber, password, fullName, isSeller = false }) {
+  async function handleRegister({
+    email,
+    contactNumber,
+    password,
+    fullName,
+    isSeller = false,
+  }) {
     try {
       dispatch(setLoading(true));
       const data = await register({
@@ -21,7 +25,10 @@ export const useAuth = () => {
       return data.user; // Return the user data for further use
       dispatch(setError(null));
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.errors?.[0]?.msg || "Registration failed";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.msg ||
+        "Registration failed";
       dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
@@ -36,7 +43,10 @@ export const useAuth = () => {
       return data.user; // Return the user data for further use
       dispatch(setError(null));
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.errors?.[0]?.msg || "Login failed";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.msg ||
+        "Login failed";
       dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
@@ -50,12 +60,15 @@ export const useAuth = () => {
       dispatch(setUser(data.user));
       dispatch(setError(null));
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.response?.data?.errors?.[0]?.msg || "Failed to fetch user data";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.msg ||
+        "Failed to fetch user data";
       dispatch(setError(errorMessage));
     } finally {
       dispatch(setLoading(false));
     }
   }
 
-  return { handleRegister, handleLogin, handleGetMe }
-}
+  return { handleRegister, handleLogin, handleGetMe };
+};

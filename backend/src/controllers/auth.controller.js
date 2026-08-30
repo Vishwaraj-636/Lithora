@@ -1,21 +1,23 @@
-import userModel from '../models/user.model.js';
-import jwt from 'jsonwebtoken';
-import { config } from '../config/config.js';
-
+import userModel from "../models/user.model.js";
+import jwt from "jsonwebtoken";
+import { config } from "../config/config.js";
 
 async function sendTokenResponse(user, res) {
-  const token = jwt.sign({
-    id: user._id,
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    config.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    },
+  );
 
-  }, config.JWT_SECRET, {
-    expiresIn: '7d'
-  })
-
-  res.cookie('token', token, {
+  res.cookie("token", token, {
     httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-  })
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
   res.status(200).json({
     token,
@@ -24,20 +26,17 @@ async function sendTokenResponse(user, res) {
       email: user.email,
       contact: user.contact,
       fullname: user.fullname,
-      role: user.role
-    }
-  })
+      role: user.role,
+    },
+  });
 }
 
 export const register = async (req, res) => {
   const { email, contact, password, fullname, isSeller } = req.body;
   try {
     const existingUser = await userModel.findOne({
-      $or: [
-        { email },
-        { contact }
-      ]
-    })
+      $or: [{ email }, { contact }],
+    });
 
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
@@ -48,19 +47,16 @@ export const register = async (req, res) => {
       contact,
       password,
       fullname,
-      role: isSeller ? "seller" : "buyer"
-    })
+      role: isSeller ? "seller" : "buyer",
+    });
 
     await user.save();
     await sendTokenResponse(user, res, "User registered successfully");
-
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
-}
-
+};
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -77,15 +73,11 @@ export const login = async (req, res) => {
     }
 
     await sendTokenResponse(user, res, "User logged in successfully");
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
-
-
-}
-
+};
 
 export const googleCallback = async (req, res) => {
   const { id, displayName, emails, photos } = req.user;
@@ -93,9 +85,8 @@ export const googleCallback = async (req, res) => {
   const email = emails[0].value;
   const profilePic = photos[0].value;
 
-
   let user = await userModel.findOne({
-    email
+    email,
   });
 
   if (!user) {
@@ -103,26 +94,29 @@ export const googleCallback = async (req, res) => {
       email,
       googleId: id,
       fullname: displayName,
-    })
+    });
   }
 
-  const token = jwt.sign({
-    id: user._id,
-  }, config.JWT_SECRET, {
-    expiresIn: '7d'
-  })
+  const token = jwt.sign(
+    {
+      id: user._id,
+    },
+    config.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    },
+  );
 
-  res.cookie('token', token, {
+  res.cookie("token", token, {
     httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-  })
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
-  res.redirect("http://localhost:5173/")
-}
+  res.redirect("http://localhost:5173/");
+};
 
-
-export const getMe= async (req, res) => {
+export const getMe = async (req, res) => {
   const user = req.user;
   res.status(200).json({
     message: "User fetched successfully",
@@ -132,7 +126,7 @@ export const getMe= async (req, res) => {
       email: user.email,
       contact: user.contact,
       fullname: user.fullname,
-      role: user.role
-    }
+      role: user.role,
+    },
   });
-}
+};
