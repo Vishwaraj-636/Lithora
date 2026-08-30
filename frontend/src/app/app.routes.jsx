@@ -8,41 +8,41 @@ import Home from "../features/products/pages/Home";
 import ProductDetail from "../features/products/pages/ProductDetail";
 
 export const routes = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/product/:productId",
-    element: <ProductDetail />,
-  },
-  {
-    path: "/seller",
-    children: [
-      {
-        path: "/seller/create-product",
-        element: (
-          <Protected role="seller">
-            <CreateProduct />
-          </Protected>
-        ),
-      },
-      {
-        path: "/seller/dashboard",
-        element: (
-          <Protected role="seller">
-            <Dashboard />
-          </Protected>
-        ),
-      },
-    ],
-  },
+   {
+      path: "/",
+      element: <Home />,
+   },
+   {
+      path: "/register",
+      element: <Register />,
+   },
+   {
+      path: "/login",
+      element: <Login />,
+   },
+   {
+      path: "/product/:productId",
+      element: <ProductDetail />,
+   },
+   {
+      path: "/seller",
+      children: [
+         {
+            path: "/seller/create-product",
+            element: (
+               <Protected role="seller">
+                  <CreateProduct />
+               </Protected>
+            ),
+         },
+         {
+            path: "/seller/dashboard",
+            element: (
+               <Protected role="seller">
+                  <Dashboard />
+               </Protected>
+            ),
+         },
+      ],
+   },
 ]);
