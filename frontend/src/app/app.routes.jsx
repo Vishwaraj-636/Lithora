@@ -8,10 +8,16 @@ import Home from "../features/products/pages/Home";
 import ProductDetail from "../features/products/pages/ProductDetail";
 import SellerProductDetail from "../features/products/pages/SellerProductDetail";
 
+import PreventSeller from "../features/auth/components/PreventSeller";
+
 export const routes = createBrowserRouter([
    {
       path: "/",
-      element: <Home />,
+      element: (
+         <PreventSeller>
+            <Home />
+         </PreventSeller>
+      ),
    },
    {
       path: "/register",
@@ -23,7 +29,11 @@ export const routes = createBrowserRouter([
    },
    {
       path: "/product/:productId",
-      element: <ProductDetail />,
+      element: (
+         <PreventSeller>
+            <ProductDetail />
+         </PreventSeller>
+      ),
    },
    {
       path: "/seller",

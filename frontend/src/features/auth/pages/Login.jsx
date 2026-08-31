@@ -91,6 +91,17 @@ const Login = () => {
    const navigate = useNavigate();
 
    const [formData, setFormData] = useState({ email: "", password: "" });
+   const user = useSelector((state) => state.auth.user);
+
+   React.useEffect(() => {
+      if (user) {
+         if (user.role === "buyer") {
+            navigate("/");
+         } else if (user.role === "seller") {
+            navigate("/seller/dashboard");
+         }
+      }
+   }, [user, navigate]);
 
    const handleChange = (e) => {
       const { name, value } = e.target;

@@ -88,7 +88,7 @@ const ProductDetail = () => {
    const [activeImage, setActiveImage] = useState(0);
 
    /* ── Variant Selection State ── */
-   const [selectedVariant, setSelectedVariant] = useState(null);
+   const [selectedAttributes, setSelectedAttributes] = useState({});
 
    const prevImage = (total) => setActiveImage((i) => (i - 1 + total) % total);
    const nextImage = (total) => setActiveImage((i) => (i + 1) % total);
@@ -96,8 +96,7 @@ const ProductDetail = () => {
    async function fetchProductDetails() {
       const data = await handleGetProductById(productId);
       setProduct(data);
-      // By default the main product must be shown, so selectedVariant remains null
-      setSelectedVariant(null);
+      setSelectedAttributes(null);
       setLoading(false);
    }
 
@@ -105,28 +104,61 @@ const ProductDetail = () => {
       fetchProductDetails();
    }, [productId]);
 
-   const handleVariantSelect = (variant) => {
-      // Toggle off if clicking the already selected variant
-      if (!variant || (selectedVariant && selectedVariant._id === variant._id)) {
-         setSelectedVariant(null);
-      } else {
-         setSelectedVariant(variant);
+   /* ── Extract all available attributes and their values ── */
+   const availableAttributes = useMemo(() => {
+      if (!product || !product.variants) return {};
+      const attrs = {};
+      product.variants.forEach((variant) => {
+         Object.entries(variant.attributes || {}).forEach(([key, val]) => {
+            if (!attrs[key]) attrs[key] = new Set();
+            attrs[key].add(val);
+         });
+      });
+      // Convert Sets to Arrays
+      Object.keys(attrs).forEach((key) => {
+         attrs[key] = Array.from(attrs[key]);
+      });
+      return attrs;
+   }, [product]);
+
+   const handleAttributeSelect = (key, val) => {
+      let newAttributes = { ...(selectedAttributes || {}), [key]: val };
+
+      let matchingVariants = product.variants.filter(v =>
+         Object.entries(newAttributes).every(([k, v_val]) => v.attributes[k] === v_val)
+      );
+
+      // If conflicting selection, start fresh from the new attribute
+      if (matchingVariants.length === 0) {
+         newAttributes = { [key]: val };
+         matchingVariants = product.variants.filter(v => v.attributes[key] === val);
       }
+
+      // Auto-select other attributes if there's only 1 option available, or clear if incompatible
+      Object.keys(availableAttributes).forEach(attrKey => {
+         if (attrKey !== key) {
+            const possibleValues = new Set(matchingVariants.map(v => v.attributes[attrKey]));
+            if (possibleValues.size === 1) {
+               newAttributes[attrKey] = Array.from(possibleValues)[0];
+            } else if (!possibleValues.has(newAttributes[attrKey])) {
+               delete newAttributes[attrKey];
+            }
+         }
+      });
+
+      setSelectedAttributes(newAttributes);
       setActiveImage(0); // reset image index on variant change
    };
 
-   /* ── Group Variants by Attribute Key ── */
-   const groupedVariants = useMemo(() => {
-      if (!product || !product.variants) return {};
-      const groups = {};
-      product.variants.forEach(variant => {
-         const keys = Object.keys(variant.attributes || {});
-         const groupKey = keys.length > 0 ? keys[0] : "Other Options";
-         if (!groups[groupKey]) groups[groupKey] = [];
-         groups[groupKey].push(variant);
+   // Determine the active variant based on selected attributes
+   const selectedVariant = useMemo(() => {
+      if (!product || !product.variants || !selectedAttributes) return null;
+      return product.variants.find((v) => {
+         return Object.entries(selectedAttributes).every(
+            ([k, val]) => v.attributes[k] === val
+         );
       });
-      return groups;
-   }, [product]);
+   }, [product, selectedAttributes]);
 
    /* ── Loading state ── */
    if (loading) {
@@ -162,7 +194,7 @@ const ProductDetail = () => {
    const symbol = CURRENCY_SYMBOLS[displayPriceCurrency] ?? displayPriceCurrency;
    const displayImages = (selectedVariant?.images?.length > 0) ? selectedVariant.images : (product.images ?? []);
 
-   const activeImageUrl = displayImages[activeImage]?.url ?? null;
+   const activeImageUrl = displayImages[activeImage]?.url ?? (typeof displayImages[activeImage] === 'string' ? displayImages[activeImage] : null);
    const hasMultiple = displayImages.length > 1;
 
    return (
@@ -200,19 +232,26 @@ const ProductDetail = () => {
                <div className="flex flex-col-reverse md:flex-row gap-3 sm:gap-4 h-full">
                   {hasMultiple && (
                      <div className="flex md:flex-col gap-2 sm:gap-3 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden pb-1 md:pb-0 md:pr-1 scrollbar-hide shrink-0 md:max-h-125">
-                        {displayImages.map((img, idx) => (
-                           <button
-                              key={img._id ?? idx}
-                              onClick={() => setActiveImage(idx)}
-                              className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all duration-200 ${idx === activeImage ? "border-[#b58a5a] opacity-100 ring-1 ring-[#b58a5a]/30" : "border-[#3a322c] opacity-50 hover:opacity-80 hover:border-[#7a6040]"}`}
-                           >
-                              <img src={img.url} alt={`${product.title} view ${idx + 1}`} className="w-full h-full object-cover" />
-                           </button>
-                        ))}
+                        {displayImages.map((img, idx) => {
+                           const imgUrl = img?.url ?? (typeof img === 'string' ? img : null);
+                           return (
+                              <button
+                                 key={img._id ?? idx}
+                                 onClick={() => setActiveImage(idx)}
+                                 className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all duration-200 ${idx === activeImage ? "border-[#b58a5a] opacity-100 ring-1 ring-[#b58a5a]/30" : "border-[#3a322c] opacity-50 hover:opacity-80 hover:border-[#7a6040]"}`}
+                              >
+                                 {imgUrl ? (
+                                    <img src={imgUrl} alt={`${product.title} view ${idx + 1}`} className="w-full h-full object-cover" />
+                                 ) : (
+                                    <div className="w-full h-full bg-[#211f1b]" />
+                                 )}
+                              </button>
+                           );
+                        })}
                      </div>
                   )}
 
-                  <div className="relative w-full aspect-4/3 sm:aspect-square bg-[#211f1b] border border-[#3a322c] rounded-xl sm:rounded-2xl overflow-hidden group/slider md:flex-1">
+                  <div className="relative w-full h-[350px] md:h-[500px] bg-[#211f1b] border border-[#3a322c] rounded-xl sm:rounded-2xl overflow-hidden group/slider md:flex-1">
                      {activeImageUrl ? (
                         <img src={activeImageUrl} alt={product.title} className="w-full h-full object-contain transition-opacity duration-300" />
                      ) : (
@@ -261,66 +300,90 @@ const ProductDetail = () => {
                         </p>
 
                         <div className="flex flex-col gap-4">
-                           {/* Original Option */}
-                           <div>
-                              <div className="flex flex-wrap gap-3 sm:gap-4">
-                                 <button
-                                    onClick={() => handleVariantSelect(null)}
-                                    className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all ${selectedVariant === null
-                                          ? "border-[#b58a5a] bg-[#b58a5a]/10 ring-1 ring-[#b58a5a]/30"
-                                          : "border-transparent hover:bg-[#211f1b] hover:border-[#3a322c]"
-                                       }`}
-                                 >
-                                    <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
-                                       {product.images?.[0]?.url ? (
-                                          <img src={product.images[0].url} alt="Original" className="w-full h-full object-cover" />
-                                       ) : (
-                                          <ImagePlaceholder small />
-                                       )}
-                                    </div>
-                                    <span className={`text-[11px] sm:text-[12px] font-medium max-w-16 truncate ${selectedVariant === null ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
+                           {/* Separate Original Product Button */}
+                           <div className="mb-2">
+                              <p className="text-[14px] sm:text-[15px] text-[#a9a49b] font-medium mb-3">
+                                 Default: <span className="text-[#f2ede6] font-bold">{!selectedAttributes ? "Original" : ""}</span>
+                              </p>
+                              <button
+                                 onClick={() => { setSelectedAttributes(null); setActiveImage(0); }}
+                                 className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#b58a5a] ${!selectedAttributes
+                                    ? "border-[#b58a5a] bg-[#b58a5a]/10 ring-1 ring-[#b58a5a]/30"
+                                    : "border-transparent hover:bg-[#211f1b] hover:border-[#3a322c]"
+                                    }`}
+                              >
+                                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
+                                    {product.images?.[0] ? (
+                                       <img src={typeof product.images[0] === 'string' ? product.images[0] : product.images[0].url} alt="Original Product" className="w-full h-full object-cover" />
+                                    ) : (
+                                       <ImagePlaceholder small />
+                                    )}
+                                 </div>
+                                 <div className="flex flex-col items-center gap-0.5">
+                                    <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${!selectedAttributes ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
                                        Original
                                     </span>
-                                 </button>
-                              </div>
+                                    {product.price?.amount && (
+                                       <span className={`text-[10px] sm:text-[11px] font-semibold ${!selectedAttributes ? "text-[#b58a5a]" : "text-[#f2ede6]"}`}>
+                                          {CURRENCY_SYMBOLS[product.price?.currency || 'INR'] ?? (product.price?.currency || 'INR')}{Number(product.price.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                       </span>
+                                    )}
+                                 </div>
+                              </button>
                            </div>
 
-                           {Object.entries(groupedVariants).map(([groupName, variantsInGroup]) => (
-                              <div key={groupName}>
-                                 <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.08em] text-[#5a5048] font-semibold mb-2.5">
-                                    {groupName}
-                                 </p>
-                                 <div className="flex flex-wrap gap-3 sm:gap-4">
-                                    {variantsInGroup.map((variant, idx) => {
-                                       const val = variant.attributes[groupName] || Object.values(variant.attributes || {})[0] || `Variant ${idx + 1}`;
-                                       const isSelected = selectedVariant && selectedVariant._id === variant._id;
-                                       // Fallback image logic
-                                       const img = variant.images?.[0]?.url || product.images?.[0]?.url;
-                                       return (
-                                          <button
-                                             key={variant._id || idx}
-                                             onClick={() => handleVariantSelect(variant)}
-                                             className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all ${isSelected
+                           {Object.entries(availableAttributes).map(([groupName, values]) => {
+                              return (
+                                 <div key={groupName} className="mb-4">
+                                    <p className="text-[14px] sm:text-[15px] text-[#a9a49b] font-medium mb-3">
+                                       {groupName}: <span className="text-[#f2ede6] font-bold">{selectedAttributes?.[groupName] || ""}</span>
+                                    </p>
+                                    <div className="flex flex-wrap gap-3 sm:gap-4">
+                                       {values.map((val) => {
+                                          const isSelected = selectedAttributes?.[groupName] === val;
+
+                                          const variantForImg = product.variants.find((v) => v.attributes[groupName] === val);
+                                          const vImg = variantForImg?.images?.[0];
+                                          const pImg = product.images?.[0];
+                                          const imgUrl = vImg?.url ?? (typeof vImg === 'string' ? vImg : null) ?? pImg?.url ?? (typeof pImg === 'string' ? pImg : null);
+
+                                          const priceAmount = variantForImg?.price?.amount;
+                                          const priceCurrency = variantForImg?.price?.currency || 'INR';
+                                          const sym = CURRENCY_SYMBOLS[priceCurrency] ?? priceCurrency;
+
+                                          return (
+                                             <button
+                                                key={val}
+                                                onClick={() => handleAttributeSelect(groupName, val)}
+                                                className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#b58a5a] ${isSelected
                                                    ? "border-[#b58a5a] bg-[#b58a5a]/10 ring-1 ring-[#b58a5a]/30"
                                                    : "border-transparent hover:bg-[#211f1b] hover:border-[#3a322c]"
-                                                }`}
-                                          >
-                                             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
-                                                {img ? (
-                                                   <img src={img} alt={val} className="w-full h-full object-cover" />
-                                                ) : (
-                                                   <ImagePlaceholder small />
-                                                )}
-                                             </div>
-                                             <span className={`text-[11px] sm:text-[12px] font-medium max-w-16 truncate ${isSelected ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
-                                                {val}
-                                             </span>
-                                          </button>
-                                       );
-                                    })}
+                                                   }`}
+                                             >
+                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
+                                                   {imgUrl ? (
+                                                      <img src={imgUrl} alt={val} className="w-full h-full object-cover" />
+                                                   ) : (
+                                                      <ImagePlaceholder small />
+                                                   )}
+                                                </div>
+                                                <div className="flex flex-col items-center gap-0.5">
+                                                   <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${isSelected ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
+                                                      {val}
+                                                   </span>
+                                                   {priceAmount && (
+                                                      <span className={`text-[10px] sm:text-[11px] font-semibold ${isSelected ? "text-[#b58a5a]" : "text-[#f2ede6]"}`}>
+                                                         {sym}{Number(priceAmount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                      </span>
+                                                   )}
+                                                </div>
+                                             </button>
+                                          );
+                                       })}
+                                    </div>
                                  </div>
-                              </div>
-                           ))}
+                              );
+                           })}
                         </div>
                      </div>
                   )}

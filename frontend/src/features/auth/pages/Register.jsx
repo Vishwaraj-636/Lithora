@@ -97,6 +97,17 @@ const Register = () => {
       password: "",
       isSeller: false,
    });
+   const user = useSelector((state) => state.auth.user);
+
+   React.useEffect(() => {
+      if (user) {
+         if (user.role === "buyer") {
+            navigate("/");
+         } else if (user.role === "seller") {
+            navigate("/seller/dashboard");
+         }
+      }
+   }, [user, navigate]);
 
    const handleChange = (e) => {
       const { name, value, type, checked } = e.target;
@@ -108,14 +119,18 @@ const Register = () => {
 
    const handleSubmit = async (e) => {
       e.preventDefault();
-      await handleRegister({
+      const user = await handleRegister({
          email: formData.email,
          password: formData.password,
          fullName: formData.fullName,
          contactNumber: formData.contactNumber,
          isSeller: formData.isSeller,
       });
-      navigate("/");
+      if (formData.isSeller) {
+         navigate("/seller/dashboard");
+      } else {
+         navigate("/");
+      }
    };
 
    return (

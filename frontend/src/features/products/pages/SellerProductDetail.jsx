@@ -295,7 +295,7 @@ const SellerProductDetail = () => {
                            ))}
                         </div>
                      )}
-                     <div className="relative w-full aspect-square bg-[#18150f] border border-[#3a322c] rounded-xl overflow-hidden group/slider flex-1">
+                     <div className="relative w-full h-[350px] md:h-[500px] bg-[#18150f] border border-[#3a322c] rounded-xl overflow-hidden group/slider flex-1">
                         {activeImageUrl ? <img src={activeImageUrl} alt={product.title} className="w-full h-full object-contain" /> : <ImagePlaceholder />}
                         {hasMultiple && (
                            <>
