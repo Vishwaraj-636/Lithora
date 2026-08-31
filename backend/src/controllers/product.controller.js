@@ -18,10 +18,12 @@ export async function createProduct(req, res) {
    const product = await productModel.create({
       title,
       description,
-      price: {
-         amount: priceAmount,
-         currency: priceCurrency || "INR",
-      },
+      ...(priceAmount && {
+         price: {
+            amount: priceAmount,
+            currency: priceCurrency || "INR",
+         },
+      }),
       // image:images[0].url,
       images,
       seller: seller._id,
@@ -106,6 +108,7 @@ export async function addProductVariant(req, res) {
    }
 
    const priceAmount = req.body.priceAmount;
+   const priceCurrency = req.body.priceCurrency;
    const stock = Number(req.body.stock) || 0;
    const attributes = JSON.parse(req.body.attributes || "{}");
 
@@ -113,6 +116,12 @@ export async function addProductVariant(req, res) {
       images,
       stock,
       attributes,
+      ...(priceAmount && {
+         price: {
+            amount: priceAmount,
+            currency: priceCurrency || "INR",
+         },
+      }),
    };
 
    product.variants.push(newVariant);

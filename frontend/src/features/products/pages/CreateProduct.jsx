@@ -233,7 +233,6 @@ const CreateProduct = () => {
                                     onChange={handleChange}
                                     placeholder="0.00"
                                     className={inputCls}
-                                    required
                                  />
                               </Field>
                            </div>
