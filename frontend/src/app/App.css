@@ -3,18 +3,16 @@
 /* ── Tailwind v4: enable class-based dark mode ── */
 @variant dark (&:where(.dark, .dark *));
 
-/* ── Autofill overrides so Chrome doesn't inject blue background ── */
+/* ── Autofill overrides — warm ivory light mode ── */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-   -webkit-text-fill-color: #181818 !important;
+   -webkit-text-fill-color: #000000 !important;
    transition: background-color 5000s ease-in-out 0s;
 }
 
-.dark input:-webkit-autofill,
-.dark input:-webkit-autofill:hover,
-.dark input:-webkit-autofill:focus {
-   -webkit-box-shadow: 0 0 0 1000px #1b1b1b inset !important;
-   -webkit-text-fill-color: #f2f0eb !important;
+/* ── Smooth transitions throughout ── */
+*, *::before, *::after {
+   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

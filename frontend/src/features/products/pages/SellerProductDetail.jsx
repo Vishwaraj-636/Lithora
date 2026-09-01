@@ -57,18 +57,18 @@ const ChevronRightIcon = () => (
 /* ─── Spinner ─── */
 const Spinner = ({ size = 'md' }) => {
    const cls = size === 'sm' ? 'w-4 h-4 border' : 'w-8 h-8 border-2';
-   return <div className={`${cls} border-[#3a322c] border-t-[#b58a5a] rounded-full animate-spin`} />;
+   return <div className={`${cls} border-[#e5e5e5] border-t-[#000000] rounded-full animate-spin`} />;
 };
 
 /* ─── Image Placeholder ─── */
 const ImagePlaceholder = ({ small = false }) => (
-   <div className={`w-full h-full flex flex-col items-center justify-center bg-[#211f1b] ${small ? 'gap-1' : 'gap-3'}`}>
-      <svg width={small ? 18 : 36} height={small ? 18 : 36} viewBox="0 0 24 24" fill="none" stroke="#3a322c" strokeWidth="1.5" strokeLinecap="round">
+   <div className={`w-full h-full flex flex-col items-center justify-center bg-[#fafafa] ${small ? 'gap-1' : 'gap-3'}`}>
+      <svg width={small ? 18 : 36} height={small ? 18 : 36} viewBox="0 0 24 24" fill="none" stroke="#cccccc" strokeWidth="1.5" strokeLinecap="round">
          <rect x="3" y="3" width="18" height="18" rx="2" />
          <circle cx="8.5" cy="8.5" r="1.5" />
          <polyline points="21 15 16 10 5 21" />
       </svg>
-      {!small && <p className="text-[11px] text-[#3a322c]">No image</p>}
+      {!small && <p className="text-[11px] text-[#cccccc]">No image</p>}
    </div>
 );
 
@@ -215,10 +215,10 @@ const SellerProductDetail = () => {
    /* ─── Loading ─── */
    if (loading) {
       return (
-         <div className="min-h-screen bg-[#18150f] flex items-center justify-center" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+         <div className="min-h-screen bg-[#ffffff] flex items-center justify-center" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
             <div className="flex flex-col items-center gap-4">
                <Spinner />
-               <p className="text-[13px] text-[#a9a49b] tracking-wide">Loading product…</p>
+               <p className="text-[13px] text-[#666666] tracking-wide">Loading product…</p>
             </div>
          </div>
       );
@@ -227,11 +227,11 @@ const SellerProductDetail = () => {
    /* ─── Not found ─── */
    if (!product) {
       return (
-         <div className="min-h-screen bg-[#18150f] flex items-center justify-center px-4" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+         <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-4" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
             <div className="text-center">
                <p className="text-[40px] mb-4">🕵️</p>
-               <h2 className="text-[20px] font-semibold text-[#f2ede6]">Product not found</h2>
-               <button onClick={() => navigate('/seller/dashboard')} className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">
+               <h2 className="text-[20px] font-semibold text-[#000000]">Product not found</h2>
+               <button onClick={() => navigate('/seller/dashboard')} className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors">
                   <ArrowLeftIcon /> Back to Dashboard
                </button>
             </div>
@@ -243,36 +243,36 @@ const SellerProductDetail = () => {
    const activeImageUrl = images[activeImage]?.url ?? null;
 
    return (
-      <div className="min-h-screen bg-[#18150f] text-[#f2ede6] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+      <div className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
 
          {/* ── Toast ── */}
          {toast && (
-            <div className={`fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold shadow-lg border transition-all ${toast.type === 'error' ? 'bg-red-900/80 border-red-700 text-red-200' : 'bg-[#231f1b] border-[#b58a5a]/50 text-[#b58a5a]'}`}>
+            <div className={`fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-semibold shadow-lg border transition-all ${toast.type === 'error' ? 'bg-red-50 border-red-200 text-red-600' : 'bg-white border-[#000000]/30 text-[#000000]'}`}>
                {toast.type === 'error' ? '✕' : '✓'} {toast.msg}
             </div>
          )}
 
          {/* ══ Navbar ══ */}
-         <nav className="w-full sticky top-0 z-20 bg-[#18150f]/90 backdrop-blur border-b border-[#3a322c]">
+         <nav className="w-full sticky top-0 z-20 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
-               <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#f2ede6] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate('/')}>
+               <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#000000] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate('/')}>
                   Meera M&amp;G
                </span>
                <div className="flex items-center gap-3 sm:gap-4">
-                  <button onClick={() => navigate('/seller/dashboard')} className="inline-flex items-center gap-1.5 text-[12px] text-[#a9a49b] hover:text-[#f2ede6] transition-colors">
+                  <button onClick={() => navigate('/seller/dashboard')} className="inline-flex items-center gap-1.5 text-[12px] text-[#666666] hover:text-[#000000] transition-colors">
                      <ArrowLeftIcon /> Dashboard
                   </button>
-                  <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Logout</button>
+                  <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#333333] transition-colors">Logout</button>
                </div>
             </div>
          </nav>
 
          {/* ══ Breadcrumb ══ */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 pb-2">
-            <p className="text-[11px] tracking-[0.08em] uppercase text-[#a9a49b] font-semibold text-left">
-               <span className="hover:text-[#f2ede6] cursor-pointer transition-colors" onClick={() => navigate('/seller/dashboard')}>Dashboard</span>
+            <p className="text-[11px] tracking-[0.08em] uppercase text-[#666666] font-semibold text-left">
+               <span className="hover:text-[#000000] cursor-pointer transition-colors" onClick={() => navigate('/seller/dashboard')}>Dashboard</span>
                <span className="mx-1.5 opacity-50">/</span>
-               <span className="text-[#f2ede6] capitalize">{product.title}</span>
+               <span className="text-[#000000] capitalize">{product.title}</span>
             </p>
          </div>
 
@@ -281,10 +281,10 @@ const SellerProductDetail = () => {
             {/* ════════════════════════════════
                 SECTION 1 — Product Overview
             ════════════════════════════════ */}
-            <section className="bg-[#211f1b] border border-[#3a322c] rounded-2xl p-5 sm:p-7">
+            <section className="bg-white border border-[#e5e5e5] rounded-2xl p-5 sm:p-7" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                <div className="flex items-center justify-between mb-5">
-                  <h2 className="text-[11px] uppercase tracking-widest text-[#5a5048] font-bold">Product Overview</h2>
-                  <span className="text-[10px] bg-[#18150f] text-[#5a5048] px-2.5 py-1 rounded-full font-mono border border-[#3a322c] truncate max-w-40 sm:max-w-none">{product._id}</span>
+                  <h2 className="text-[11px] uppercase tracking-widest text-[#999999] font-bold">Product Overview</h2>
+                  <span className="text-[10px] bg-[#f5f5f5] text-[#999999] px-2.5 py-1 rounded-full font-mono border border-[#e5e5e5] truncate max-w-40 sm:max-w-none">{product._id}</span>
                </div>
 
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-7">
@@ -294,21 +294,21 @@ const SellerProductDetail = () => {
                         <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto scrollbar-hide shrink-0 md:max-h-96">
                            {images.map((img, idx) => (
                               <button key={img._id ?? idx} onClick={() => setActiveImage(idx)}
-                                 className={`relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all ${idx === activeImage ? 'border-[#b58a5a] opacity-100' : 'border-[#3a322c] opacity-50 hover:opacity-80'}`}>
+                                 className={`relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 transition-all ${idx === activeImage ? 'border-[#000000] opacity-100' : 'border-[#e5e5e5] opacity-50 hover:opacity-80'}`}>
                                  <img src={img.url} alt="" className="w-full h-full object-cover" />
                               </button>
                            ))}
                         </div>
                      )}
-                     <div className="relative w-full h-[350px] md:h-[500px] bg-[#18150f] border border-[#3a322c] rounded-xl overflow-hidden group/slider flex-1">
+                     <div className="relative w-full h-[350px] md:h-[500px] bg-[#fafafa] border border-[#e5e5e5] rounded-xl overflow-hidden group/slider flex-1">
                         {activeImageUrl ? <img src={activeImageUrl} alt={product.title} className="w-full h-full object-contain" /> : <ImagePlaceholder />}
                         {hasMultiple && (
                            <>
-                              <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-[#f2ede6] border border-white/10 opacity-0 group-hover/slider:opacity-100 hover:bg-[#b58a5a] transition-all"><ChevronLeftIcon /></button>
-                              <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-[#f2ede6] border border-white/10 opacity-0 group-hover/slider:opacity-100 hover:bg-[#b58a5a] transition-all"><ChevronRightIcon /></button>
+                              <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 hover:bg-white/90 text-[#000000] border border-[#e5e5e5] opacity-0 group-hover/slider:opacity-100 transition-all"><ChevronLeftIcon /></button>
+                              <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 hover:bg-white/90 text-[#000000] border border-[#e5e5e5] opacity-0 group-hover/slider:opacity-100 transition-all"><ChevronRightIcon /></button>
                               <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
                                  {images.map((_, idx) => (
-                                    <button key={idx} onClick={() => setActiveImage(idx)} className={`rounded-full transition-all ${idx === activeImage ? 'w-4 h-1.5 bg-[#b58a5a]' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'}`} />
+                                    <button key={idx} onClick={() => setActiveImage(idx)} className={`rounded-full transition-all ${idx === activeImage ? 'w-4 h-1.5 bg-[#000000]' : 'w-1.5 h-1.5 bg-[#000000]/20 hover:bg-[#000000]/40'}`} />
                                  ))}
                               </div>
                            </>
@@ -318,26 +318,26 @@ const SellerProductDetail = () => {
 
                   {/* Product info */}
                   <div className="flex flex-col gap-4">
-                     <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#f2ede6] leading-tight capitalize">{product.title}</h1>
+                     <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#000000] leading-tight capitalize">{product.title}</h1>
                      <div className="flex items-baseline gap-2">
-                        <span className="text-[26px] sm:text-[30px] font-bold text-[#b58a5a]">
+                        <span className="text-[26px] sm:text-[30px] font-bold text-[#000000]">
                            {symbol}{Number(product.price?.amount ?? 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
-                        <span className="text-[12px] text-[#5a5048]">{product.price?.currency}</span>
+                        <span className="text-[12px] text-[#999999]">{product.price?.currency}</span>
                      </div>
-                     <div className="h-px bg-[#3a322c]" />
+                     <div className="h-px bg-[#e5e5e5]" />
                      {product.description && (
                         <div>
-                           <p className="text-[10px] uppercase tracking-[0.08em] text-[#5a5048] font-semibold mb-1.5">Description</p>
-                           <p className="text-[14px] text-[#a9a49b] leading-relaxed">{product.description}</p>
+                           <p className="text-[10px] uppercase tracking-[0.08em] text-[#999999] font-semibold mb-1.5">Description</p>
+                           <p className="text-[14px] text-[#666666] leading-relaxed">{product.description}</p>
                         </div>
                      )}
-                     <div className="h-px bg-[#3a322c]" />
+                     <div className="h-px bg-[#e5e5e5]" />
                      <div className="flex flex-wrap gap-3 pt-1">
 
-                        <div className="px-4 py-2.5 bg-[#18150f] border border-[#3a322c] rounded-xl text-center min-w-22.5">
-                           <p className="text-[10px] text-[#5a5048] uppercase tracking-widest mb-0.5">Total Stock</p>
-                           <p className="text-[20px] font-semibold text-[#f2ede6]">
+                        <div className="px-4 py-2.5 bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl text-center min-w-22.5">
+                           <p className="text-[10px] text-[#999999] uppercase tracking-widest mb-0.5">Total Stock</p>
+                           <p className="text-[20px] font-semibold text-[#000000]">
                               {(product.variants ?? []).reduce((acc, v) => acc + (v.stock ?? 0), 0)}
                            </p>
                         </div>
@@ -349,28 +349,28 @@ const SellerProductDetail = () => {
             {/* ════════════════════════════════
                 SECTION 2 — Add New Variant
             ════════════════════════════════ */}
-            <section className="bg-[#211f1b] border border-[#3a322c] rounded-2xl p-5 sm:p-7">
-               <h2 className="text-[11px] uppercase tracking-widest text-[#5a5048] font-bold mb-5">Add New Variant</h2>
+            <section className="bg-white border border-[#e5e5e5] rounded-2xl p-5 sm:p-7" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+               <h2 className="text-[11px] uppercase tracking-widest text-[#999999] font-bold mb-5">Add New Variant</h2>
 
                <div className="space-y-6">
                   {/* Attribute builder */}
                   <div>
-                     <p className="text-[12px] text-[#a9a49b] font-semibold mb-2 uppercase tracking-wider">Attributes</p>
+                     <p className="text-[12px] text-[#666666] font-semibold mb-2 uppercase tracking-wider">Attributes</p>
                      <div className="flex flex-col sm:flex-row gap-2">
                         <input type="text" value={attrKey} onChange={e => setAttrKey(e.target.value)} onKeyDown={e => e.key === 'Enter' && addAttribute()}
-                           placeholder="Name (e.g. Color, Size)" className="flex-1 h-10 px-3 bg-[#18150f] border border-[#3a322c] rounded-lg text-[13px] text-[#f2ede6] placeholder-[#5a5048] focus:outline-none focus:border-[#b58a5a] transition-colors" />
+                           placeholder="Name (e.g. Color, Size)" className="flex-1 h-10 px-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] placeholder:text-[#999999] focus:outline-none focus:border-[#000000] transition-colors" />
                         <input type="text" value={attrVal} onChange={e => setAttrVal(e.target.value)} onKeyDown={e => e.key === 'Enter' && addAttribute()}
-                           placeholder="Value (e.g. Red, XL)" className="flex-1 h-10 px-3 bg-[#18150f] border border-[#3a322c] rounded-lg text-[13px] text-[#f2ede6] placeholder-[#5a5048] focus:outline-none focus:border-[#b58a5a] transition-colors" />
-                        <button onClick={addAttribute} className="shrink-0 h-10 px-4 flex items-center gap-1.5 rounded-lg border border-[#b58a5a] text-[#b58a5a] text-[12px] font-semibold hover:bg-[#b58a5a] hover:text-[#18150f] transition-all">
+                           placeholder="Value (e.g. Red, XL)" className="flex-1 h-10 px-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] placeholder:text-[#999999] focus:outline-none focus:border-[#000000] transition-colors" />
+                        <button onClick={addAttribute} className="shrink-0 h-10 px-4 flex items-center gap-1.5 rounded-lg border border-[#000000] text-[#000000] text-[12px] font-semibold hover:bg-[#000000] hover:text-white transition-all">
                            <PlusIcon /> Add
                         </button>
                      </div>
                      {Object.keys(attributes).length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3">
                            {Object.entries(attributes).map(([k, v]) => (
-                              <span key={k} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium bg-[#b58a5a]/15 text-[#b58a5a] border border-[#b58a5a]/25">
-                                 <span className="text-[#a9a49b] font-normal">{k}:</span> {v}
-                                 <button onClick={() => removeAttribute(k)} className="hover:text-white transition-colors ml-0.5"><XIcon /></button>
+                              <span key={k} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium bg-[#000000]/15 text-[#000000] border border-[#000000]/25">
+                                 <span className="text-[#666666] font-normal">{k}:</span> {v}
+                                 <button onClick={() => removeAttribute(k)} className="hover:text-[#333333] transition-colors ml-0.5"><XIcon /></button>
                               </span>
                            ))}
                         </div>
@@ -380,48 +380,48 @@ const SellerProductDetail = () => {
                   {/* Stock & Price inputs */}
                   <div className="flex flex-col sm:flex-row gap-4">
                      <div className="flex-1">
-                        <label className="text-[12px] text-[#a9a49b] font-semibold uppercase tracking-wider mb-2 block">Initial Stock</label>
+                        <label className="text-[12px] text-[#666666] font-semibold uppercase tracking-wider mb-2 block">Initial Stock</label>
                         <input type="number" min="0" value={stock} onChange={e => setStock(e.target.value)} placeholder="0"
-                           className="w-full h-10 px-3 bg-[#18150f] border border-[#3a322c] rounded-lg text-[13px] text-[#f2ede6] placeholder-[#5a5048] focus:outline-none focus:border-[#b58a5a] transition-colors" />
+                           className="w-full h-10 px-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] placeholder:text-[#999999] focus:outline-none focus:border-[#000000] transition-colors" />
                      </div>
                      <div className="flex-1">
-                        <label className="text-[12px] text-[#a9a49b] font-semibold uppercase tracking-wider mb-2 block">Price <span className="text-[#5a5048] font-normal normal-case">(optional)</span></label>
+                        <label className="text-[12px] text-[#666666] font-semibold uppercase tracking-wider mb-2 block">Price <span className="text-[#999999] font-normal normal-case">(optional)</span></label>
                         <div className="relative">
-                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5a5048] font-semibold">{symbol || '$'}</span>
+                           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#999999] font-semibold">{symbol || '$'}</span>
                            <input type="number" min="0" step="0.01" value={priceAmount} onChange={e => setPriceAmount(e.target.value)} placeholder={product?.price?.amount || '0.00'}
-                              className="w-full h-10 pl-8 pr-3 bg-[#18150f] border border-[#3a322c] rounded-lg text-[13px] text-[#f2ede6] placeholder-[#5a5048] focus:outline-none focus:border-[#b58a5a] transition-colors" />
+                              className="w-full h-10 pl-8 pr-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] placeholder:text-[#999999] focus:outline-none focus:border-[#000000] transition-colors" />
                         </div>
                      </div>
                   </div>
 
                   {/* Image upload */}
                   <div>
-                     <label className="text-[12px] text-[#a9a49b] font-semibold uppercase tracking-wider mb-2 block">Variant Images <span className="text-[#5a5048] font-normal normal-case">(optional)</span></label>
+                     <label className="text-[12px] text-[#666666] font-semibold uppercase tracking-wider mb-2 block">Variant Images <span className="text-[#999999] font-normal normal-case">(optional)</span></label>
                      <div onDrop={handleDrop} onDragOver={e => e.preventDefault()} onClick={() => fileInputRef.current?.click()}
-                        className="border-2 border-dashed border-[#3a322c] rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer hover:border-[#b58a5a]/50 transition-colors group">
-                        <span className="text-[#3a322c] group-hover:text-[#b58a5a]/50 transition-colors"><UploadIcon /></span>
-                        <p className="text-[12px] text-[#5a5048] group-hover:text-[#a9a49b] transition-colors text-center">
-                           Drag &amp; drop images here, or <span className="text-[#b58a5a] underline underline-offset-2">click to browse</span>
+                        className="border-2 border-dashed border-[#dddddd] rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer hover:border-[#000000]/50 bg-[#fafafa] transition-colors group">
+                        <span className="text-[#cccccc] group-hover:text-[#000000]/60 transition-colors"><UploadIcon /></span>
+                        <p className="text-[12px] text-[#999999] group-hover:text-[#666666] transition-colors text-center">
+                           Drag &amp; drop images here, or <span className="text-[#000000] underline underline-offset-2">click to browse</span>
                         </p>
-                        <p className="text-[10px] text-[#3a322c]">PNG, JPG, WEBP · Max 5 MB each</p>
+                        <p className="text-[10px] text-[#cccccc]">PNG, JPG, WEBP · Max 5 MB each</p>
                      </div>
                      <input ref={fileInputRef} type="file" multiple accept="image/*" className="hidden" onChange={e => handleFiles(e.target.files)} />
                      {variantPreviews.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-3">
                            {variantPreviews.map((src, idx) => (
-                              <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-[#3a322c] group/prev">
+                              <div key={idx} className="relative w-16 h-16 rounded-lg overflow-hidden border border-[#e5e5e5] group/prev">
                                  <img src={src} alt="" className="w-full h-full object-cover" />
-                                 <button onClick={() => removePreview(idx)} className="absolute inset-0 bg-black/60 opacity-0 group-hover/prev:opacity-100 flex items-center justify-center transition-opacity text-white"><XIcon /></button>
+                                 <button onClick={() => removePreview(idx)} className="absolute inset-0 bg-black/40 opacity-0 group-hover/prev:opacity-100 flex items-center justify-center transition-opacity text-white"><XIcon /></button>
                               </div>
                            ))}
                         </div>
                      )}
                   </div>
 
-                  {createError && <p className="text-[12px] text-red-400">{createError}</p>}
+                  {createError && <p className="text-[12px] text-red-500">{createError}</p>}
 
                   <button onClick={handleCreateVariant} disabled={creating}
-                     className="w-full sm:w-auto h-11 px-6 flex items-center justify-center gap-2 rounded-xl bg-[#b58a5a] text-[#18150f] text-[13px] font-bold hover:bg-[#c49a68] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]">
+                     className="w-full sm:w-auto h-11 px-6 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] font-bold hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]">
                      {creating ? <><Spinner size="sm" /> Creating…</> : <><PlusIcon /> Create </>}
                   </button>
                </div>
@@ -431,12 +431,12 @@ const SellerProductDetail = () => {
                 SECTION 3 — Existing Variants
             ════════════════════════════════ */}
             {product.variants && product.variants.length > 0 && (
-               <section className="bg-[#211f1b] border border-[#3a322c] rounded-2xl p-5 sm:p-7">
-                  <h2 className="text-[11px] uppercase tracking-widest text-[#5a5048] font-bold mb-5">Existing Variants ({product.variants.length})</h2>
+               <section className="bg-white border border-[#e5e5e5] rounded-2xl p-5 sm:p-7" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
+                  <h2 className="text-[11px] uppercase tracking-widest text-[#999999] font-bold mb-5">Existing Variants ({product.variants.length})</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                      {product.variants.map((variant, idx) => (
-                        <div key={variant._id || idx} className="flex gap-4 p-4 border border-[#3a322c] rounded-xl bg-[#18150f] hover:border-[#b58a5a]/50 transition-colors">
-                           <div className="w-20 h-20 shrink-0 bg-[#211f1b] rounded-lg border border-[#3a322c] overflow-hidden">
+                        <div key={variant._id || idx} className="flex gap-4 p-4 border border-[#e5e5e5] rounded-xl bg-[#fafafa] hover:border-[#000000]/50 transition-colors">
+                           <div className="w-20 h-20 shrink-0 bg-white rounded-lg border border-[#e5e5e5] overflow-hidden">
                               {variant.images?.[0]?.url ? (
                                  <img src={variant.images[0].url} alt="Variant" className="w-full h-full object-cover" />
                               ) : (
@@ -448,23 +448,23 @@ const SellerProductDetail = () => {
                               <div className="flex flex-wrap gap-1.5">
                                  {Object.entries(variant.attributes || {}).length > 0 ? (
                                     Object.entries(variant.attributes).map(([k, v]) => (
-                                       <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#3a322c] text-[#f2ede6] truncate">
-                                          <span className="text-[#a9a49b]">{k}:</span> {v}
+                                       <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#e5e5e5] text-[#000000] truncate">
+                                          <span className="text-[#666666]">{k}:</span> {v}
                                        </span>
                                     ))
                                  ) : (
-                                    <span className="text-[11px] text-[#5a5048]">No attributes</span>
+                                    <span className="text-[11px] text-[#999999]">No attributes</span>
                                  )}
                               </div>
                               {/* Stock and Price */}
-                              <div className="flex flex-wrap items-center gap-3 text-[12px] text-[#a9a49b]">
-                                 <div className="flex items-center gap-1.5 bg-[#211f1b] px-2 py-1 rounded-md border border-[#3a322c]">
+                              <div className="flex flex-wrap items-center gap-3 text-[12px] text-[#666666]">
+                                 <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
                                     <span>📦 Stock:</span>
-                                    <span className="font-semibold text-[#f2ede6]">{variant.stock ?? 0}</span>
+                                    <span className="font-semibold text-[#000000]">{variant.stock ?? 0}</span>
                                  </div>
-                                 <div className="flex items-center gap-1.5 bg-[#211f1b] px-2 py-1 rounded-md border border-[#3a322c]">
+                                 <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
                                     <span>💰 Price:</span>
-                                    <span className="font-semibold text-[#b58a5a]">{variant.price?.currency || product.price?.currency || 'INR'} {variant.price?.amount || product.price?.amount || 0}</span>
+                                    <span className="font-semibold text-[#000000]">{variant.price?.currency || product.price?.currency || 'INR'} {variant.price?.amount || product.price?.amount || 0}</span>
                                  </div>
                               </div>
                            </div>
@@ -477,10 +477,10 @@ const SellerProductDetail = () => {
          </main>
 
          {/* ── Footer ── */}
-         <footer className="w-full border-t border-[#3a322c] py-6 mt-4">
+         <footer className="w-full border-t border-[#e5e5e5] py-6 mt-4">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2">
-               <span className="text-lg tracking-[-0.04em] text-[#f2ede6]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
-               <p className="text-[11px] text-[#5a5048]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
+               <span className="text-lg tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
+               <p className="text-[11px] text-[#999999]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
             </div>
          </footer>
       </div>

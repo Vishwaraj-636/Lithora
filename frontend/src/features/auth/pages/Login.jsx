@@ -59,16 +59,16 @@ function FloatingInput({
             onChange={onChange}
             className={[
                "peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent",
-               "text-[#f2ede6]",
-               "border-[#3a322c]",
-               "focus:border-[#b58a5a]",
+               "text-[#000000]",
+               "border-[#dddddd]",
+               "focus:border-[#000000]",
                "focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base",
             ].join(" ")}
          />
          <label
             htmlFor={id}
             className={[
-               "absolute left-0 top-3.5 text-sm text-[#a9a49b] cursor-text",
+               "absolute left-0 top-3.5 text-sm text-[#666666] cursor-text",
                "transition-all duration-200",
                "-translate-y-6 peer-placeholder-shown:translate-y-0",
                "peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm",
@@ -123,14 +123,14 @@ const Login = () => {
 
    return (
       <main
-         className="min-h-screen flex flex-col md:flex-row bg-[#18150f] text-[#f2ede6]"
+         className="min-h-screen flex flex-col md:flex-row bg-[#ffffff] text-[#000000]"
          style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
          {/* ── LEFT PANEL — editorial branding (md+) ── */}
-         <div className="hidden md:flex md:w-[55%] bg-[#18150f] flex-col justify-between p-16 min-h-screen border-r border-[#3a322c]">
+         <div className="hidden md:flex md:w-[55%] bg-[#f5f5f5] flex-col justify-between p-16 min-h-screen border-r border-[#e5e5e5]">
             <header>
                <span
-                  className="text-2xl tracking-[-0.04em] text-[#f2ede6]"
+                  className="text-2xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
                   Meera M&amp;G
@@ -139,7 +139,7 @@ const Login = () => {
 
             <div className="flex-1 flex items-center">
                <h2
-                  className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#f2ede6] whitespace-pre-line"
+                  className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#000000] whitespace-pre-line"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
                   {"Crafted from\nthe earth,\nbuilt to last."}
@@ -147,18 +147,18 @@ const Login = () => {
             </div>
 
             <footer>
-               <p className="text-sm tracking-wide text-[#81756b]">
+               <p className="text-sm tracking-wide text-[#666666]">
                   The trusted source for premium marble &amp; granite.
                </p>
             </footer>
          </div>
 
          {/* ── RIGHT PANEL — form ── */}
-         <div className="w-full md:w-[45%] bg-[#211f1b] flex flex-col justify-center p-6 sm:p-12 md:p-16 min-h-screen relative">
+         <div className="w-full md:w-[45%] bg-[#ffffff] flex flex-col justify-center p-6 sm:p-12 md:p-16 min-h-screen relative">
             {/* Mobile logo */}
             <div className="absolute top-6 right-6 md:top-10 md:right-10">
                <span
-                  className="block md:hidden text-xl tracking-[-0.04em] text-[#f2ede6]"
+                  className="block md:hidden text-xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
                   Meera M&amp;G
@@ -169,7 +169,7 @@ const Login = () => {
             <div className="w-full max-w-md mx-auto mt-16 md:mt-0">
                <div className="mb-12">
                   <h1
-                     className="text-[32px] leading-[1.3] text-[#f2ede6] mb-2"
+                     className="text-[32px] leading-[1.3] text-[#000000] mb-2"
                      style={{
                         fontFamily: "'Playfair Display', serif",
                         fontWeight: 500,
@@ -177,7 +177,7 @@ const Login = () => {
                   >
                      Sign in
                   </h1>
-                  <p className="text-sm text-[#a9a49b]">
+                  <p className="text-sm text-[#666666]">
                      Welcome back to Meera M&amp;G.
                   </p>
                </div>
@@ -202,11 +202,11 @@ const Login = () => {
                         required
                         value={formData.password}
                         onChange={handleChange}
-                        className="peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent text-[#f2ede6] border-[#3a322c] focus:border-[#b58a5a] focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base"
+                        className="peer block w-full border-0 border-b py-3.5 px-0 pr-8 bg-transparent text-[#000000] border-[#dddddd] focus:border-[#000000] focus:ring-0 focus:outline-none placeholder-transparent transition-colors duration-200 text-base"
                      />
                      <label
                         htmlFor="password"
-                        className="absolute left-0 top-3.5 text-sm text-[#a9a49b] cursor-text transition-all duration-200 -translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm"
+                        className="absolute left-0 top-3.5 text-sm text-[#666666] cursor-text transition-all duration-200 -translate-y-6 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:text-base peer-focus:-translate-y-6 peer-focus:text-sm"
                      >
                         Password
                      </label>
@@ -214,7 +214,7 @@ const Login = () => {
                         type="button"
                         onClick={() => setShowPassword((v) => !v)}
                         aria-label="Toggle password visibility"
-                        className="absolute right-0 top-3.5 text-[#a9a49b] hover:text-[#f2ede6] transition-colors duration-200"
+                        className="absolute right-0 top-3.5 text-[#666666] hover:text-[#000000] transition-colors duration-200"
                      >
                         {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                      </button>
@@ -226,7 +226,7 @@ const Login = () => {
                      <button
                         type="submit"
                         disabled={loading}
-                        className="w-full py-3.5 px-6 rounded bg-[#b58a5a] hover:bg-[#c49a68] text-white text-xs font-semibold uppercase tracking-widest transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#b58a5a] focus:ring-offset-[#211f1b] disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full py-3.5 px-6 rounded bg-[#000000] hover:bg-[#333333] text-white text-xs font-semibold uppercase tracking-widest transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000000] focus:ring-offset-[#ffffff] disabled:opacity-70 disabled:cursor-not-allowed"
                      >
                         {loading ? "Signing in..." : "Sign In"}
                      </button>
@@ -235,11 +235,11 @@ const Login = () => {
 
                <div className="mt-6 text-center">
                   <ContinueWithGoogle />
-                  <p className="text-xs text-[#a9a49b]">
+                  <p className="text-xs text-[#666666]">
                      Don&apos;t have an account?{" "}
                      <Link
                         to="/register"
-                        className="text-[#f2ede6] border-b border-[#3a322c] hover:border-[#b58a5a] pb-0.5 transition-colors duration-200"
+                        className="text-[#000000] border-b border-[#dddddd] hover:border-[#000000] pb-0.5 transition-colors duration-200"
                      >
                         Create one
                      </Link>

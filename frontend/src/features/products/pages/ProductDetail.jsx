@@ -67,13 +67,13 @@ const RefreshIcon = () => (
 
 /* ── Image Placeholder ── */
 const ImagePlaceholder = ({ small = false }) => (
-   <div className={`w-full h-full flex flex-col items-center justify-center bg-[#211f1b] ${small ? "gap-1" : "gap-3"}`}>
-      <svg width={small ? "24" : "48"} height={small ? "24" : "48"} viewBox="0 0 24 24" fill="none" stroke="#3a322c" strokeWidth="1.5" strokeLinecap="round">
+   <div className={`w-full h-full flex flex-col items-center justify-center bg-[#fafafa] ${small ? "gap-1" : "gap-3"}`}>
+      <svg width={small ? "24" : "48"} height={small ? "24" : "48"} viewBox="0 0 24 24" fill="none" stroke="#cccccc" strokeWidth="1.5" strokeLinecap="round">
          <rect x="3" y="3" width="18" height="18" rx="2" />
          <circle cx="8.5" cy="8.5" r="1.5" />
          <polyline points="21 15 16 10 5 21" />
       </svg>
-      {!small && <p className="text-[12px] text-[#3a322c] mt-3">No image available</p>}
+      {!small && <p className="text-[12px] text-[#cccccc] mt-3">No image available</p>}
    </div>
 );
 
@@ -175,10 +175,10 @@ const ProductDetail = () => {
    /* ── Loading state ── */
    if (loading) {
       return (
-         <div className="min-h-screen bg-[#18150f] flex items-center justify-center" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+         <div className="min-h-screen bg-[#ffffff] flex items-center justify-center" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
             <div className="flex flex-col items-center gap-4">
-               <div className="w-8 h-8 border-2 border-[#3a322c] border-t-[#b58a5a] rounded-full animate-spin" />
-               <p className="text-[13px] text-[#a9a49b] tracking-wide">Loading slab details…</p>
+               <div className="w-8 h-8 border-2 border-[#e5e5e5] border-t-[#000000] rounded-full animate-spin" />
+               <p className="text-[13px] text-[#666666] tracking-wide">Loading slab details…</p>
             </div>
          </div>
       );
@@ -187,12 +187,12 @@ const ProductDetail = () => {
    /* ── Not found state ── */
    if (!product) {
       return (
-         <div className="min-h-screen bg-[#18150f] flex items-center justify-center px-4" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+         <div className="min-h-screen bg-[#ffffff] flex items-center justify-center px-4" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
             <div className="text-center">
                <p className="text-[40px] mb-4">🕵️</p>
-               <h2 className="text-[20px] font-semibold text-[#f2ede6]">Product not found</h2>
-               <p className="mt-2 text-[13px] text-[#a9a49b]">This slab may have been removed or is no longer available.</p>
-               <button onClick={() => navigate("/")} className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">
+               <h2 className="text-[20px] font-semibold text-[#000000]">Product not found</h2>
+               <p className="mt-2 text-[13px] text-[#666666]">This slab may have been removed or is no longer available.</p>
+               <button onClick={() => navigate("/")} className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors">
                   <ArrowLeftIcon /> Back to Catalogue
                </button>
             </div>
@@ -213,21 +213,21 @@ const ProductDetail = () => {
    const hasMultiple = displayImages.length > 1;
 
    return (
-      <div className="min-h-screen bg-[#18150f] text-[#f2ede6] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
+      <div className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
          {/* ══════════════════════════════ Navbar ══════════════════════════════ */}
-         <nav className="sticky top-0 z-20 bg-[#18150f]/90 backdrop-blur border-b border-[#3a322c]">
+         <nav className="sticky top-0 z-20 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
-               <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#f2ede6] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate("/")}>
+               <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#000000] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate("/")}>
                   Meera M&amp;G
                </span>
                {!user ? (
                   <div className="flex items-center gap-3 sm:gap-4">
-                     <a href="/login" className="text-[13px] text-[#a9a49b] hover:text-[#f2ede6] transition-colors">Sign in</a>
-                     <a href="/register" className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Register</a>
+                     <a href="/login" className="text-[13px] text-[#666666] hover:text-[#000000] transition-colors">Sign in</a>
+                     <a href="/register" className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#333333] transition-colors">Register</a>
                   </div>
                ) : (
                   <div className="flex items-center gap-3 sm:gap-4">
-                     <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Logout</button>
+                     <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#333333] transition-colors">Logout</button>
                   </div>
                )}
             </div>
@@ -235,12 +235,12 @@ const ProductDetail = () => {
 
          {/* ══════════════════════════════ Breadcrumb ══════════════════════════════ */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 sm:pt-6 pb-2 flex justify-start">
-            <p className="text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-[#a9a49b] font-semibold truncate text-left">
-               <span className="hover:text-[#f2ede6] cursor-pointer transition-colors" onClick={() => navigate("/")}>Home</span>
+            <p className="text-[10px] sm:text-[11px] tracking-[0.08em] uppercase text-[#666666] font-semibold truncate text-left">
+               <span className="hover:text-[#000000] cursor-pointer transition-colors" onClick={() => navigate("/")}>Home</span>
                <span className="mx-1.5 opacity-50">/</span>
-               <span className="hover:text-[#f2ede6] cursor-pointer transition-colors hidden sm:inline" onClick={() => navigate("/")}>All Products</span>
+               <span className="hover:text-[#000000] cursor-pointer transition-colors hidden sm:inline" onClick={() => navigate("/")}>All Products</span>
                <span className="mx-1.5 opacity-50 hidden sm:inline">/</span>
-               <span className="text-[#f2ede6] capitalize">{product.title}</span>
+               <span className="text-[#000000] capitalize">{product.title}</span>
             </p>
          </div>
 
@@ -257,12 +257,12 @@ const ProductDetail = () => {
                               <button
                                  key={img._id ?? idx}
                                  onClick={() => setActiveImage(idx)}
-                                 className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all duration-200 ${idx === activeImage ? "border-[#b58a5a] opacity-100 ring-1 ring-[#b58a5a]/30" : "border-[#3a322c] opacity-50 hover:opacity-80 hover:border-[#7a6040]"}`}
+                                 className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg sm:rounded-xl overflow-hidden border-2 transition-all duration-200 ${idx === activeImage ? "border-[#000000] opacity-100 ring-1 ring-[#000000]/30" : "border-[#e5e5e5] opacity-50 hover:opacity-80 hover:border-[#7a6040]"}`}
                               >
                                  {imgUrl ? (
                                     <img src={imgUrl} alt={`${product.title} view ${idx + 1}`} className="w-full h-full object-cover" />
                                  ) : (
-                                    <div className="w-full h-full bg-[#211f1b]" />
+                                    <div className="w-full h-full bg-[#fafafa]" />
                                  )}
                               </button>
                            );
@@ -270,7 +270,7 @@ const ProductDetail = () => {
                      </div>
                   )}
 
-                  <div className="relative w-full h-[350px] md:h-[500px] bg-[#211f1b] border border-[#3a322c] rounded-xl sm:rounded-2xl overflow-hidden group/slider md:flex-1">
+                  <div className="relative w-full h-[350px] md:h-[500px] bg-[#fafafa] border border-[#e5e5e5] rounded-xl sm:rounded-2xl overflow-hidden group/slider md:flex-1">
                      {activeImageUrl ? (
                         <img src={activeImageUrl} alt={product.title} className="w-full h-full object-contain transition-opacity duration-300" />
                      ) : (
@@ -278,11 +278,11 @@ const ProductDetail = () => {
                      )}
                      {hasMultiple && (
                         <>
-                           <button onClick={() => prevImage(displayImages.length)} aria-label="Previous image" className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-black/60 text-[#f2ede6] backdrop-blur-sm border border-white/10 opacity-70 sm:opacity-0 sm:group-hover/slider:opacity-100 hover:bg-[#b58a5a] hover:border-[#b58a5a] transition-all duration-200 active:scale-90"><ChevronLeftIcon /></button>
-                           <button onClick={() => nextImage(displayImages.length)} aria-label="Next image" className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-black/60 text-[#f2ede6] backdrop-blur-sm border border-white/10 opacity-70 sm:opacity-0 sm:group-hover/slider:opacity-100 hover:bg-[#b58a5a] hover:border-[#b58a5a] transition-all duration-200 active:scale-90"><ChevronRightIcon /></button>
+                           <button onClick={() => prevImage(displayImages.length)} aria-label="Previous image" className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-white/70 hover:bg-white/90 text-[#000000] border border-[#e5e5e5] opacity-70 sm:opacity-0 sm:group-hover/slider:opacity-100 transition-all duration-200 active:scale-90"><ChevronLeftIcon /></button>
+                           <button onClick={() => nextImage(displayImages.length)} aria-label="Next image" className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-white/70 hover:bg-white/90 text-[#000000] border border-[#e5e5e5] opacity-70 sm:opacity-0 sm:group-hover/slider:opacity-100 transition-all duration-200 active:scale-90"><ChevronRightIcon /></button>
                            <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-10">
                               {displayImages.map((_, idx) => (
-                                 <button key={idx} onClick={() => setActiveImage(idx)} aria-label={`Go to image ${idx + 1}`} className={`rounded-full transition-all duration-200 ${idx === activeImage ? "w-4 h-1.5 bg-[#b58a5a]" : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"}`} />
+                                 <button key={idx} onClick={() => setActiveImage(idx)} aria-label={`Go to image ${idx + 1}`} className={`rounded-full transition-all duration-200 ${idx === activeImage ? "w-4 h-1.5 bg-[#000000]" : "w-1.5 h-1.5 bg-[#000000]/20 hover:bg-[#000000]/40"}`} />
                               ))}
                            </div>
                         </>
@@ -292,46 +292,46 @@ const ProductDetail = () => {
 
                {/* ── RIGHT: Product Details ── */}
                <div className="flex flex-col gap-5 sm:gap-6 lg:sticky lg:top-20 lg:self-start">
-                  <h1 className="text-[22px] sm:text-[28px] lg:text-[32px] xl:text-[36px] font-semibold text-[#f2ede6] leading-tight tracking-tight capitalize">
+                  <h1 className="text-[22px] sm:text-[28px] lg:text-[32px] xl:text-[36px] font-semibold text-[#000000] leading-tight tracking-tight capitalize">
                      {product.title}
                   </h1>
 
                   <div className="flex items-baseline gap-2">
                      {displayPriceAmount !== null ? (
                         <>
-                           <span className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#b58a5a] leading-none">
+                           <span className="text-[28px] sm:text-[32px] lg:text-[36px] font-bold text-[#000000] leading-none">
                               {symbol}{Number(displayPriceAmount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                            </span>
-                           <span className="text-[12px] sm:text-[13px] text-[#5a5048]">{displayPriceCurrency}</span>
+                           <span className="text-[12px] sm:text-[13px] text-[#999999]">{displayPriceCurrency}</span>
                         </>
                      ) : (
-                        <span className="text-[22px] sm:text-[24px] font-semibold text-[#b58a5a] leading-none">Contact for price</span>
+                        <span className="text-[22px] sm:text-[24px] font-semibold text-[#000000] leading-none">Contact for price</span>
                      )}
                   </div>
 
-                  <div className="h-px bg-[#3a322c] w-full" />
+                  <div className="h-px bg-[#e5e5e5] w-full" />
 
                   {/* Variants List (Grouped by Attribute with Mini Images) */}
                   {product.variants && product.variants.length > 0 && (
                      <div className="flex flex-col gap-5">
-                        <p className="text-[13px] sm:text-[14px] text-[#f2ede6] font-semibold">
+                        <p className="text-[13px] sm:text-[14px] text-[#000000] font-semibold">
                            Select Variant
                         </p>
 
                         <div className="flex flex-col gap-4">
                            {/* Separate Original Product Button */}
                            <div className="mb-2">
-                              <p className="text-[14px] sm:text-[15px] text-[#a9a49b] font-medium mb-3">
-                                 Default: <span className="text-[#f2ede6] font-bold">{!selectedAttributes ? "Original" : ""}</span>
+                              <p className="text-[14px] sm:text-[15px] text-[#666666] font-medium mb-3">
+                                 Default: <span className="text-[#000000] font-bold">{!selectedAttributes ? "Original" : ""}</span>
                               </p>
                               <button
                                  onClick={() => { setSelectedAttributes(null); setActiveImage(0); }}
-                                 className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#b58a5a] ${!selectedAttributes
-                                    ? "border-[#b58a5a] bg-[#b58a5a]/10 ring-1 ring-[#b58a5a]/30"
-                                    : "border-transparent hover:bg-[#211f1b] hover:border-[#3a322c]"
+                                 className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#000000] ${!selectedAttributes
+                                    ? "border-[#000000] bg-[#000000]/10 ring-1 ring-[#000000]/30"
+                                    : "border-transparent hover:bg-[#fafafa] hover:border-[#e5e5e5]"
                                     }`}
                               >
-                                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
+                                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#e5e5e5] shrink-0 bg-[#fafafa]">
                                     {product.images?.[0] ? (
                                        <img src={typeof product.images[0] === 'string' ? product.images[0] : product.images[0].url} alt="Original Product" className="w-full h-full object-cover" />
                                     ) : (
@@ -339,11 +339,11 @@ const ProductDetail = () => {
                                     )}
                                  </div>
                                  <div className="flex flex-col items-center gap-0.5">
-                                    <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${!selectedAttributes ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
+                                    <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${!selectedAttributes ? "text-[#000000]" : "text-[#666666]"}`}>
                                        Original
                                     </span>
                                     {product.price?.amount && (
-                                       <span className={`text-[10px] sm:text-[11px] font-semibold ${!selectedAttributes ? "text-[#b58a5a]" : "text-[#f2ede6]"}`}>
+                                       <span className={`text-[10px] sm:text-[11px] font-semibold ${!selectedAttributes ? "text-[#000000]" : "text-[#000000]"}`}>
                                           {CURRENCY_SYMBOLS[product.price?.currency || 'INR'] ?? (product.price?.currency || 'INR')}{Number(product.price.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                        </span>
                                     )}
@@ -354,8 +354,8 @@ const ProductDetail = () => {
                            {Object.entries(availableAttributes).map(([groupName, values]) => {
                               return (
                                  <div key={groupName} className="mb-4">
-                                    <p className="text-[14px] sm:text-[15px] text-[#a9a49b] font-medium mb-3">
-                                       {groupName}: <span className="text-[#f2ede6] font-bold">{selectedAttributes?.[groupName] || ""}</span>
+                                    <p className="text-[14px] sm:text-[15px] text-[#666666] font-medium mb-3">
+                                       {groupName}: <span className="text-[#000000] font-bold">{selectedAttributes?.[groupName] || ""}</span>
                                     </p>
                                     <div className="flex flex-wrap gap-3 sm:gap-4">
                                        {values.map((val) => {
@@ -374,12 +374,12 @@ const ProductDetail = () => {
                                              <button
                                                 key={val}
                                                 onClick={() => handleAttributeSelect(groupName, val)}
-                                                className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#b58a5a] ${isSelected
-                                                   ? "border-[#b58a5a] bg-[#b58a5a]/10 ring-1 ring-[#b58a5a]/30"
-                                                   : "border-transparent hover:bg-[#211f1b] hover:border-[#3a322c]"
+                                                className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#000000] ${isSelected
+                                                   ? "border-[#000000] bg-[#000000]/10 ring-1 ring-[#000000]/30"
+                                                   : "border-transparent hover:bg-[#fafafa] hover:border-[#e5e5e5]"
                                                    }`}
                                              >
-                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#3a322c] shrink-0 bg-[#18150f]">
+                                                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#e5e5e5] shrink-0 bg-[#fafafa]">
                                                    {imgUrl ? (
                                                       <img src={imgUrl} alt={val} className="w-full h-full object-cover" />
                                                    ) : (
@@ -387,11 +387,11 @@ const ProductDetail = () => {
                                                    )}
                                                 </div>
                                                 <div className="flex flex-col items-center gap-0.5">
-                                                   <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${isSelected ? "text-[#b58a5a]" : "text-[#a9a49b]"}`}>
+                                                   <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${isSelected ? "text-[#000000]" : "text-[#666666]"}`}>
                                                       {val}
                                                    </span>
                                                    {priceAmount && (
-                                                      <span className={`text-[10px] sm:text-[11px] font-semibold ${isSelected ? "text-[#b58a5a]" : "text-[#f2ede6]"}`}>
+                                                      <span className={`text-[10px] sm:text-[11px] font-semibold ${isSelected ? "text-[#000000]" : "text-[#000000]"}`}>
                                                          {sym}{Number(priceAmount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                       </span>
                                                    )}
@@ -408,21 +408,21 @@ const ProductDetail = () => {
                   )}
 
                   {selectedVariant && (
-                     <p className="text-[13px] text-[#a9a49b] font-medium">
-                        Stock: <span className="text-[#f2ede6]">{selectedVariant.stock}</span> available
+                     <p className="text-[13px] text-[#666666] font-medium">
+                        Stock: <span className="text-[#000000]">{selectedVariant.stock}</span> available
                      </p>
                   )}
 
-                  {product.variants && product.variants.length > 0 && <div className="h-px bg-[#3a322c] w-full" />}
+                  {product.variants && product.variants.length > 0 && <div className="h-px bg-[#e5e5e5] w-full" />}
 
                   {product.description && (
                      <div>
-                        <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.08em] text-[#5a5048] font-semibold mb-1.5">Description</p>
-                        <p className="text-[14px] sm:text-[15px] text-[#a9a49b] leading-relaxed">{product.description}</p>
+                        <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.08em] text-[#999999] font-semibold mb-1.5">Description</p>
+                        <p className="text-[14px] sm:text-[15px] text-[#666666] leading-relaxed">{product.description}</p>
                      </div>
                   )}
 
-                  <div className="h-px bg-[#3a322c] w-full" />
+                  <div className="h-px bg-[#e5e5e5] w-full" />
 
                   <div className="flex flex-col gap-3">
                      <button 
@@ -432,10 +432,10 @@ const ProductDetail = () => {
                            variantId: selectedVariant?._id
                         })
                      }}
-                     disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#b58a5a] text-[#b58a5a] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#b58a5a] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                     disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#000000] text-[#000000] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#000000] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                         <ShoppingCartIcon /> Add to Cart
                      </button>
-                     <button disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#b58a5a] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#c49a68] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                     <button disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <BoltIcon /> Buy Now
                      </button>
                   </div>
@@ -446,16 +446,16 @@ const ProductDetail = () => {
                         { icon: <ShieldIcon />, label: "Secure Payment" },
                         { icon: <RefreshIcon />, label: "Easy Returns" },
                      ].map(({ icon, label }) => (
-                        <div key={label} className="flex flex-col items-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-2 bg-[#211f1b] border border-[#3a322c] rounded-xl text-center">
-                           <span className="text-[#b58a5a]">{icon}</span>
-                           <span className="text-[9px] sm:text-[10px] text-[#a9a49b] font-medium leading-tight">{label}</span>
+                        <div key={label} className="flex flex-col items-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-2 bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl text-center">
+                           <span className="text-[#000000]">{icon}</span>
+                           <span className="text-[9px] sm:text-[10px] text-[#666666] font-medium leading-tight">{label}</span>
                         </div>
                      ))}
                   </div>
 
-                  <div className="pt-1 border-t border-[#2e2a25]">
-                     <p className="text-[10px] sm:text-[11px] text-[#5a5048] break-all">
-                        Product ID: <span className="text-[#7a6f65]">{product._id}</span>
+                  <div className="pt-1 border-t border-[#f0f0f0]">
+                     <p className="text-[10px] sm:text-[11px] text-[#999999] break-all">
+                        Product ID: <span className="text-[#999999]">{product._id}</span>
                      </p>
                   </div>
                </div>
@@ -464,16 +464,16 @@ const ProductDetail = () => {
 
          {/* ── Back link ── */}
          <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pb-8 sm:pb-10">
-            <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#a9a49b] hover:text-[#f2ede6] transition-colors">
+            <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 text-[12px] sm:text-[13px] text-[#666666] hover:text-[#000000] transition-colors">
                <ArrowLeftIcon /> Back to Catalogue
             </button>
          </div>
 
          {/* ── Footer ── */}
-         <footer className="border-t border-[#3a322c] py-6 sm:py-8 mt-auto">
+         <footer className="border-t border-[#e5e5e5] py-6 sm:py-8 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#f2ede6]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
-               <p className="text-[10px] sm:text-[11px] text-[#5a5048]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
+               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
+               <p className="text-[10px] sm:text-[11px] text-[#999999]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
             </div>
          </footer>
       </div>
