@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
 import { useAuth } from "../../auth/hook/useAuth";
+import { useCart } from "../../cart/hook/useCart";
+
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: "₹", USD: "$", EUR: "€", GBP: "£" };
@@ -84,6 +86,10 @@ const ProductDetail = () => {
    const user = useSelector((state) => state.auth.user);
    const { handleGetProductById } = useProduct();
    const { handleLogout } = useAuth();
+   const { handleAddItem } = useCart();
+
+
+
 
    const [product, setProduct] = useState(null);
    const [loading, setLoading] = useState(true);
@@ -98,7 +104,11 @@ const ProductDetail = () => {
    async function fetchProductDetails() {
       const data = await handleGetProductById(productId);
       setProduct(data);
-      setSelectedAttributes(null);
+      if (data?.variants?.length > 0) {
+         setSelectedAttributes(data.variants[0].attributes || {});
+      } else {
+         setSelectedAttributes({});
+      }
       setLoading(false);
    }
 
@@ -189,6 +199,9 @@ const ProductDetail = () => {
          </div>
       );
    }
+
+   // console.log({product,selectedVariant})
+
 
    /* ── Determine display values based on variant or product fallback ── */
    const displayPriceAmount = selectedVariant?.price?.amount ?? product.price?.amount ?? null;
@@ -412,7 +425,14 @@ const ProductDetail = () => {
                   <div className="h-px bg-[#3a322c] w-full" />
 
                   <div className="flex flex-col gap-3">
-                     <button disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#b58a5a] text-[#b58a5a] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#b58a5a] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                     <button 
+                     onClick={()=>{
+                        handleAddItem({
+                           productId: product._id,
+                           variantId: selectedVariant?._id
+                        })
+                     }}
+                     disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#b58a5a] text-[#b58a5a] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#b58a5a] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                         <ShoppingCartIcon /> Add to Cart
                      </button>
                      <button disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#b58a5a] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#c49a68] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
