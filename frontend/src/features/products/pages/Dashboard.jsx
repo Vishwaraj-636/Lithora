@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useProduct } from "../hook/useProduct";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hook/useAuth";
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: "₹", USD: "$", EUR: "€", GBP: "£" };
@@ -161,6 +162,7 @@ const Dashboard = () => {
    const { handleGetProduct } = useProduct();
    const products = useSelector((state) => state.product.sellerProducts);
    const navigate = useNavigate();
+   const { handleLogout } = useAuth();
 
    useEffect(() => {
       handleGetProduct();
@@ -175,13 +177,21 @@ const Dashboard = () => {
       >
          {/* ── Navbar ── */}
          <nav className="sticky top-0 z-10 bg-[#18150f]/90 backdrop-blur border-b border-[#3a322c]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
                <span
                   className="text-2xl tracking-[-0.04em] text-[#f2ede6]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
                   Meera M&amp;G
                </span>
+               <div className="flex items-center gap-4">
+                  <button
+                     onClick={handleLogout}
+                     className="px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors"
+                  >
+                     Logout
+                  </button>
+               </div>
             </div>
          </nav>
 

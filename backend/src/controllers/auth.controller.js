@@ -3,130 +3,152 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 
 async function sendTokenResponse(user, res) {
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    config.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    },
-  );
+   const token = jwt.sign(
+      {
+         id: user._id,
+      },
+      config.JWT_SECRET,
+      {
+         expiresIn: "7d",
+      },
+   );
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
+   res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+   });
 
-  res.status(200).json({
-    token,
-    user: {
-      id: user._id,
-      email: user.email,
-      contact: user.contact,
-      fullname: user.fullname,
-      role: user.role,
-    },
-  });
+   res.status(200).json({
+      token,
+      user: {
+         id: user._id,
+         email: user.email,
+         contact: user.contact,
+         fullname: user.fullname,
+         role: user.role,
+      },
+   });
 }
 
 export const register = async (req, res) => {
-  const { email, contact, password, fullname, isSeller } = req.body;
-  try {
-    const existingUser = await userModel.findOne({
-      $or: [{ email }, { contact }],
-    });
+   const { email, contact, password, fullname, isSeller } = req.body;
+   try {
+      const existingUser = await userModel.findOne({
+         $or: [{ email }, { contact }],
+      });
 
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+      if (existingUser) {
+         return res.status(400).json({ message: "User already exists" });
+      }
 
-    const user = new userModel({
-      email,
-      contact,
-      password,
-      fullname,
-      role: isSeller ? "seller" : "buyer",
-    });
+      const user = new userModel({
+         email,
+         contact,
+         password,
+         fullname,
+         role: isSeller ? "seller" : "buyer",
+      });
 
-    await user.save();
-    await sendTokenResponse(user, res, "User registered successfully");
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
+      await user.save();
+      await sendTokenResponse(user, res, "User registered successfully");
+   } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal server error" });
+   }
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+   const { email, password } = req.body;
 
-  try {
-    const user = await userModel.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+   try {
+      const user = await userModel.findOne({ email });
+      if (!user) {
+         return res.status(400).json({ message: "Invalid email or password" });
+      }
 
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+         return res.status(400).json({ message: "Invalid email or password" });
+      }
 
-    await sendTokenResponse(user, res, "User logged in successfully");
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
+      await sendTokenResponse(user, res, "User logged in successfully");
+   } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Internal server error" });
+   }
 };
 
 export const googleCallback = async (req, res) => {
-  const { id, displayName, emails, photos } = req.user;
+   const { id, displayName, emails, photos } = req.user;
 
-  const email = emails[0].value;
-  const profilePic = photos[0].value;
+   const email = emails[0].value;
+   const profilePic = photos[0].value;
 
-  let user = await userModel.findOne({
-    email,
-  });
-
-  if (!user) {
-    user = await userModel.create({
+   let user = await userModel.findOne({
       email,
-      googleId: id,
-      fullname: displayName,
-    });
-  }
+   });
 
-  const token = jwt.sign(
-    {
-      id: user._id,
-    },
-    config.JWT_SECRET,
-    {
-      expiresIn: "7d",
-    },
-  );
+   if (!user) {
+      user = await userModel.create({
+         email,
+         googleId: id,
+         fullname: displayName,
+      });
+   }
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
+   const token = jwt.sign(
+      {
+         id: user._id,
+      },
+      config.JWT_SECRET,
+      {
+         expiresIn: "7d",
+      },
+   );
 
-  res.redirect("http://localhost:5173/");
+   res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+   });
+
+   res.redirect("http://localhost:5173/");
 };
 
 export const getMe = async (req, res) => {
-  const user = req.user;
-  res.status(200).json({
-    message: "User fetched successfully",
-    success: true,
-    user: {
-      id: user._id,
-      email: user.email,
-      contact: user.contact,
-      fullname: user.fullname,
-      role: user.role,
-    },
-  });
+   const user = req.user;
+   res.status(200).json({
+      message: "User fetched successfully",
+      success: true,
+      user: {
+         id: user._id,
+         email: user.email,
+         contact: user.contact,
+         fullname: user.fullname,
+         role: user.role,
+      },
+   });
 };
+
+
+export const logout = async (req, res) => {
+   try {
+      res.clearCookie('token', {
+         httpOnly: true,
+         sameSite: 'lax',
+      });
+
+      return res.status(200).json({
+         message: 'Logged out successfully',
+         success: true,
+      })
+   }
+   catch (err) {
+      console.log(err)
+      return res.status(500).json({
+         message: 'Internal server error',
+         success: false,
+      })
+   }
+}

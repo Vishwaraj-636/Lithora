@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hook/useAuth";
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: "₹", USD: "$", EUR: "€", GBP: "£" };
@@ -114,6 +115,7 @@ const Home = () => {
    const products = useSelector((state) => state.product.products);
    const user = useSelector((state) => state.auth.user);
    const { handleGetAllProducts } = useProduct();
+   const { handleLogout } = useAuth();
    const [loading, setLoading] = useState(true);
 
    useEffect(() => {
@@ -175,7 +177,7 @@ const Home = () => {
                >
                   Meera M&amp;G
                </span>
-               {!user && (
+               {!user ? (
                   <div className="flex items-center gap-4">
                      <a
                         href="/login"
@@ -189,6 +191,15 @@ const Home = () => {
                      >
                         Register
                      </a>
+                  </div>
+               ) : (
+                  <div className="flex items-center gap-4">
+                     <button
+                        onClick={handleLogout}
+                        className="px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors"
+                     >
+                        Logout
+                     </button>
                   </div>
                )}
             </div>

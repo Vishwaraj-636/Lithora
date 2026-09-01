@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useProduct } from "../hook/useProduct";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../auth/hook/useAuth";
 
 const MAX_IMAGES = 7;
 const MAX_CHARS = 1000;
@@ -68,6 +69,7 @@ const SectionHeading = ({ children }) => (
 ═══════════════════════════════════════════════ */
 const CreateProduct = () => {
    const { handleCreateProduct } = useProduct();
+   const { handleLogout } = useAuth();
 
    const [formData, setFormData] = useState({
       title: "",
@@ -133,13 +135,16 @@ const CreateProduct = () => {
       >
          {/* ── Navbar ── */}
          <nav className="sticky top-0 z-10 bg-[#18150f]/90 backdrop-blur border-b border-[#3a322c]">
-            <div className="w-full max-w-300 mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center">
+            <div className="w-full max-w-300 mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
                <span
                   className="text-2xl tracking-[-0.04em] text-[#f2ede6]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
                   Meera M&amp;G
                </span>
+               <div className="flex items-center gap-4">
+                  <button onClick={handleLogout} className="px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Logout</button>
+               </div>
             </div>
          </nav>
 

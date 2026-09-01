@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
+import { useAuth } from "../../auth/hook/useAuth";
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: "₹", USD: "$", EUR: "€", GBP: "£" };
@@ -82,6 +83,7 @@ const ProductDetail = () => {
    const navigate = useNavigate();
    const user = useSelector((state) => state.auth.user);
    const { handleGetProductById } = useProduct();
+   const { handleLogout } = useAuth();
 
    const [product, setProduct] = useState(null);
    const [loading, setLoading] = useState(true);
@@ -205,10 +207,14 @@ const ProductDetail = () => {
                <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#f2ede6] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate("/")}>
                   Meera M&amp;G
                </span>
-               {!user && (
+               {!user ? (
                   <div className="flex items-center gap-3 sm:gap-4">
                      <a href="/login" className="text-[13px] text-[#a9a49b] hover:text-[#f2ede6] transition-colors">Sign in</a>
                      <a href="/register" className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Register</a>
+                  </div>
+               ) : (
+                  <div className="flex items-center gap-3 sm:gap-4">
+                     <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#b58a5a] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#c49a68] transition-colors">Logout</button>
                   </div>
                )}
             </div>
