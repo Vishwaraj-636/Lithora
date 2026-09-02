@@ -1,16 +1,22 @@
-import {addItem} from "../services/cart.api.js";
-import {useDispatch} from "react-redux";
-import {addItem as addItemToCart} from "../state/cart.slice.js";
+import { addItem, getCart } from "../services/cart.api.js";
+import { useDispatch } from "react-redux";
+import { useCallback } from "react";
+import { addItem as addItemToCart, setItems } from "../state/cart.slice.js";
 
 export const useCart = () => {
    const dispatch = useDispatch();
 
-   async function handleAddItem({productId, variantId}) {
-      const data = await addItem({productId, variantId});
+   const handleAddItem = useCallback(async ({ productId, variantId }) => {
+      const data = await addItem({ productId, variantId });
       // dispatch(addItemToCart(data.item));
 
       return data;
-   }
+   }, [dispatch]);
 
-   return { handleAddItem };
+   const handleGetCart = useCallback(async () => {
+      const data = await getCart();
+      dispatch(setItems(data.cart.items));
+   }, [dispatch]);
+
+   return { handleAddItem, handleGetCart };
 }

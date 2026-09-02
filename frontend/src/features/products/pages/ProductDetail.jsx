@@ -214,24 +214,7 @@ const ProductDetail = () => {
 
    return (
       <div className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
-         {/* ══════════════════════════════ Navbar ══════════════════════════════ */}
-         <nav className="sticky top-0 z-20 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
-               <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#000000] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate("/")}>
-                  Meera M&amp;G
-               </span>
-               {!user ? (
-                  <div className="flex items-center gap-3 sm:gap-4">
-                     <a href="/login" className="text-[13px] text-[#666666] hover:text-[#000000] transition-colors">Sign in</a>
-                     <a href="/register" className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#333333] transition-colors">Register</a>
-                  </div>
-               ) : (
-                  <div className="flex items-center gap-3 sm:gap-4">
-                     <button onClick={handleLogout} className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] sm:text-[13px] font-semibold hover:bg-[#333333] transition-colors">Logout</button>
-                  </div>
-               )}
-            </div>
-         </nav>
+         
 
          {/* ══════════════════════════════ Breadcrumb ══════════════════════════════ */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 sm:pt-6 pb-2 flex justify-start">
@@ -425,17 +408,17 @@ const ProductDetail = () => {
                   <div className="h-px bg-[#e5e5e5] w-full" />
 
                   <div className="flex flex-col gap-3">
-                     <button 
-                     onClick={()=>{
-                        handleAddItem({
-                           productId: product._id,
-                           variantId: selectedVariant?._id
-                        })
-                     }}
-                     disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#000000] text-[#000000] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#000000] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
+                     <button
+                        onClick={() => {
+                           handleAddItem({
+                              productId: product._id,
+                              variantId: selectedVariant?._id
+                           })
+                        }}
+                        disabled={(selectedVariant ? selectedVariant.stock : product.stock) <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#000000] text-[#000000] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#000000] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                         <ShoppingCartIcon /> Add to Cart
                      </button>
-                     <button disabled={selectedVariant && selectedVariant.stock <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                     <button disabled={(selectedVariant ? selectedVariant.stock : product.stock) <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <BoltIcon /> Buy Now
                      </button>
                   </div>

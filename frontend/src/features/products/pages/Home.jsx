@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useProduct } from "../hook/useProduct";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../auth/hook/useAuth";
+import { useCart } from "../../cart/hook/useCart";
 
 /* ── Currency symbol map ── */
 const CURRENCY_SYMBOLS = { INR: "₹", USD: "$", EUR: "€", GBP: "£" };
@@ -51,6 +52,7 @@ const ProductCard = ({ product }) => {
       CURRENCY_SYMBOLS[product.price?.currency] ?? product.price?.currency ?? "";
    const coverUrl = product.images?.[0]?.url ?? null;
    const navigate = useNavigate();
+   const { handleAddItem } = useCart();
 
    return (
       <div
@@ -99,7 +101,13 @@ const ProductCard = ({ product }) => {
                      maximumFractionDigits: 2,
                   })}
                </span>
-               <button className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] font-semibold hover:bg-[#333333] transition-colors active:scale-[0.97]">
+               <button
+                  onClick={(event) => {
+                     event.stopPropagation();
+                     handleAddItem({ productId: product._id });
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#000000] text-white text-[12px] font-semibold hover:bg-[#333333] transition-colors active:scale-[0.97]"
+               >
                   <BagIcon />
                   Add
                </button>
@@ -169,42 +177,7 @@ const Home = () => {
          className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col"
          style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
-         {/* ── Navbar ── */}
-         <nav className="sticky top-0 z-10 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
-               <span
-                  className="text-2xl tracking-[-0.04em] text-[#000000]"
-                  style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
-               >
-                  Meera M&amp;G
-               </span>
-               {!user ? (
-                  <div className="flex items-center gap-4">
-                     <a
-                        href="/login"
-                        className="text-[13px] text-[#666666] hover:text-[#000000] transition-colors"
-                     >
-                        Sign in
-                     </a>
-                     <a
-                        href="/register"
-                        className="px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors"
-                     >
-                        Register
-                     </a>
-                  </div>
-               ) : (
-                  <div className="flex items-center gap-4">
-                     <button
-                        onClick={handleLogout}
-                        className="px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors"
-                     >
-                        Logout
-                     </button>
-                  </div>
-               )}
-            </div>
-         </nav>
+         
 
          {/* ── Hero ── */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 pb-10 sm:pt-16 sm:pb-12">

@@ -177,25 +177,7 @@ const Dashboard = () => {
          className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col"
          style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
-         {/* ── Navbar ── */}
-         <nav className="sticky top-0 z-10 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
-               <span
-                  className="text-2xl tracking-[-0.04em] text-[#000000]"
-                  style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
-               >
-                  Meera M&amp;G
-               </span>
-               <div className="flex items-center gap-4">
-                  <button
-                     onClick={handleLogout}
-                     className="px-4 py-1.5 rounded-lg bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors"
-                  >
-                     Logout
-                  </button>
-               </div>
-            </div>
-         </nav>
+         
 
          <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
             {/* ── Page Header ── */}
