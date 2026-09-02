@@ -1,7 +1,7 @@
 import express from 'express';
 import { authenticateUser } from '../middleware/auth.middleware.js';
-import { validateAddToCart,validatedecreamentCartItemQuantity,validateincreamentCartItemQuantity } from '../validator/cart.validator.js';
-import { addToCart, getCart,increamentCartItemQuantity,decreamentCartItemQuantity } from '../controllers/cart.controller.js';
+import { validateAddToCart, validatedecreamentCartItemQuantity, validateincreamentCartItemQuantity, validateRemoveCartItem } from '../validator/cart.validator.js';
+import { addToCart, getCart, increamentCartItemQuantity, decreamentCartItemQuantity, removeCartItem, clearCart } from '../controllers/cart.controller.js';
 
 const router = express.Router();
 
@@ -43,10 +43,23 @@ router.patch("/quantity/increament/:productId", authenticateUser, validateincrea
  * @argument productId - The ID of the product to update in the cart
  */
 
-router.patch("/quantity/decreament/:productId",authenticateUser,validatedecreamentCartItemQuantity,decreamentCartItemQuantity)
+router.patch("/quantity/decreament/:productId", authenticateUser, validatedecreamentCartItemQuantity, decreamentCartItemQuantity)
 
 
+/**
+ * @routes DELETE /api/cart/remove/:productId
+ * @desc Remove an item from the cart
+ * @access Private
+ * @argument productId - The ID of the product to remove from the cart
+ */
+router.delete("/remove/:productId", authenticateUser, validateRemoveCartItem, removeCartItem)
 
+/**
+ * @routes DELETE /api/cart/clear
+ * @desc Clear the entire cart
+ * @access Private
+ */
+router.delete("/clear", authenticateUser, clearCart)
 
 
 export default router;

@@ -25,3 +25,8 @@ export const validatedecreamentCartItemQuantity = [
    param("productId").isMongoId().withMessage("Invalid product ID"),
    validateRequest,
 ]
+
+export const validateRemoveCartItem = [
+   param("productId").isMongoId().withMessage("Invalid product ID"),
+   validateRequest,
+]

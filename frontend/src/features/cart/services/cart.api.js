@@ -29,9 +29,21 @@ export const incrementItemQuantity = async ({ productId, variantId }) => {
    return response.data;
 }
 
-export const decrementItemQuantity = async({ productId, variantId }) => {
+export const decrementItemQuantity = async ({ productId, variantId }) => {
    const response = await cartAPIInstance.patch(`/quantity/decreament/${productId}`, {
       variantId: variantId || null
    })
+   return response.data;
+}
+
+export const removeItem = async ({ productId, variantId }) => {
+   const response = await cartAPIInstance.delete(`/remove/${productId}`, {
+      data: { variantId: variantId || null }
+   });
+   return response.data;
+}
+
+export const clearCart = async () => {
+   const response = await cartAPIInstance.delete("/clear");
    return response.data;
 }

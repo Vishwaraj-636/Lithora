@@ -52,7 +52,7 @@ const ImagePlaceholder = ({ small = false }) => (
 const Cart = () => {
    const navigate = useNavigate();
    const cartItems = useSelector((state) => state.cart.items);
-   const { handleGetCart, handleIncrementItemQuantity,handleDecreamentItemQuantity } = useCart();
+   const { handleGetCart, handleIncrementItemQuantity, handleDecreamentItemQuantity, handleRemoveItem, handleClearCart } = useCart();
 
 
    useEffect(() => {
@@ -68,11 +68,21 @@ const Cart = () => {
          <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12 lg:py-16">
 
             {/* Header */}
-            <div className="mb-8 sm:mb-12">
-               <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#000000] mb-2">Shopping Cart</h1>
-               <p className="text-[14px] sm:text-[15px] text-[#666666]">
-                  {cartItems?.length || 0} {cartItems?.length === 1 ? 'item' : 'items'} in your cart
-               </p>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-12 gap-4">
+               <div>
+                  <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#000000] mb-2">Shopping Cart</h1>
+                  <p className="text-[14px] sm:text-[15px] text-[#666666]">
+                     {cartItems?.length || 0} {cartItems?.length === 1 ? 'item' : 'items'} in your cart
+                  </p>
+               </div>
+               {cartItems && cartItems.length > 0 && (
+                  <button
+                     onClick={handleClearCart}
+                     className="text-[#ff4444] hover:text-[#cc0000] text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-2xl cursor-pointer hover:bg-gray-100"
+                  >
+                     Clear Cart
+                  </button>
+               )}
             </div>
 
             {cartItems && cartItems.length > 0 ? (
@@ -122,16 +132,19 @@ const Cart = () => {
                                           </div>
                                        )}
                                     </div>
-                                    <button className="p-2 text-[#999999] hover:text-[#000000] transition-colors rounded-lg hover:bg-[#fafafa]">
+                                    <button
+                                       onClick={() => handleRemoveItem({ productId: item.product._id, variantId: item.variant })}
+                                       className="p-2 text-[#999999] hover:text-[#ff4444] transition-colors rounded-lg hover:bg-[#fafafa]"
+                                    >
                                        <TrashIcon />
                                     </button>
                                  </div>
 
                                  <div className="flex justify-between items-end mt-4">
                                     <div className="flex items-center rounded-xl border border-[#e5e5e5] h-9 sm:h-10">
-                                       <button 
-                                       onClick={() => handleDecreamentItemQuantity({ productId: item.product._id, variantId: item.variant })}
-                                       className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
+                                       <button
+                                          onClick={() => handleDecreamentItemQuantity({ productId: item.product._id, variantId: item.variant })}
+                                          className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
                                           <MinusIcon />
                                        </button>
                                        <span className="w-8 sm:w-10 text-center text-[13px] sm:text-[14px] font-medium text-[#000000]">

@@ -212,3 +212,68 @@ export const decreamentCartItemQuantity = async (req, res) => {
       item: cartItem
    });
 }
+
+export const removeCartItem = async (req, res) => {
+   const { productId } = req.params;
+   const { variantId } = req.body;
+
+   const product = await productModel.findById(productId);
+
+   if (!product) {
+      return res.status(404).json({
+         message: "Product not found",
+         success: false
+      });
+   }
+
+   const cart = await cartModel.findOne({ user: req.user._id });
+
+   if (!cart) {
+      return res.status(404).json({
+         message: "Cart not found",
+         success: false
+      });
+   }
+
+   const cartItem = cart.items.find(item =>
+      item.product.toString() === productId &&
+      (item.variant?.toString() ?? null) === (variantId ?? null)
+   );
+
+   if (!cartItem) {
+      return res.status(404).json({
+         message: "Cart item not found",
+         success: false
+      });
+   }
+
+   cart.items = cart.items.filter(item =>
+      !(item.product.toString() === productId &&
+         (item.variant?.toString() ?? null) === (variantId ?? null))
+   );
+   await cart.save();
+
+   return res.status(200).json({
+      message: "Cart item removed successfully",
+      success: true
+   });
+}
+
+export const clearCart = async (req, res) => {
+   const cart = await cartModel.findOne({ user: req.user._id });
+
+   if (!cart) {
+      return res.status(404).json({
+         message: "Cart not found",
+         success: false
+      });
+   }
+
+   cart.items = [];
+   await cart.save();
+
+   return res.status(200).json({
+      message: "Cart cleared successfully",
+      success: true
+   });
+}

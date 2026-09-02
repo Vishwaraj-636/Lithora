@@ -48,10 +48,24 @@ const cartSlice = createSlice({
                return item;
             }
          })
+      },
+      removeItemFromCart: (state, action) => {
+         const { productId, variantId } = action.payload;
+
+         state.items = state.items.filter(item => {
+            const currentProductId = item.product?._id || item.product || item.productId;
+            const currentVariantId = item.variant?._id || item.variant || item.variantId;
+
+            return !(String(currentProductId) === String(productId) &&
+               (currentVariantId?.toString() ?? null) === (variantId?.toString() ?? null));
+         });
+      },
+      clearCartItems: (state) => {
+         state.items = [];
       }
    }
 })
 
 
-export const { setItems, addItem, increamentCartItem, decreamentCartItem } = cartSlice.actions;
+export const { setItems, addItem, increamentCartItem, decreamentCartItem, removeItemFromCart, clearCartItems } = cartSlice.actions;
 export default cartSlice.reducer;
