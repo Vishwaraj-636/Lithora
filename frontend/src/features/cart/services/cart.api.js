@@ -28,3 +28,10 @@ export const incrementItemQuantity = async ({ productId, variantId }) => {
    });
    return response.data;
 }
+
+export const decrementItemQuantity = async({ productId, variantId }) => {
+   const response = await cartAPIInstance.patch(`/quantity/decreament/${productId}`, {
+      variantId: variantId || null
+   })
+   return response.data;
+}

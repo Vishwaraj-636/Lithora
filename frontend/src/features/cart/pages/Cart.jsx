@@ -52,7 +52,7 @@ const ImagePlaceholder = ({ small = false }) => (
 const Cart = () => {
    const navigate = useNavigate();
    const cartItems = useSelector((state) => state.cart.items);
-   const { handleGetCart, handleIncrementItemQuantity } = useCart();
+   const { handleGetCart, handleIncrementItemQuantity,handleDecreamentItemQuantity } = useCart();
 
 
    useEffect(() => {
@@ -129,7 +129,9 @@ const Cart = () => {
 
                                  <div className="flex justify-between items-end mt-4">
                                     <div className="flex items-center rounded-xl border border-[#e5e5e5] h-9 sm:h-10">
-                                       <button className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
+                                       <button 
+                                       onClick={() => handleDecreamentItemQuantity({ productId: item.product._id, variantId: item.variant })}
+                                       className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
                                           <MinusIcon />
                                        </button>
                                        <span className="w-8 sm:w-10 text-center text-[13px] sm:text-[14px] font-medium text-[#000000]">

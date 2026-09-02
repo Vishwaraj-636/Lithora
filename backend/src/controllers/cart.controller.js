@@ -153,3 +153,62 @@ export const increamentCartItemQuantity = async (req, res) => {
       item: cartItem
    });
 }
+
+export const decreamentCartItemQuantity = async (req, res) => {
+   const { productId } = req.params;
+   const { variantId } = req.body;
+
+   const product = await productModel.findById(productId);
+
+   if (!product) {
+      return res.status(404).json({
+         message: "Product not found",
+         success: false
+      });
+   }
+
+   const cart = await cartModel.findOne({ user: req.user._id });
+
+   if (!cart) {
+      return res.status(404).json({
+         message: "Cart not found",
+         success: false
+      });
+   }
+
+   const cartItem = cart.items.find(item =>
+      item.product.toString() === productId &&
+      (item.variant?.toString() ?? null) === (variantId ?? null)
+   );
+
+   if (!cartItem) {
+      return res.status(404).json({
+         message: "Cart item not found",
+         success: false
+      });
+   }
+
+   const stock = variantId ? await stockOfVariant(productId, variantId) : null;
+   if (variantId && stock === null) {
+      return res.status(404).json({
+         message: "Product variant not found",
+         success: false
+      });
+   }
+
+   if (cartItem.quantity <= 1) {
+      return res.status(400).json({
+         message: `Cannot decrease quantity below 1.`,
+         success: false
+      });
+   }
+
+   cartItem.quantity -= 1;
+   await cart.save();
+
+   return res.status(200).json({
+      message: "Cart quantity updated successfully",
+      success: true,
+      item: cartItem
+   });
+}
