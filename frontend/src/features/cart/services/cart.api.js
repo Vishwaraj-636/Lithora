@@ -20,3 +20,11 @@ export const getCart = async () => {
    const response = await cartAPIInstance.get("/", { withCredentials: true });
    return response.data;
 }
+
+
+export const incrementItemQuantity = async ({ productId, variantId }) => {
+   const response = await cartAPIInstance.patch(`/quantity/increament/${productId}`, {
+      variantId: variantId || null
+   });
+   return response.data;
+}

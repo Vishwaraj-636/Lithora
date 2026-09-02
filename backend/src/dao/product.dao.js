@@ -7,8 +7,11 @@ export const stockOfVariant = async (productId, variantId) => {
       'variants._id': variantId
    })
 
-   const stock = product.variants.find(variant => variant._id.toString() === variantId).stock
+   if (!product) {
+      return null;
+   }
 
-   return stock;
+   const variant = product.variants.find(item => item._id.toString() === variantId);
+   return variant?.stock ?? null;
 
 }

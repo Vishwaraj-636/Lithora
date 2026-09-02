@@ -52,8 +52,9 @@ const ImagePlaceholder = ({ small = false }) => (
 const Cart = () => {
    const navigate = useNavigate();
    const cartItems = useSelector((state) => state.cart.items);
-   const { handleGetCart } = useCart();
-   
+   const { handleGetCart, handleIncrementItemQuantity } = useCart();
+
+
    useEffect(() => {
       handleGetCart();
    }, []);
@@ -65,7 +66,7 @@ const Cart = () => {
    return (
       <div className="min-h-screen bg-white text-[#000000] font-sans flex flex-col">
          <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12 lg:py-16">
-            
+
             {/* Header */}
             <div className="mb-8 sm:mb-12">
                <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#000000] mb-2">Shopping Cart</h1>
@@ -76,20 +77,20 @@ const Cart = () => {
 
             {cartItems && cartItems.length > 0 ? (
                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
-                  
+
                   {/* Cart Items List */}
                   <div className="w-full lg:w-2/3 flex flex-col gap-6">
                      {cartItems.map((item) => {
-                        const variantData = item.variant 
+                        const variantData = item.variant
                            ? item.product.variants?.find(v => v._id === item.variant)
                            : null;
-                        
-                        const imageUrl = variantData?.images?.[0]?.url 
+
+                        const imageUrl = variantData?.images?.[0]?.url
                            || item.product.images?.[0]?.url;
-                        
+
                         return (
                            <div key={item._id} className="flex flex-col sm:flex-row gap-4 sm:gap-6 pb-6 border-b border-[#e5e5e5] last:border-0">
-                              
+
                               {/* Image */}
                               <div className="w-full sm:w-32 h-32 shrink-0 rounded-xl overflow-hidden bg-[#fafafa] border border-[#e5e5e5]">
                                  {imageUrl ? (
@@ -98,7 +99,7 @@ const Cart = () => {
                                     <ImagePlaceholder small />
                                  )}
                               </div>
-                              
+
                               {/* Details */}
                               <div className="flex flex-col justify-between flex-grow">
                                  <div className="flex justify-between items-start">
@@ -109,7 +110,7 @@ const Cart = () => {
                                        <p className="text-[13px] sm:text-[14px] text-[#666666] mb-3">
                                           {item.product.description}
                                        </p>
-                                       
+
                                        {variantData?.attributes && (
                                           <div className="flex flex-wrap gap-x-4 gap-y-1">
                                              {Object.entries(variantData.attributes).map(([key, value]) => (
@@ -125,7 +126,7 @@ const Cart = () => {
                                        <TrashIcon />
                                     </button>
                                  </div>
-                                 
+
                                  <div className="flex justify-between items-end mt-4">
                                     <div className="flex items-center rounded-xl border border-[#e5e5e5] h-9 sm:h-10">
                                        <button className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
@@ -134,7 +135,9 @@ const Cart = () => {
                                        <span className="w-8 sm:w-10 text-center text-[13px] sm:text-[14px] font-medium text-[#000000]">
                                           {item.quantity}
                                        </span>
-                                       <button className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-r-xl">
+                                       <button
+                                          onClick={() => handleIncrementItemQuantity({ productId: item.product._id, variantId: item.variant })}
+                                          className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-r-xl">
                                           <PlusIcon />
                                        </button>
                                     </div>
@@ -154,7 +157,7 @@ const Cart = () => {
                   <div className="w-full lg:w-1/3">
                      <div className="bg-[#fafafa] border border-[#e5e5e5] rounded-2xl p-6 lg:p-8 sticky top-8">
                         <h2 className="text-[18px] sm:text-[20px] font-semibold text-[#000000] mb-6">Order Summary</h2>
-                        
+
                         <div className="flex flex-col gap-4 mb-6 text-[13px] sm:text-[14px]">
                            <div className="flex justify-between">
                               <span className="text-[#666666]">Subtotal</span>
@@ -169,9 +172,9 @@ const Cart = () => {
                               <span className="text-[#000000] font-medium">Calculated at checkout</span>
                            </div>
                         </div>
-                        
+
                         <div className="h-px bg-[#e5e5e5] w-full mb-6" />
-                        
+
                         <div className="flex justify-between items-end mb-8">
                            <span className="text-[16px] font-semibold text-[#000000]">Total</span>
                            <div className="text-right">
@@ -181,11 +184,11 @@ const Cart = () => {
                               <p className="text-[11px] text-[#999999] mt-0.5">Including all taxes</p>
                            </div>
                         </div>
-                        
+
                         <button className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm">
                            Proceed to Checkout
                         </button>
-                        
+
                         <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-[#666666]">
                            <LockIcon />
                            <span>Secure Encrypted Checkout</span>
@@ -203,8 +206,8 @@ const Cart = () => {
                   <p className="text-[14px] text-[#666666] mb-8 max-w-md">
                      Looks like you haven't added any products to your cart yet. Explore our catalogue to find what you're looking for.
                   </p>
-                  <button 
-                     onClick={() => navigate("/")} 
+                  <button
+                     onClick={() => navigate("/")}
                      className="h-11 px-8 flex items-center justify-center rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 shadow-sm"
                   >
                      Continue Shopping

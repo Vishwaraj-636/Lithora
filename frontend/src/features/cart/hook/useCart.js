@@ -1,7 +1,7 @@
-import { addItem, getCart } from "../services/cart.api.js";
+import { addItem, getCart,incrementItemQuantity } from "../services/cart.api.js";
 import { useDispatch } from "react-redux";
 import { useCallback } from "react";
-import { addItem as addItemToCart, setItems } from "../state/cart.slice.js";
+import { addItem as addItemToCart, setItems,increamentCartItem } from "../state/cart.slice.js";
 
 export const useCart = () => {
    const dispatch = useDispatch();
@@ -18,5 +18,11 @@ export const useCart = () => {
       dispatch(setItems(data.cart.items));
    }, [dispatch]);
 
-   return { handleAddItem, handleGetCart };
+   const handleIncrementItemQuantity = useCallback(async ({ productId, variantId }) => {
+      const data = await incrementItemQuantity({ productId, variantId });
+      dispatch(increamentCartItem({ productId, variantId }));
+      return data;
+   }, [dispatch]);
+
+   return { handleAddItem, handleGetCart, handleIncrementItemQuantity };
 }

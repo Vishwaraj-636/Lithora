@@ -13,4 +13,10 @@ export const validateAddToCart = [
    param("variantId").optional().isMongoId().withMessage("Invalid variant ID"),
    body("quantity").optional().isInt({ min: 1 }).withMessage("Quantity must be a positive integer"),
    validateRequest,
-]
+]
+
+
+export const validateincreamentCartItemQuantity = [
+   param("productId").isMongoId().withMessage("Invalid product ID"),
+   validateRequest,
+]
