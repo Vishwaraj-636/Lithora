@@ -8,7 +8,9 @@ export const useCart = () => {
 
    const handleAddItem = useCallback(async ({ productId, variantId }) => {
       const data = await addItem({ productId, variantId });
-      // dispatch(addItemToCart(data.item));
+      // Fetch the updated cart to keep Redux in sync
+      const updatedCartData = await getCart();
+      dispatch(setItems(updatedCartData.cart.items));
 
       return data;
    }, [dispatch]);
