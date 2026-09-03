@@ -78,7 +78,7 @@ const Cart = () => {
                {cartItems && cartItems.length > 0 && (
                   <button
                      onClick={handleClearCart}
-                     className="text-[#ff4444] hover:text-[#cc0000] text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-2xl cursor-pointer hover:bg-gray-100"
+                     className="text-white hover:text-[#ff4444] text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-lg cursor-pointer bg-red-500 hover:bg-white"
                   >
                      Clear Cart
                   </button>
