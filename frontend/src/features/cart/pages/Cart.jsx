@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../hook/useCart";
-import { initiateCheckout } from "../services/cart.api";
 
 /* ── Icons ── */
 const ArrowLeftIcon = () => (
@@ -58,11 +57,6 @@ const Cart = () => {
    const total = useSelector((state) => state.cart.finalTotal) || 0;
    const { handleGetCart, handleIncrementItemQuantity, handleDecreamentItemQuantity, handleRemoveItem, handleClearCart } = useCart();
 
-   // Checkout state — server returns the authoritative order summary
-   const [checkoutLoading, setCheckoutLoading] = useState(false);
-   const [checkoutError, setCheckoutError] = useState(null);
-   const [checkoutOrder, setCheckoutOrder] = useState(null);
-
    const subtotal = backendTotalPrice;
 
    //console.log(cart)
@@ -70,29 +64,6 @@ const Cart = () => {
    useEffect(() => {
       handleGetCart();
    }, []);
-
-   /**
-    * Sends NO price data to the backend.
-    * The backend fetches live prices from DB and returns the authoritative total.
-    */
-   const handleCheckout = async () => {
-      setCheckoutLoading(true);
-      setCheckoutError(null);
-      try {
-         const data = await initiateCheckout();
-         if (data.success) {
-            setCheckoutOrder(data.order);
-            // TODO: navigate to a dedicated checkout/payment page and pass data.order
-            // navigate("/checkout/confirm", { state: { order: data.order } });
-         } else {
-            setCheckoutError(data.message || "Checkout failed. Please try again.");
-         }
-      } catch (err) {
-         setCheckoutError(err?.response?.data?.message || "Something went wrong. Please try again.");
-      } finally {
-         setCheckoutLoading(false);
-      }
-   };
 
 
    return (
@@ -110,7 +81,7 @@ const Cart = () => {
                {cart && cart.length > 0 && (
                   <button
                      onClick={handleClearCart}
-                     className="text-white hover:text-[#ff4444] text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-lg cursor-pointer bg-red-500 hover:bg-white"
+                     className="text-[#ff4444] hover:text-white text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-lg cursor-pointer bg-white hover:bg-red-500"
                   >
                      Clear Cart
                   </button>
@@ -188,9 +159,20 @@ const Cart = () => {
                                        </button>
                                     </div>
                                     <div className="text-right">
-                                       <p className="text-[14px] sm:text-[16px] font-semibold text-[#000000]">
-                                          ₹{item.price.amount.toLocaleString('en-IN')}
-                                       </p>
+                                       {item.originalPrice?.amount && item.originalPrice.amount !== item.price.amount ? (
+                                          <div className="flex flex-col items-end">
+                                             <p className="text-[12px] sm:text-[13px] text-[#999999] line-through">
+                                                ₹{item.originalPrice.amount.toLocaleString('en-IN')}
+                                             </p>
+                                             <p className={`text-[14px] sm:text-[16px] font-semibold ${item.price.amount < item.originalPrice.amount ? 'text-green-600' : 'text-red-600'}`}>
+                                                ₹{item.price.amount.toLocaleString('en-IN')}
+                                             </p>
+                                          </div>
+                                       ) : (
+                                          <p className="text-[14px] sm:text-[16px] font-semibold text-[#000000]">
+                                             ₹{item.price.amount.toLocaleString('en-IN')}
+                                          </p>
+                                       )}
                                     </div>
                                  </div>
                               </div>
@@ -231,25 +213,10 @@ const Cart = () => {
                            </div>
                         </div>
 
-                        {/* Error from checkout */}
-                        {checkoutError && (
-                           <p className="text-[12px] text-red-500 mb-3 text-center">{checkoutError}</p>
-                        )}
-
-                        {/* Server-confirmed total — shown only after backend responds */}
-                        {checkoutOrder && (
-                           <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-[13px] text-green-800">
-                              <p className="font-semibold mb-1">✓ Order confirmed by server</p>
-                              <p>Total: ₹{checkoutOrder.finalTotal.toLocaleString('en-IN')}</p>
-                           </div>
-                        )}
-
                         <button
-                           onClick={handleCheckout}
-                           disabled={checkoutLoading}
                            className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                         >
-                           {checkoutLoading ? "Processing…" : "Proceed to Checkout"}
+                           Proceed to Checkout
                         </button>
 
                         <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-[#666666]">

@@ -228,8 +228,9 @@ const SellerProductDetail = () => {
    const addAttribute = () => {
       const k = attrKey.trim(); const v = attrVal.trim();
       if (!k || !v) return;
-      if (Object.keys(attributes).some(key => key.toLowerCase() === k.toLowerCase())) {
-         setCreateError(`Attribute "${k}" already added.`); return;
+      const existingKey = Object.keys(attributes).find(key => key.toLowerCase() === k.toLowerCase());
+      if (existingKey) {
+         setCreateError(`"${existingKey}" is already set to "${attributes[existingKey]}". To add another size/color, create this variant first, then create a new one.`); return;
       }
       setAttributes(prev => ({ ...prev, [k]: v }));
       setAttrKey(''); setAttrVal(''); setCreateError('');

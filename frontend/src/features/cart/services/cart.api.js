@@ -57,12 +57,3 @@ export const clearCart = async () => {
    const response = await cartAPIInstance.delete("/clear");
    return response.data;
 }
-
-/**
- * Initiates checkout.
- * Security: sends NO monetary values — the backend recalculates everything from DB.
- */
-export const initiateCheckout = async () => {
-   const response = await axios.post("/api/checkout", {}, { withCredentials: true });
-   return response.data;
-}
