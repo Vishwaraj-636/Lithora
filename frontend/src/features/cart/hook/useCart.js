@@ -10,21 +10,24 @@ export const useCart = () => {
       const data = await addItem({ productId, variantId });
       // Fetch the updated cart to keep Redux in sync
       const updatedCartData = await getCart();
-      dispatch(setItems(updatedCartData.cart.items));
+      const cartObj = updatedCartData?.cart?.[0] || { items: [], totalPrice: 0, currency: 'INR' };
+      dispatch(setItems(cartObj));
 
       return data;
    }, [dispatch]);
 
    const handleGetCart = useCallback(async () => {
       const data = await getCart();
-      dispatch(setItems(data.cart.items));
+      const cartObj = data?.cart?.[0] || { items: [], totalPrice: 0, currency: 'INR' };
+      dispatch(setItems(cartObj));
    }, [dispatch]);
 
    const handleIncrementItemQuantity = useCallback(async ({ productId, variantId }) => {
       const data = await incrementItemQuantity({ productId, variantId });
-      // Only update UI if the backend confirmed success
       if (data.success) {
-         dispatch(increamentCartItem({ productId, variantId }));
+         const updatedCartData = await getCart();
+         const cartObj = updatedCartData?.cart?.[0] || { items: [], totalPrice: 0, currency: 'INR' };
+         dispatch(setItems(cartObj));
       }
       return data;
    }, [dispatch]);
@@ -32,21 +35,28 @@ export const useCart = () => {
    const handleDecreamentItemQuantity = useCallback(async ({ productId, variantId }) => {
       const data = await decrementItemQuantity({ productId, variantId });
       if (data.success) {
-         dispatch(decreamentCartItem({ productId, variantId }));
+         const updatedCartData = await getCart();
+         const cartObj = updatedCartData?.cart?.[0] || { items: [], totalPrice: 0, currency: 'INR' };
+         dispatch(setItems(cartObj));
       }
       return data;
    }, [dispatch]);
 
-
    const handleRemoveItem = useCallback(async ({ productId, variantId }) => {
       const data = await removeItem({ productId, variantId });
-      dispatch(removeItemFromCart({ productId, variantId }));
+      if (data.success) {
+         const updatedCartData = await getCart();
+         const cartObj = updatedCartData?.cart?.[0] || { items: [], totalPrice: 0, currency: 'INR' };
+         dispatch(setItems(cartObj));
+      }
       return data;
    }, [dispatch]);
 
    const handleClearCart = useCallback(async () => {
       const data = await clearCart();
-      dispatch(clearCartItems());
+      if (data.success) {
+         dispatch(setItems({ items: [], totalPrice: 0, tax: 0, finalTotal: 0, currency: 'INR' }));
+      }
       return data;
    }, [dispatch]);
 

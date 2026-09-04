@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../hook/useCart";
+import { initiateCheckout } from "../services/cart.api";
 
 /* ── Icons ── */
 const ArrowLeftIcon = () => (
@@ -51,17 +52,48 @@ const ImagePlaceholder = ({ small = false }) => (
 
 const Cart = () => {
    const navigate = useNavigate();
-   const cartItems = useSelector((state) => state.cart.items);
+   const cart = useSelector((state) => state.cart.items);
+   const backendTotalPrice = useSelector((state) => state.cart.totalPrice) || 0;
+   const estimatedTax = useSelector((state) => state.cart.tax) || 0;
+   const total = useSelector((state) => state.cart.finalTotal) || 0;
    const { handleGetCart, handleIncrementItemQuantity, handleDecreamentItemQuantity, handleRemoveItem, handleClearCart } = useCart();
 
+   // Checkout state — server returns the authoritative order summary
+   const [checkoutLoading, setCheckoutLoading] = useState(false);
+   const [checkoutError, setCheckoutError] = useState(null);
+   const [checkoutOrder, setCheckoutOrder] = useState(null);
+
+   const subtotal = backendTotalPrice;
+
+   //console.log(cart)
 
    useEffect(() => {
       handleGetCart();
    }, []);
 
-   const subtotal = cartItems?.reduce((acc, item) => acc + (item.price.amount * item.quantity), 0) || 0;
-   const estimatedTax = subtotal * 0.18; // Example 18% tax
-   const total = subtotal + estimatedTax;
+   /**
+    * Sends NO price data to the backend.
+    * The backend fetches live prices from DB and returns the authoritative total.
+    */
+   const handleCheckout = async () => {
+      setCheckoutLoading(true);
+      setCheckoutError(null);
+      try {
+         const data = await initiateCheckout();
+         if (data.success) {
+            setCheckoutOrder(data.order);
+            // TODO: navigate to a dedicated checkout/payment page and pass data.order
+            // navigate("/checkout/confirm", { state: { order: data.order } });
+         } else {
+            setCheckoutError(data.message || "Checkout failed. Please try again.");
+         }
+      } catch (err) {
+         setCheckoutError(err?.response?.data?.message || "Something went wrong. Please try again.");
+      } finally {
+         setCheckoutLoading(false);
+      }
+   };
+
 
    return (
       <div className="min-h-screen bg-white text-[#000000] font-sans flex flex-col">
@@ -72,10 +104,10 @@ const Cart = () => {
                <div>
                   <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-[#000000] mb-2">Shopping Cart</h1>
                   <p className="text-[14px] sm:text-[15px] text-[#666666]">
-                     {cartItems?.length || 0} {cartItems?.length === 1 ? 'item' : 'items'} in your cart
+                     {cart?.length || 0} {cart?.length === 1 ? 'item' : 'items'} in your cart
                   </p>
                </div>
-               {cartItems && cartItems.length > 0 && (
+               {cart && cart.length > 0 && (
                   <button
                      onClick={handleClearCart}
                      className="text-white hover:text-[#ff4444] text-[13px] sm:text-[14px] font-medium transition-colors border-2 p-2 rounded-lg cursor-pointer bg-red-500 hover:bg-white"
@@ -85,18 +117,17 @@ const Cart = () => {
                )}
             </div>
 
-            {cartItems && cartItems.length > 0 ? (
+            {cart && cart.length > 0 ? (
                <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
 
                   {/* Cart Items List */}
                   <div className="w-full lg:w-2/3 flex flex-col gap-6">
-                     {cartItems.map((item) => {
-                        const variantData = item.variant
-                           ? item.product.variants?.find(v => v._id === item.variant)
-                           : null;
+                     {cart.map((item) => {
+                        const variantData = typeof item.variant === 'object' ? item.variant : item.product?.variants?.find(v => v._id === item.variant);
 
                         const imageUrl = variantData?.images?.[0]?.url
-                           || item.product.images?.[0]?.url;
+                           || item.product?.selectedVariant?.images?.[0]?.url
+                           || item.product?.images?.[0]?.url;
 
                         return (
                            <div key={item._id} className="flex flex-col sm:flex-row gap-4 sm:gap-6 pb-6 border-b border-[#e5e5e5] last:border-0">
@@ -133,7 +164,7 @@ const Cart = () => {
                                        )}
                                     </div>
                                     <button
-                                       onClick={() => handleRemoveItem({ productId: item.product._id, variantId: item.variant })}
+                                       onClick={() => handleRemoveItem({ productId: item.product._id, variantId: variantData?._id || item.variant })}
                                        className="p-2 text-[#999999] hover:text-[#ff4444] transition-colors rounded-lg hover:bg-[#fafafa]"
                                     >
                                        <TrashIcon />
@@ -143,7 +174,7 @@ const Cart = () => {
                                  <div className="flex justify-between items-end mt-4">
                                     <div className="flex items-center rounded-xl border border-[#e5e5e5] h-9 sm:h-10">
                                        <button
-                                          onClick={() => handleDecreamentItemQuantity({ productId: item.product._id, variantId: item.variant })}
+                                          onClick={() => handleDecreamentItemQuantity({ productId: item.product._id, variantId: variantData?._id || item.variant })}
                                           className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-l-xl">
                                           <MinusIcon />
                                        </button>
@@ -151,7 +182,7 @@ const Cart = () => {
                                           {item.quantity}
                                        </span>
                                        <button
-                                          onClick={() => handleIncrementItemQuantity({ productId: item.product._id, variantId: item.variant })}
+                                          onClick={() => handleIncrementItemQuantity({ productId: item.product._id, variantId: variantData?._id || item.variant })}
                                           className="px-3 h-full flex items-center justify-center text-[#666666] hover:text-[#000000] hover:bg-[#fafafa] transition-colors rounded-r-xl">
                                           <PlusIcon />
                                        </button>
@@ -200,8 +231,25 @@ const Cart = () => {
                            </div>
                         </div>
 
-                        <button className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm">
-                           Proceed to Checkout
+                        {/* Error from checkout */}
+                        {checkoutError && (
+                           <p className="text-[12px] text-red-500 mb-3 text-center">{checkoutError}</p>
+                        )}
+
+                        {/* Server-confirmed total — shown only after backend responds */}
+                        {checkoutOrder && (
+                           <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-[13px] text-green-800">
+                              <p className="font-semibold mb-1">✓ Order confirmed by server</p>
+                              <p>Total: ₹{checkoutOrder.finalTotal.toLocaleString('en-IN')}</p>
+                           </div>
+                        )}
+
+                        <button
+                           onClick={handleCheckout}
+                           disabled={checkoutLoading}
+                           className="w-full h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                           {checkoutLoading ? "Processing…" : "Proceed to Checkout"}
                         </button>
 
                         <div className="mt-4 flex items-center justify-center gap-1.5 text-[12px] text-[#666666]">

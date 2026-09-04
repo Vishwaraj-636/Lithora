@@ -3,16 +3,24 @@ import { createSlice } from '@reduxjs/toolkit';
 const cartSlice = createSlice({
    name: 'cart',
    initialState: {
+      totalPrice: null,
+      tax: null,
+      finalTotal: null,
+      currency: null,
       items: [],
-
    },
    reducers: {
       setItems: (state, action) => {
-         state.items = action.payload;
+         state.items = action.payload.items || [];
+         state.totalPrice = action.payload.totalPrice || 0;
+         state.tax = action.payload.tax || 0;
+         state.finalTotal = action.payload.finalTotal || 0;
+         state.currency = action.payload.currency || 'INR';
       },
       addItem: (state, action) => {
          state.items.push(action.payload);
       },
+
       increamentCartItem: (state, action) => {
          const { productId, variantId } = action.payload;
 
