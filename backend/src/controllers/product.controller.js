@@ -2,8 +2,94 @@ import { json } from "express";
 import productModel from "../models/product.model.js";
 import { uploadFile } from "../services/storage.service.js";
 
+export async function updateProduct(req, res) {
+   const { productId } = req.params;
+   const seller = req.user;
+
+   const product = await productModel.findOne({
+      _id: productId,
+      seller: seller._id,
+   });
+
+   if (!product) {
+      return res.status(404).json({
+         message: "Product not found or you are not the seller",
+         success: false,
+      });
+   }
+
+   const { title, description, priceAmount, priceCurrency, stock } = req.body;
+
+   if (title !== undefined) product.title = title;
+   if (description !== undefined) product.description = description;
+   if (stock !== undefined) product.stock = Number(stock);
+   if (priceAmount !== undefined) {
+      product.price = {
+         amount: Number(priceAmount),
+         currency: priceCurrency || product.price?.currency || "INR",
+      };
+   } else if (priceCurrency !== undefined && product.price) {
+      product.price.currency = priceCurrency;
+   }
+
+   await product.save();
+
+   return res.status(200).json({
+      message: "Product updated successfully",
+      success: true,
+      product,
+   });
+}
+
+export async function updateProductVariant(req, res) {
+   const { productId, variantId } = req.params;
+   const seller = req.user;
+
+   const product = await productModel.findOne({
+      _id: productId,
+      seller: seller._id,
+   });
+
+   if (!product) {
+      return res.status(404).json({
+         message: "Product not found or you are not the seller",
+         success: false,
+      });
+   }
+
+   const variant = product.variants.id(variantId);
+
+   if (!variant) {
+      return res.status(404).json({
+         message: "Variant not found",
+         success: false,
+      });
+   }
+
+   const { stock, priceAmount, priceCurrency } = req.body;
+
+   if (stock !== undefined) variant.stock = Number(stock);
+   if (priceAmount !== undefined) {
+      variant.price = {
+         amount: Number(priceAmount),
+         currency: priceCurrency || variant.price?.currency || product.price?.currency || "INR",
+      };
+   } else if (priceCurrency !== undefined && variant.price) {
+      variant.price.currency = priceCurrency;
+   }
+
+   await product.save();
+
+   return res.status(200).json({
+      message: "Variant updated successfully",
+      success: true,
+      variant,
+   });
+}
+
+
 export async function createProduct(req, res) {
-   const { title, description, priceAmount, priceCurrency } = req.body;
+   const { title, description, priceAmount, priceCurrency, stock } = req.body;
    const seller = req.user;
 
    const images = await Promise.all(
@@ -24,6 +110,7 @@ export async function createProduct(req, res) {
             currency: priceCurrency || "INR",
          },
       }),
+      stock: Number(stock) || 0,
       // image:images[0].url,
       images,
       seller: seller._id,

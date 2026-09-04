@@ -23,18 +23,28 @@ export const getCart = async () => {
 
 
 export const incrementItemQuantity = async ({ productId, variantId }) => {
-   const response = await cartAPIInstance.patch(`/quantity/increament/${productId}`, {
-      variantId: variantId || null
-   });
-   return response.data;
+   try {
+      const response = await cartAPIInstance.patch(`/quantity/increament/${productId}`, {
+         variantId: variantId || null
+      });
+      return response.data;
+   } catch (err) {
+      // Return the backend error payload so the hook can check success: false
+      return err?.response?.data ?? { success: false, message: "Failed to update quantity" };
+   }
 }
 
 export const decrementItemQuantity = async ({ productId, variantId }) => {
-   const response = await cartAPIInstance.patch(`/quantity/decreament/${productId}`, {
-      variantId: variantId || null
-   })
-   return response.data;
+   try {
+      const response = await cartAPIInstance.patch(`/quantity/decreament/${productId}`, {
+         variantId: variantId || null
+      });
+      return response.data;
+   } catch (err) {
+      return err?.response?.data ?? { success: false, message: "Failed to update quantity" };
+   }
 }
+
 
 export const removeItem = async ({ productId, variantId }) => {
    const response = await cartAPIInstance.delete(`/remove/${productId}`, {

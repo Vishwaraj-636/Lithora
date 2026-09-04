@@ -1,27 +1,30 @@
 import { useState, useEffect } from "react";
 
 /**
- * Shared dark-mode hook for Meera M&G.
- * Persists to localStorage under 'meera-mg-theme'.
- * Toggles the 'dark' class on <html>.
+ * Shared dark-mode hook for WEARTH.
+ * Persists to localStorage under 'wearth-theme'.
  */
 export function useDarkMode() {
-   const [isDark, setIsDark] = useState(() => {
-      const stored = localStorage.getItem("meera-mg-theme");
-      if (stored) return stored === "dark";
+   const [isDarkMode, setIsDarkMode] = useState(() => {
+      // 1. Check local storage
+      const stored = localStorage.getItem("wearth-theme");
+      if (stored) {
+         return stored === "dark";
+      }
+      // 2. Fall back to system preference
       return window.matchMedia("(prefers-color-scheme: dark)").matches;
    });
 
    useEffect(() => {
-      const root = document.documentElement;
-      if (isDark) {
+      const root = window.document.documentElement;
+      if (isDarkMode) {
          root.classList.add("dark");
-         localStorage.setItem("meera-mg-theme", "dark");
+         localStorage.setItem("wearth-theme", "dark");
       } else {
          root.classList.remove("dark");
-         localStorage.setItem("meera-mg-theme", "light");
+         localStorage.setItem("wearth-theme", "light");
       }
-   }, [isDark]);
+   }, [isDarkMode]);
 
-   return [isDark, () => setIsDark((v) => !v)];
+   return [isDarkMode, () => setIsDarkMode((v) => !v)];
 }

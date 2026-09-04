@@ -165,7 +165,7 @@ const Home = () => {
                   No products yet
                </h2>
                <p className="mt-2 text-[13px] text-[#666666]">
-                  Check back soon — new slabs are being added.
+                  Check back soon — new items are being added.
                </p>
             </div>
          </div>
@@ -177,7 +177,7 @@ const Home = () => {
          className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col"
          style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
-         
+
 
          {/* ── Hero ── */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-14 pb-10 sm:pt-16 sm:pb-12">
@@ -187,11 +187,11 @@ const Home = () => {
                <span className="text-[#000000]">All Products</span>
             </p>
             <h1 className="text-[28px] sm:text-[36px] lg:text-[48px] font-semibold text-[#000000] leading-tight tracking-tight mb-2">
-               Our Stone Collection
+               Our Apparel Collection
             </h1>
             <p className="text-[14px] sm:text-[16px] text-[#666666] leading-relaxed max-w-xl">
-               Premium marble and granite slabs sourced directly from the quarry.
-               Quality stone for every space.
+               Premium clothing and apparel items sourced directly from top designers.
+               Quality apparel for every occasion.
             </p>
             <div className="h-px bg-[#e5e5e5] w-full mt-8" />
          </div>
@@ -221,10 +221,10 @@ const Home = () => {
                   className="text-xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
                <p className="text-[11px] text-[#999999]">
-                  © {new Date().getFullYear()} Meera M&amp;G. All rights reserved.
+                  © {new Date().getFullYear()} WEARTH. All rights reserved.
                </p>
             </div>
          </footer>

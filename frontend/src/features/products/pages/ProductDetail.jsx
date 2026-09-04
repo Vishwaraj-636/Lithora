@@ -97,20 +97,52 @@ const ProductDetail = () => {
 
    /* ── Variant Selection State ── */
    const [selectedAttributes, setSelectedAttributes] = useState({});
+   const [selectedVariantId, setSelectedVariantId] = useState(null);
 
    const prevImage = (total) => setActiveImage((i) => (i - 1 + total) % total);
    const nextImage = (total) => setActiveImage((i) => (i + 1) % total);
 
    async function fetchProductDetails() {
       const data = await handleGetProductById(productId);
+
+      if (data) {
+         // Inject a synthetic "Original" variant representing the base product,
+         // so it is always available as the default selected state.
+         const hasOriginalVariant = data.variants?.some(
+            (v) => v.attributes && v.attributes["Variant"] === "Original"
+         );
+         if (!hasOriginalVariant) {
+            const originalVariant = {
+               _id: data._id + "_original",
+               images: data.images,
+               stock: data.stock || 0,
+               attributes: { Variant: "Original" },
+               price: data.price,
+            };
+            data.variants = [originalVariant, ...(data.variants || [])];
+         }
+      }
+
       setProduct(data);
-      if (data?.variants?.length > 0) {
-         setSelectedAttributes(data.variants[0].attributes || {});
+
+      // Always default-select the "Original" (base product) variant
+      const originalVariant = data?.variants?.find(
+         (v) => v.attributes && v.attributes["Variant"] === "Original"
+      );
+      if (originalVariant) {
+         setSelectedAttributes(originalVariant.attributes || {});
+         setSelectedVariantId(originalVariant._id?.toString());
+      } else if (data?.variants?.length > 0) {
+         const firstVariant = data.variants[0];
+         setSelectedAttributes(firstVariant.attributes || {});
+         setSelectedVariantId(firstVariant._id?.toString());
       } else {
          setSelectedAttributes({});
+         setSelectedVariantId(null);
       }
       setLoading(false);
    }
+
 
    useEffect(() => {
       fetchProductDetails();
@@ -132,6 +164,7 @@ const ProductDetail = () => {
       });
       return attrs;
    }, [product]);
+
 
    const handleAttributeSelect = (key, val) => {
       let newAttributes = { ...(selectedAttributes || {}), [key]: val };
@@ -159,18 +192,20 @@ const ProductDetail = () => {
       });
 
       setSelectedAttributes(newAttributes);
+      const selectedVariant = matchingVariants[0];
+      setSelectedVariantId(selectedVariant?._id?.toString() ?? null);
       setActiveImage(0); // reset image index on variant change
    };
 
    // Determine the active variant based on selected attributes
    const selectedVariant = useMemo(() => {
       if (!product || !product.variants || !selectedAttributes) return null;
-      return product.variants.find((v) => {
-         return Object.entries(selectedAttributes).every(
-            ([k, val]) => v.attributes[k] === val
-         );
-      });
-   }, [product, selectedAttributes]);
+      return product.variants.find((variant) =>
+         variant._id?.toString() === selectedVariantId
+      ) ?? product.variants.find((variant) =>
+         Object.entries(selectedAttributes).every(([key, value]) => variant.attributes[key] === value)
+      );
+   }, [product, selectedAttributes, selectedVariantId]);
 
    /* ── Loading state ── */
    if (loading) {
@@ -178,7 +213,7 @@ const ProductDetail = () => {
          <div className="min-h-screen bg-[#ffffff] flex items-center justify-center" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
             <div className="flex flex-col items-center gap-4">
                <div className="w-8 h-8 border-2 border-[#e5e5e5] border-t-[#000000] rounded-full animate-spin" />
-               <p className="text-[13px] text-[#666666] tracking-wide">Loading slab details…</p>
+               <p className="text-[13px] text-[#666666] tracking-wide">Loading item details…</p>
             </div>
          </div>
       );
@@ -191,7 +226,7 @@ const ProductDetail = () => {
             <div className="text-center">
                <p className="text-[40px] mb-4">🕵️</p>
                <h2 className="text-[20px] font-semibold text-[#000000]">Product not found</h2>
-               <p className="mt-2 text-[13px] text-[#666666]">This slab may have been removed or is no longer available.</p>
+               <p className="mt-2 text-[13px] text-[#666666]">This item may have been removed or is no longer available.</p>
                <button onClick={() => navigate("/")} className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors">
                   <ArrowLeftIcon /> Back to Catalogue
                </button>
@@ -214,7 +249,7 @@ const ProductDetail = () => {
 
    return (
       <div className="min-h-screen bg-[#ffffff] text-[#000000] flex flex-col" style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}>
-         
+
 
          {/* ══════════════════════════════ Breadcrumb ══════════════════════════════ */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 sm:pt-6 pb-2 flex justify-start">
@@ -302,37 +337,6 @@ const ProductDetail = () => {
                         </p>
 
                         <div className="flex flex-col gap-4">
-                           {/* Separate Original Product Button */}
-                           <div className="mb-2">
-                              <p className="text-[14px] sm:text-[15px] text-[#666666] font-medium mb-3">
-                                 Default: <span className="text-[#000000] font-bold">{!selectedAttributes ? "Original" : ""}</span>
-                              </p>
-                              <button
-                                 onClick={() => { setSelectedAttributes(null); setActiveImage(0); }}
-                                 className={`flex flex-col items-center gap-1.5 p-1.5 rounded-xl border transition-all hover:border-[#000000] ${!selectedAttributes
-                                    ? "border-[#000000] bg-[#000000]/10 ring-1 ring-[#000000]/30"
-                                    : "border-transparent hover:bg-[#fafafa] hover:border-[#e5e5e5]"
-                                    }`}
-                              >
-                                 <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border border-[#e5e5e5] shrink-0 bg-[#fafafa]">
-                                    {product.images?.[0] ? (
-                                       <img src={typeof product.images[0] === 'string' ? product.images[0] : product.images[0].url} alt="Original Product" className="w-full h-full object-cover" />
-                                    ) : (
-                                       <ImagePlaceholder small />
-                                    )}
-                                 </div>
-                                 <div className="flex flex-col items-center gap-0.5">
-                                    <span className={`text-[11px] sm:text-[12px] font-medium max-w-20 truncate ${!selectedAttributes ? "text-[#000000]" : "text-[#666666]"}`}>
-                                       Original
-                                    </span>
-                                    {product.price?.amount && (
-                                       <span className={`text-[10px] sm:text-[11px] font-semibold ${!selectedAttributes ? "text-[#000000]" : "text-[#000000]"}`}>
-                                          {CURRENCY_SYMBOLS[product.price?.currency || 'INR'] ?? (product.price?.currency || 'INR')}{Number(product.price.amount).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                       </span>
-                                    )}
-                                 </div>
-                              </button>
-                           </div>
 
                            {Object.entries(availableAttributes).map(([groupName, values]) => {
                               return (
@@ -404,15 +408,19 @@ const ProductDetail = () => {
                         <p className="text-[14px] sm:text-[15px] text-[#666666] leading-relaxed">{product.description}</p>
                      </div>
                   )}
-
                   <div className="h-px bg-[#e5e5e5] w-full" />
 
                   <div className="flex flex-col gap-3">
                      <button
                         onClick={() => {
+                           // The "Original" variant is synthetic (frontend-only) — send null so
+                           // the backend adds the base product without a variant reference.
+                           const cartVariantId = selectedVariantId?.endsWith("_original")
+                              ? null
+                              : (selectedVariantId ?? null);
                            handleAddItem({
                               productId: product._id,
-                              variantId: selectedVariant?._id
+                              variantId: cartVariantId
                            })
                         }}
                         disabled={(selectedVariant ? selectedVariant.stock : product.stock) <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#000000] text-[#000000] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#000000] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
@@ -455,8 +463,8 @@ const ProductDetail = () => {
          {/* ── Footer ── */}
          <footer className="border-t border-[#e5e5e5] py-6 sm:py-8 mt-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
-               <p className="text-[10px] sm:text-[11px] text-[#999999]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
+               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>WEARTH</span>
+               <p className="text-[10px] sm:text-[11px] text-[#999999]">© {new Date().getFullYear()} WEARTH. All rights reserved.</p>
             </div>
          </footer>
       </div>

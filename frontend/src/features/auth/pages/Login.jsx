@@ -133,7 +133,7 @@ const Login = () => {
                   className="text-2xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
             </header>
 
@@ -142,13 +142,13 @@ const Login = () => {
                   className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#000000] whitespace-pre-line"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  {"Crafted from\nthe earth,\nbuilt to last."}
+                  {"Crafted for\ncomfort,\nstyled to last."}
                </h2>
             </div>
 
             <footer>
                <p className="text-sm tracking-wide text-[#666666]">
-                  The trusted source for premium marble &amp; granite.
+                  The trusted source for premium clothing &amp; apparel.
                </p>
             </footer>
          </div>
@@ -161,7 +161,7 @@ const Login = () => {
                   className="block md:hidden text-xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
             </div>
 
@@ -178,7 +178,7 @@ const Login = () => {
                      Sign in
                   </h1>
                   <p className="text-sm text-[#666666]">
-                     Welcome back to Meera M&amp;G.
+                     Welcome back to WEARTH.
                   </p>
                </div>
 
@@ -216,7 +216,7 @@ const Login = () => {
                         aria-label="Toggle password visibility"
                         className="absolute right-0 top-3.5 text-[#666666] hover:text-[#000000] transition-colors duration-200"
                      >
-                        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        {showPassword ? <EyeIcon /> : <EyeOffIcon />}
                      </button>
                   </div>
 

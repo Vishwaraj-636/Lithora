@@ -81,6 +81,8 @@ const SellerProductDetail = () => {
    const {
       handleGetProductById,
       handleAddProductVariant,
+      handleUpdateProduct,
+      handleUpdateProductVariant,
    } = useProduct();
    const { handleLogout } = useAuth();
 
@@ -88,6 +90,20 @@ const SellerProductDetail = () => {
    const [product, setProduct] = useState(null);
    const [loading, setLoading] = useState(true);
    const [activeImage, setActiveImage] = useState(0);
+
+   /* ── Edit base product state ── */
+   const [editMode, setEditMode] = useState(false);
+   const [editTitle, setEditTitle] = useState('');
+   const [editDescription, setEditDescription] = useState('');
+   const [editPrice, setEditPrice] = useState('');
+   const [editStock, setEditStock] = useState('');
+   const [saving, setSaving] = useState(false);
+
+   /* ── Edit variant state ── */
+   const [editingVariantId, setEditingVariantId] = useState(null);
+   const [variantEditStock, setVariantEditStock] = useState('');
+   const [variantEditPrice, setVariantEditPrice] = useState('');
+   const [savingVariant, setSavingVariant] = useState(false);
 
    /* ── Variant form state ── */
    const [attrKey, setAttrKey] = useState('');
@@ -109,10 +125,24 @@ const SellerProductDetail = () => {
       setTimeout(() => setToast(null), 3000);
    };
 
+
    /* ─── Fetch product ─── */
    async function fetchProduct() {
       try {
          const data = await handleGetProductById(productId);
+         if (data) {
+            const hasOriginalVariant = data.variants?.some(v => v.attributes && v.attributes["Variant"] === "Original");
+            if (!hasOriginalVariant) {
+               const originalVariant = {
+                  _id: data._id + "_original",
+                  images: data.images,
+                  stock: data.stock || 0,
+                  attributes: { "Variant": "Original" },
+                  price: data.price
+               };
+               data.variants = [originalVariant, ...(data.variants || [])];
+            }
+         }
          setProduct(data);
       } catch (err) {
          console.error('Error fetching product:', err);
@@ -123,11 +153,76 @@ const SellerProductDetail = () => {
 
    useEffect(() => { fetchProduct(); }, [productId]);
 
+   /* ─── Pre-fill edit state when product loads ─── */
+   useEffect(() => {
+      if (product) {
+         setEditTitle(product.title || '');
+         setEditDescription(product.description || '');
+         setEditPrice(product.price?.amount ?? '');
+         setEditStock(product.stock ?? '');
+      }
+   }, [product?._id]);
+
+   /* ─── Save base product ─── */
+   const handleSaveProduct = async () => {
+      setSaving(true);
+      try {
+         const payload = {};
+         if (editTitle !== product.title) payload.title = editTitle;
+         if (editDescription !== product.description) payload.description = editDescription;
+         if (String(editPrice) !== String(product.price?.amount ?? '')) payload.priceAmount = editPrice;
+         if (String(editStock) !== String(product.stock ?? '')) payload.stock = editStock;
+
+         if (Object.keys(payload).length === 0) {
+            setEditMode(false);
+            return;
+         }
+
+         const updated = await handleUpdateProduct(product._id, payload);
+         setProduct(prev => ({ ...prev, ...updated }));
+         setEditMode(false);
+         showToast('Product updated successfully!');
+      } catch (err) {
+         showToast(err?.response?.data?.message || 'Failed to update product.', 'error');
+      } finally {
+         setSaving(false);
+      }
+   };
+
+   /* ─── Start editing a variant ─── */
+   const startEditVariant = (variant) => {
+      setEditingVariantId(variant._id);
+      setVariantEditStock(variant.stock ?? '');
+      setVariantEditPrice(variant.price?.amount ?? product.price?.amount ?? '');
+   };
+
+   /* ─── Save variant ─── */
+   const handleSaveVariant = async (variantId) => {
+      setSavingVariant(true);
+      try {
+         const payload = { stock: variantEditStock, priceAmount: variantEditPrice };
+         const updatedVariant = await handleUpdateProductVariant(product._id, variantId, payload);
+         setProduct(prev => ({
+            ...prev,
+            variants: prev.variants.map(v =>
+               v._id === variantId ? { ...v, ...updatedVariant } : v
+            ),
+         }));
+         setEditingVariantId(null);
+         showToast('Variant updated!');
+      } catch (err) {
+         showToast(err?.response?.data?.message || 'Failed to update variant.', 'error');
+      } finally {
+         setSavingVariant(false);
+      }
+   };
+
    /* ─── Gallery ─── */
    const images = product?.images ?? [];
    const hasMultiple = images.length > 1;
    const prevImage = () => setActiveImage(i => (i - 1 + images.length) % images.length);
    const nextImage = () => setActiveImage(i => (i + 1) % images.length);
+
 
    /* ─── Attribute management ─── */
    const addAttribute = () => {
@@ -252,7 +347,7 @@ const SellerProductDetail = () => {
             </div>
          )}
 
-         
+
 
          {/* ══ Breadcrumb ══ */}
          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-4 pb-2">
@@ -271,7 +366,25 @@ const SellerProductDetail = () => {
             <section className="bg-white border border-[#e5e5e5] rounded-2xl p-5 sm:p-7" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                <div className="flex items-center justify-between mb-5">
                   <h2 className="text-[11px] uppercase tracking-widest text-[#999999] font-bold">Product Overview</h2>
-                  <span className="text-[10px] bg-[#f5f5f5] text-[#999999] px-2.5 py-1 rounded-full font-mono border border-[#e5e5e5] truncate max-w-40 sm:max-w-none">{product._id}</span>
+                  <div className="flex items-center gap-3">
+                     <span className="text-[10px] bg-[#f5f5f5] text-[#999999] px-2.5 py-1 rounded-full font-mono border border-[#e5e5e5] truncate max-w-40 sm:max-w-none">{product._id}</span>
+                     {!editMode ? (
+                        <button
+                           onClick={() => setEditMode(true)}
+                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e5e5e5] text-[11px] font-semibold text-[#666666] hover:border-[#000000] hover:text-[#000000] transition-all"
+                        >
+                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                           Edit
+                        </button>
+                     ) : (
+                        <button
+                           onClick={() => setEditMode(false)}
+                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e5e5e5] text-[11px] font-semibold text-[#666666] hover:border-[#000000] hover:text-[#000000] transition-all"
+                        >
+                           Cancel
+                        </button>
+                     )}
+                  </div>
                </div>
 
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-7">
@@ -303,35 +416,99 @@ const SellerProductDetail = () => {
                      </div>
                   </div>
 
-                  {/* Product info */}
+                  {/* Product info — view or edit mode */}
                   <div className="flex flex-col gap-4">
-                     <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#000000] leading-tight capitalize">{product.title}</h1>
-                     <div className="flex items-baseline gap-2">
-                        <span className="text-[26px] sm:text-[30px] font-bold text-[#000000]">
-                           {symbol}{Number(product.price?.amount ?? 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </span>
-                        <span className="text-[12px] text-[#999999]">{product.price?.currency}</span>
-                     </div>
-                     <div className="h-px bg-[#e5e5e5]" />
-                     {product.description && (
-                        <div>
-                           <p className="text-[10px] uppercase tracking-[0.08em] text-[#999999] font-semibold mb-1.5">Description</p>
-                           <p className="text-[14px] text-[#666666] leading-relaxed">{product.description}</p>
+                     {editMode ? (
+                        /* ── Edit form ── */
+                        <div className="flex flex-col gap-4">
+                           <div>
+                              <label className="text-[11px] uppercase tracking-wider text-[#999999] font-semibold mb-1.5 block">Title</label>
+                              <input
+                                 type="text"
+                                 value={editTitle}
+                                 onChange={e => setEditTitle(e.target.value)}
+                                 className="w-full h-10 px-3 bg-white border border-[#dddddd] rounded-lg text-[14px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors"
+                              />
+                           </div>
+                           <div>
+                              <label className="text-[11px] uppercase tracking-wider text-[#999999] font-semibold mb-1.5 block">Description</label>
+                              <textarea
+                                 value={editDescription}
+                                 onChange={e => setEditDescription(e.target.value)}
+                                 rows={4}
+                                 className="w-full px-3 py-2 bg-white border border-[#dddddd] rounded-lg text-[14px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors resize-none"
+                              />
+                           </div>
+                           <div className="flex gap-3">
+                              <div className="flex-1">
+                                 <label className="text-[11px] uppercase tracking-wider text-[#999999] font-semibold mb-1.5 block">Price ({product.price?.currency || 'INR'})</label>
+                                 <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#999999] font-semibold text-[13px]">{symbol}</span>
+                                    <input
+                                       type="number"
+                                       min="0"
+                                       step="0.01"
+                                       value={editPrice}
+                                       onChange={e => setEditPrice(e.target.value)}
+                                       className="w-full h-10 pl-8 pr-3 bg-white border border-[#dddddd] rounded-lg text-[14px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors"
+                                    />
+                                 </div>
+                              </div>
+                              <div className="flex-1">
+                                 <label className="text-[11px] uppercase tracking-wider text-[#999999] font-semibold mb-1.5 block">Base Stock</label>
+                                 <input
+                                    type="number"
+                                    min="0"
+                                    value={editStock}
+                                    onChange={e => setEditStock(e.target.value)}
+                                    className="w-full h-10 px-3 bg-white border border-[#dddddd] rounded-lg text-[14px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors"
+                                 />
+                              </div>
+                           </div>
+                           <button
+                              onClick={handleSaveProduct}
+                              disabled={saving}
+                              className="self-start h-10 px-6 flex items-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] font-bold hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
+                           >
+                              {saving ? <><Spinner size="sm" /> Saving…</> : <><SaveIcon /> Save Changes</>}
+                           </button>
                         </div>
+                     ) : (
+                        /* ── View mode ── */
+                        <>
+                           <h1 className="text-[22px] sm:text-[28px] font-semibold text-[#000000] leading-tight capitalize">{product.title}</h1>
+                           <div className="flex items-baseline gap-2">
+                              <span className="text-[26px] sm:text-[30px] font-bold text-[#000000]">
+                                 {symbol}{Number(product.price?.amount ?? 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </span>
+                              <span className="text-[12px] text-[#999999]">{product.price?.currency}</span>
+                           </div>
+                           <div className="h-px bg-[#e5e5e5]" />
+                           {product.description && (
+                              <div>
+                                 <p className="text-[10px] uppercase tracking-[0.08em] text-[#999999] font-semibold mb-1.5">Description</p>
+                                 <p className="text-[14px] text-[#666666] leading-relaxed">{product.description}</p>
+                              </div>
+                           )}
+                           <div className="h-px bg-[#e5e5e5]" />
+                           <div className="flex flex-wrap gap-3 pt-1">
+                              <div className="px-4 py-2.5 bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl text-center min-w-22.5">
+                                 <p className="text-[10px] text-[#999999] uppercase tracking-widest mb-0.5">Total Stock</p>
+                                 <p className="text-[20px] font-semibold text-[#000000]">
+                                    {(product.variants ?? []).reduce((acc, v) => acc + (v.stock ?? 0), 0)}
+                                 </p>
+                              </div>
+                              <div className="px-4 py-2.5 bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl text-center min-w-22.5">
+                                 <p className="text-[10px] text-[#999999] uppercase tracking-widest mb-0.5">Base Stock</p>
+                                 <p className="text-[20px] font-semibold text-[#000000]">{product.stock ?? 0}</p>
+                              </div>
+                           </div>
+                        </>
                      )}
-                     <div className="h-px bg-[#e5e5e5]" />
-                     <div className="flex flex-wrap gap-3 pt-1">
-
-                        <div className="px-4 py-2.5 bg-[#f5f5f5] border border-[#e5e5e5] rounded-xl text-center min-w-22.5">
-                           <p className="text-[10px] text-[#999999] uppercase tracking-widest mb-0.5">Total Stock</p>
-                           <p className="text-[20px] font-semibold text-[#000000]">
-                              {(product.variants ?? []).reduce((acc, v) => acc + (v.stock ?? 0), 0)}
-                           </p>
-                        </div>
-                     </div>
                   </div>
                </div>
             </section>
+
 
             {/* ════════════════════════════════
                 SECTION 2 — Add New Variant
@@ -421,53 +598,117 @@ const SellerProductDetail = () => {
                <section className="bg-white border border-[#e5e5e5] rounded-2xl p-5 sm:p-7" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
                   <h2 className="text-[11px] uppercase tracking-widest text-[#999999] font-bold mb-5">Existing Variants ({product.variants.length})</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                     {product.variants.map((variant, idx) => (
-                        <div key={variant._id || idx} className="flex gap-4 p-4 border border-[#e5e5e5] rounded-xl bg-[#fafafa] hover:border-[#000000]/50 transition-colors">
-                           <div className="w-20 h-20 shrink-0 bg-white rounded-lg border border-[#e5e5e5] overflow-hidden">
-                              {variant.images?.[0]?.url ? (
-                                 <img src={variant.images[0].url} alt="Variant" className="w-full h-full object-cover" />
-                              ) : (
-                                 <ImagePlaceholder small />
-                              )}
-                           </div>
-                           <div className="flex flex-col flex-1 justify-center gap-2 min-w-0">
-                              {/* Attributes */}
-                              <div className="flex flex-wrap gap-1.5">
-                                 {Object.entries(variant.attributes || {}).length > 0 ? (
-                                    Object.entries(variant.attributes).map(([k, v]) => (
-                                       <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#e5e5e5] text-[#000000] truncate">
-                                          <span className="text-[#666666]">{k}:</span> {v}
-                                       </span>
-                                    ))
-                                 ) : (
-                                    <span className="text-[11px] text-[#999999]">No attributes</span>
+                     {product.variants.map((variant, idx) => {
+                        const isEditing = editingVariantId === variant._id;
+                        // "Original" synthetic variant has an _id ending in "_original" — no real DB id, skip edit
+                        const isOriginalVirtual = variant._id?.endsWith('_original');
+                        return (
+                           <div key={variant._id || idx} className={`flex flex-col gap-3 p-4 border rounded-xl transition-colors ${isEditing ? 'border-[#000000] bg-white' : 'border-[#e5e5e5] bg-[#fafafa] hover:border-[#000000]/30'}`}>
+                              {/* Top row: image + attributes + edit button */}
+                              <div className="flex gap-4">
+                                 <div className="w-20 h-20 shrink-0 bg-white rounded-lg border border-[#e5e5e5] overflow-hidden">
+                                    {variant.images?.[0]?.url ? (
+                                       <img src={variant.images[0].url} alt="Variant" className="w-full h-full object-cover" />
+                                    ) : (
+                                       <ImagePlaceholder small />
+                                    )}
+                                 </div>
+                                 <div className="flex flex-col flex-1 justify-center gap-2 min-w-0">
+                                    {/* Attributes */}
+                                    <div className="flex flex-wrap gap-1.5">
+                                       {Object.entries(variant.attributes || {}).length > 0 ? (
+                                          Object.entries(variant.attributes).map(([k, v]) => (
+                                             <span key={k} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-[#e5e5e5] text-[#000000] truncate">
+                                                <span className="text-[#666666]">{k}:</span> {v}
+                                             </span>
+                                          ))
+                                       ) : (
+                                          <span className="text-[11px] text-[#999999]">No attributes</span>
+                                       )}
+                                    </div>
+                                    {/* Stock and Price display */}
+                                    {!isEditing && (
+                                       <div className="flex flex-wrap items-center gap-3 text-[12px] text-[#666666]">
+                                          <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
+                                             <span>📦 Stock:</span>
+                                             <span className="font-semibold text-[#000000]">{variant.stock ?? 0}</span>
+                                          </div>
+                                          <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
+                                             <span>💰 Price:</span>
+                                             <span className="font-semibold text-[#000000]">{variant.price?.currency || product.price?.currency || 'INR'} {variant.price?.amount || product.price?.amount || 0}</span>
+                                          </div>
+                                       </div>
+                                    )}
+                                 </div>
+                                 {/* Edit / Cancel toggle — only for persisted variants */}
+                                 {!isOriginalVirtual && (
+                                    <button
+                                       onClick={() => isEditing ? setEditingVariantId(null) : startEditVariant(variant)}
+                                       className="shrink-0 self-start mt-0.5 p-1.5 rounded-lg border border-[#e5e5e5] text-[#999999] hover:border-[#000000] hover:text-[#000000] transition-all"
+                                       title={isEditing ? 'Cancel' : 'Edit variant'}
+                                    >
+                                       {isEditing ? (
+                                          <XIcon />
+                                       ) : (
+                                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                                       )}
+                                    </button>
                                  )}
                               </div>
-                              {/* Stock and Price */}
-                              <div className="flex flex-wrap items-center gap-3 text-[12px] text-[#666666]">
-                                 <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
-                                    <span>📦 Stock:</span>
-                                    <span className="font-semibold text-[#000000]">{variant.stock ?? 0}</span>
+
+                              {/* Inline edit form */}
+                              {isEditing && (
+                                 <div className="flex flex-col gap-3 pt-2 border-t border-[#e5e5e5]">
+                                    <div className="flex gap-3">
+                                       <div className="flex-1">
+                                          <label className="text-[10px] uppercase tracking-wider text-[#999999] font-semibold mb-1 block">Stock</label>
+                                          <input
+                                             type="number"
+                                             min="0"
+                                             value={variantEditStock}
+                                             onChange={e => setVariantEditStock(e.target.value)}
+                                             className="w-full h-9 px-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors"
+                                          />
+                                       </div>
+                                       <div className="flex-1">
+                                          <label className="text-[10px] uppercase tracking-wider text-[#999999] font-semibold mb-1 block">Price ({variant.price?.currency || product.price?.currency || 'INR'})</label>
+                                          <div className="relative">
+                                             <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#999999] text-[12px] font-semibold">{symbol}</span>
+                                             <input
+                                                type="number"
+                                                min="0"
+                                                step="0.01"
+                                                value={variantEditPrice}
+                                                onChange={e => setVariantEditPrice(e.target.value)}
+                                                className="w-full h-9 pl-7 pr-3 bg-white border border-[#dddddd] rounded-lg text-[13px] text-[#000000] focus:outline-none focus:border-[#000000] transition-colors"
+                                             />
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <button
+                                       onClick={() => handleSaveVariant(variant._id)}
+                                       disabled={savingVariant}
+                                       className="self-start h-9 px-5 flex items-center gap-1.5 rounded-lg bg-[#000000] text-white text-[12px] font-bold hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
+                                    >
+                                       {savingVariant ? <><Spinner size="sm" /> Saving…</> : <><SaveIcon /> Save Variant</>}
+                                    </button>
                                  </div>
-                                 <div className="flex items-center gap-1.5 bg-white px-2 py-1 rounded-md border border-[#e5e5e5]">
-                                    <span>💰 Price:</span>
-                                    <span className="font-semibold text-[#000000]">{variant.price?.currency || product.price?.currency || 'INR'} {variant.price?.amount || product.price?.amount || 0}</span>
-                                 </div>
-                              </div>
+                              )}
                            </div>
-                        </div>
-                     ))}
+                        );
+                     })}
                   </div>
                </section>
             )}
+
 
          </main>
 
          {/* ── Footer ── */}
          <footer className="w-full border-t border-[#e5e5e5] py-6 mt-4">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2">
-               <span className="text-lg tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
-               <p className="text-[11px] text-[#999999]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
+               <span className="text-lg tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>WEARTH</span>
+               <p className="text-[11px] text-[#999999]">© {new Date().getFullYear()} WEARTH. All rights reserved.</p>
             </div>
          </footer>
       </div>

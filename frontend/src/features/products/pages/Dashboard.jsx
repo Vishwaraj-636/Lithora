@@ -197,7 +197,7 @@ const Dashboard = () => {
                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold hover:bg-[#333333] transition-colors active:scale-[0.98] self-start sm:self-auto"
                   >
                      <PlusIcon />
-                     Add Slab
+                     Add Item
                   </button>
                </div>
 
@@ -241,10 +241,10 @@ const Dashboard = () => {
                <div className="flex flex-col items-center justify-center py-24 text-center">
                   <EmptyBoxIcon />
                   <h2 className="mt-6 text-[18px] font-semibold text-[#000000]">
-                     No slabs listed yet
+                     No items listed yet
                   </h2>
                   <p className="mt-2 text-[13px] text-[#666666] max-w-xs">
-                     You haven't listed any slabs yet. Add your first marble or granite
+                     You haven't listed any items yet. Add your first clothing or apparel
                      product to start selling.
                   </p>
                   <button
@@ -252,7 +252,7 @@ const Dashboard = () => {
                      className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-[#000000] text-white text-[13px] font-semibold hover:bg-[#333333] transition-colors active:scale-[0.98]"
                   >
                      <PlusIcon />
-                     List Your First Slab
+                     List Your First Item
                   </button>
                </div>
             ) : (
@@ -276,10 +276,10 @@ const Dashboard = () => {
                   className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
                <p className="text-[10px] sm:text-[11px] text-[#999999]">
-                  © {new Date().getFullYear()} Meera M&amp;G. All rights reserved.
+                  © {new Date().getFullYear()} WEARTH. All rights reserved.
                </p>
             </div>
          </footer>

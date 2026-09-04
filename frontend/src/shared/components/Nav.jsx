@@ -26,7 +26,7 @@ const Nav = () => {
       <nav className="sticky top-0 z-20 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#e5e5e5]">
          <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 h-14 flex items-center justify-between">
             <span className="text-xl sm:text-2xl tracking-[-0.04em] text-[#000000] cursor-pointer" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }} onClick={() => navigate("/")}>
-               Meera M&amp;G
+               WEARTH
             </span>
             {!user ? (
                <div className="flex items-center gap-3 sm:gap-4">

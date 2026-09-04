@@ -12,8 +12,16 @@ const productSlice = createSlice({
       setProducts: (state, action) => {
          state.products = action.payload;
       },
+      updateSellerProduct: (state, action) => {
+         const updated = action.payload;
+         const idx = state.sellerProducts.findIndex((p) => p._id === updated._id);
+         if (idx !== -1) {
+            state.sellerProducts[idx] = updated;
+         }
+      },
    },
 });
 
-export const { setSellerProducts, setProducts } = productSlice.actions;
+export const { setSellerProducts, setProducts, updateSellerProduct } = productSlice.actions;
 export default productSlice.reducer;
+

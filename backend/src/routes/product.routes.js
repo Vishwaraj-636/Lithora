@@ -7,8 +7,11 @@ import {
    getSellerProduct,
    getProductDetails,
    addProductVariant,
+   updateProduct,
+   updateProductVariant,
 } from "../controllers/product.controller.js";
-import { createProductValidator } from "../validator/product.validator.js";
+import { createProductValidator, updateProductValidator } from "../validator/product.validator.js";
+
 
 const upload = multer({
    storage: multer.memoryStorage(),
@@ -61,6 +64,21 @@ router.get("/detail/:productId", getProductDetails);
  */
 router.post("/:productId/variants", authenticateSeller, upload.array("images", 7), addProductVariant);
 
+/**
+ * @route PATCH /api/products/:productId
+ * @desc Update base product (title, description, price, stock)
+ * @access Private (Seller only)
+ */
+router.patch("/:productId", authenticateSeller, updateProductValidator, updateProduct);
+
+/**
+ * @route PATCH /api/products/:productId/variants/:variantId
+ * @desc Update a product variant's stock and/or price
+ * @access Private (Seller only)
+ */
+router.patch("/:productId/variants/:variantId", authenticateSeller, updateProductVariant);
+
 
 
 export default router;
+

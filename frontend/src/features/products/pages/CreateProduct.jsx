@@ -76,6 +76,7 @@ const CreateProduct = () => {
       description: "",
       priceAmount: "",
       priceCurrency: "INR",
+      stock: "",
    });
    const [images, setImages] = useState([]); // { file, preview }[]
    const [dragOver, setDragOver] = useState(false);
@@ -117,6 +118,7 @@ const CreateProduct = () => {
          data.append("description", formData.description);
          data.append("priceAmount", formData.priceAmount);
          data.append("priceCurrency", formData.priceCurrency);
+         data.append("stock", formData.stock);
          images.forEach((img) => data.append("images", img.file));
          await handleCreateProduct(data);
          navigate("/seller/dashboard");
@@ -133,7 +135,7 @@ const CreateProduct = () => {
          className="min-h-screen bg-[#ffffff] text-[#000000]"
          style={{ fontFamily: "'Hanken Grotesk', sans-serif" }}
       >
-        
+
 
          <div className="w-full max-w-300 mx-auto px-4 sm:px-8 lg:px-16 py-8 sm:py-12">
             {/* ── Page Header ── */}
@@ -165,7 +167,7 @@ const CreateProduct = () => {
                                  type="text"
                                  value={formData.title}
                                  onChange={handleChange}
-                                 placeholder="e.g. Handcrafted Ceramic Mug"
+                                 placeholder="e.g. Premium Cotton T-Shirt"
                                  className={inputCls}
                                  required
                               />
@@ -179,7 +181,7 @@ const CreateProduct = () => {
                                  value={formData.description}
                                  onChange={handleChange}
                                  maxLength={MAX_CHARS}
-                                 placeholder="Describe your product — materials, craftsmanship, dimensions..."
+                                 placeholder="Describe your apparel — materials, fit, care instructions..."
                                  className={`${inputCls} resize-y`}
                               />
                               <p className="text-right text-[11px] text-[#666666]">
@@ -213,7 +215,7 @@ const CreateProduct = () => {
                               </div>
                            </Field>
 
-                           <div className="flex-1">
+                           <div className="flex-1 flex flex-col sm:flex-row gap-4">
                               <Field label="Price Amount" htmlFor="priceAmount">
                                  <input
                                     id="priceAmount"
@@ -224,6 +226,18 @@ const CreateProduct = () => {
                                     value={formData.priceAmount}
                                     onChange={handleChange}
                                     placeholder="0.00"
+                                    className={inputCls}
+                                 />
+                              </Field>
+                              <Field label="Stock" htmlFor="stock">
+                                 <input
+                                    id="stock"
+                                    name="stock"
+                                    type="number"
+                                    min="0"
+                                    value={formData.stock}
+                                    onChange={handleChange}
+                                    placeholder="0"
                                     className={inputCls}
                                  />
                               </Field>
@@ -265,9 +279,9 @@ const CreateProduct = () => {
                       cursor-pointer transition-colors mb-5
                       h-35 sm:h-45 lg:h-50
                       ${dragOver
-                                 ? "border-[#000000] bg-[#f5f5f5]"
-                                 : "border-[#dddddd] bg-[#fafafa] hover:bg-[#f5f5f5] hover:border-[#000000]"
-                              }
+                                    ? "border-[#000000] bg-[#f5f5f5]"
+                                    : "border-[#dddddd] bg-[#fafafa] hover:bg-[#f5f5f5] hover:border-[#000000]"
+                                 }
                     `}
                            >
                               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#f5f5f5] flex items-center justify-center mb-2 sm:mb-3">

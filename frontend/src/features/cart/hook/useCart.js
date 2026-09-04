@@ -22,15 +22,21 @@ export const useCart = () => {
 
    const handleIncrementItemQuantity = useCallback(async ({ productId, variantId }) => {
       const data = await incrementItemQuantity({ productId, variantId });
-      dispatch(increamentCartItem({ productId, variantId }));
+      // Only update UI if the backend confirmed success
+      if (data.success) {
+         dispatch(increamentCartItem({ productId, variantId }));
+      }
       return data;
    }, [dispatch]);
 
    const handleDecreamentItemQuantity = useCallback(async ({ productId, variantId }) => {
       const data = await decrementItemQuantity({ productId, variantId });
-      dispatch(decreamentCartItem({ productId, variantId }));
+      if (data.success) {
+         dispatch(decreamentCartItem({ productId, variantId }));
+      }
       return data;
    }, [dispatch]);
+
 
    const handleRemoveItem = useCallback(async ({ productId, variantId }) => {
       const data = await removeItem({ productId, variantId });

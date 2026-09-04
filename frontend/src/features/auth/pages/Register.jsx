@@ -145,7 +145,7 @@ const Register = () => {
                   className="text-2xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
             </header>
 
@@ -154,13 +154,13 @@ const Register = () => {
                   className="text-[clamp(52px,5.5vw,90px)] leading-[1.05] tracking-[-0.03em] text-[#000000] whitespace-pre-line"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  {"Where stone\nmeets\nelegance."}
+                  {"Where fashion\nmeets\nelegance."}
                </h2>
             </div>
 
             <footer>
                <p className="text-sm tracking-wide text-[#666666]">
-                  Join India's premier marble &amp; granite marketplace.
+                  Join India's premier clothing &amp; apparel marketplace.
                </p>
             </footer>
          </div>
@@ -173,7 +173,7 @@ const Register = () => {
                   className="block md:hidden text-xl tracking-[-0.04em] text-[#000000]"
                   style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}
                >
-                  Meera M&amp;G
+                  WEARTH
                </span>
             </div>
 
@@ -239,7 +239,7 @@ const Register = () => {
                         aria-label="Toggle password visibility"
                         className="absolute right-0 top-3.5 text-[#666666] hover:text-[#000000] transition-colors duration-200"
                      >
-                        {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                        {showPassword ? <EyeIcon /> : <EyeOffIcon />}
                      </button>
                   </div>
 

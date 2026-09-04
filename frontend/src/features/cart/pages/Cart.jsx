@@ -241,8 +241,8 @@ const Cart = () => {
          {/* Footer */}
          <footer className="border-t border-[#e5e5e5] py-6 sm:py-8 mt-auto w-full">
             <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-3">
-               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>Meera M&amp;G</span>
-               <p className="text-[10px] sm:text-[11px] text-[#999999]">© {new Date().getFullYear()} Meera M&amp;G. All rights reserved.</p>
+               <span className="text-lg sm:text-xl tracking-[-0.04em] text-[#000000]" style={{ fontFamily: "'Playfair Display', serif", fontWeight: 300 }}>WEARTH</span>
+               <p className="text-[10px] sm:text-[11px] text-[#999999]">© {new Date().getFullYear()} WEARTH. All rights reserved.</p>
             </div>
          </footer>
       </div>

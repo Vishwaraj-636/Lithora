@@ -41,3 +41,13 @@ export async function addProductVariant(productId, newProductVariant) {
    const response = await productAPIInstance.post(`/${productId}/variants`, formData);
    return response.data;
 }
+
+export async function updateProduct(productId, data) {
+   const response = await productAPIInstance.patch(`/${productId}`, data);
+   return response.data;
+}
+
+export async function updateProductVariant(productId, variantId, data) {
+   const response = await productAPIInstance.patch(`/${productId}/variants/${variantId}`, data);
+   return response.data;
+}

@@ -129,17 +129,23 @@ export const increamentCartItemQuantity = async (req, res) => {
       });
    }
 
-   const stock = variantId ? await stockOfVariant(productId, variantId) : null;
-   if (variantId && stock === null) {
-      return res.status(404).json({
-         message: "Product variant not found",
-         success: false
-      });
+   // Resolve stock: use variant stock if variantId provided, otherwise base product stock
+   let stock;
+   if (variantId) {
+      stock = await stockOfVariant(productId, variantId);
+      if (stock === null) {
+         return res.status(404).json({
+            message: "Product variant not found",
+            success: false
+         });
+      }
+   } else {
+      stock = product.stock ?? null;
    }
 
    if (Number.isFinite(stock) && cartItem.quantity + 1 > stock) {
       return res.status(400).json({
-         message: `Only ${stock} items left in stock. You already have ${cartItem.quantity} items in your cart.`,
+         message: `Only ${stock} items left in stock. You already have ${cartItem.quantity} in your cart.`,
          success: false
       });
    }
@@ -153,6 +159,7 @@ export const increamentCartItemQuantity = async (req, res) => {
       item: cartItem
    });
 }
+
 
 export const decreamentCartItemQuantity = async (req, res) => {
    const { productId } = req.params;

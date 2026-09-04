@@ -25,3 +25,27 @@ export const createProductValidator = [
       .withMessage("Price currency must be INR, USD, EUR or GBP"),
    validateRequest,
 ];
+
+export const updateProductValidator = [
+   body("title")
+      .optional()
+      .notEmpty()
+      .withMessage("Title cannot be empty"),
+   body("description")
+      .optional()
+      .notEmpty()
+      .withMessage("Description cannot be empty"),
+   body("priceAmount")
+      .optional({ checkFalsy: true })
+      .isNumeric()
+      .withMessage("Price amount must be a number"),
+   body("priceCurrency")
+      .optional()
+      .isIn(["INR", "USD", "EUR", "GBP"])
+      .withMessage("Price currency must be INR, USD, EUR or GBP"),
+   body("stock")
+      .optional({ checkFalsy: true })
+      .isNumeric()
+      .withMessage("Stock must be a number"),
+   validateRequest,
+];
