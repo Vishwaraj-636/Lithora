@@ -1,7 +1,7 @@
 import express from 'express';
 import { authenticateUser } from '../middleware/auth.middleware.js';
 import { validateAddToCart, validatedecreamentCartItemQuantity, validateincreamentCartItemQuantity, validateRemoveCartItem } from '../validator/cart.validator.js';
-import { addToCart, getCart, increamentCartItemQuantity, decreamentCartItemQuantity, removeCartItem, clearCart } from '../controllers/cart.controller.js';
+import { addToCart, getCart, increamentCartItemQuantity, decreamentCartItemQuantity, removeCartItem, clearCart, createOrderController } from '../controllers/cart.controller.js';
 
 const router = express.Router();
 
@@ -61,5 +61,15 @@ router.delete("/remove/:productId", authenticateUser, validateRemoveCartItem, re
  */
 router.delete("/clear", authenticateUser, clearCart)
 
+
+/**
+ * @routes POST /api/cart/payment/create/order
+ * @desc Create a payment order using Razorpay
+ * @access Private
+ * @argument amount - The amount for the order
+ * @argument currency - The currency for the order (default is INR)
+ */
+
+router.post("/payment/create/order", authenticateUser, createOrderController)
 
 export default router;

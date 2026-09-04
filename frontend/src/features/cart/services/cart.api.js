@@ -57,3 +57,8 @@ export const clearCart = async () => {
    const response = await cartAPIInstance.delete("/clear");
    return response.data;
 }
+
+export const createCartOrder = async () => {
+   const response = await cartAPIInstance.post("/payment/create/order");
+   return response.data;
+};
