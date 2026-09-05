@@ -426,9 +426,7 @@ const ProductDetail = () => {
                         disabled={(selectedVariant ? selectedVariant.stock : product.stock) <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl border border-[#000000] text-[#000000] text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#000000] hover:text-white transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                         <ShoppingCartIcon /> Add to Cart
                      </button>
-                     <button disabled={(selectedVariant ? selectedVariant.stock : product.stock) <= 0} className="w-full h-11 sm:h-12 flex items-center justify-center gap-2 rounded-xl bg-[#000000] text-white text-[13px] sm:text-[14px] font-semibold tracking-wide hover:bg-[#333333] transition-all duration-200 active:scale-[0.98] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
-                        <BoltIcon /> Buy Now
-                     </button>
+                     
                   </div>
 
                   <div className="grid grid-cols-3 gap-2 sm:gap-3">

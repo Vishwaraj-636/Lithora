@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const ContinueWithGoogle = () => {
    return (
       <a
-         href="/api/auth/google"
+         href={import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/auth/google` : "/api/auth/google"}
          className="flex items-center w-full h-10 bg-white dark:bg-[#131314] border border-[#747775] dark:border-[#8e918f] rounded px-3 hover:bg-[#f8fafd] dark:hover:bg-[#1f1f1f] transition-all duration-200 mb-4"
       >
          <svg

@@ -15,7 +15,8 @@ async function sendTokenResponse(user, res) {
 
    res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
    });
 
@@ -111,7 +112,7 @@ export const googleCallback = async (req, res) => {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
    });
 
    res.redirect(process.env.FRONTEND_URL || "http://localhost:5173/");
