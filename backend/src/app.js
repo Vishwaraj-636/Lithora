@@ -13,6 +13,7 @@ import productRouter from "./routes/product.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 
 const app = express();
+app.set("trust proxy", 1);
 
 //use packages
 app.use(morgan("dev"));
@@ -41,7 +42,11 @@ passport.use(
 );
 
 app.get("/", (req, res) => {
-   res.status(200).json({ message: "server is running" });
+   res.status(200).json({
+      message: "server is running",
+      env: process.env.NODE_ENV,
+      frontendUrl: process.env.FRONTEND_URL
+   });
 });
 
 //setup routes
