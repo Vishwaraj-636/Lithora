@@ -21,9 +21,10 @@ export const useAuth = () => {
             fullname: fullName,
             isSeller,
          });
+         if (data.token) localStorage.setItem("token", data.token);
          dispatch(setUser(data.user));
-         return data.user; // Return the user data for further use
          dispatch(setError(null));
+         return data.user;
       } catch (error) {
          const errorMessage =
             error.response?.data?.message ||
@@ -39,9 +40,10 @@ export const useAuth = () => {
       try {
          dispatch(setLoading(true));
          const data = await login({ email, password });
+         if (data.token) localStorage.setItem("token", data.token);
          dispatch(setUser(data.user));
-         return data.user; // Return the user data for further use
          dispatch(setError(null));
+         return data.user;
       } catch (error) {
          const errorMessage =
             error.response?.data?.message ||
@@ -73,7 +75,8 @@ export const useAuth = () => {
    async function handleLogout() {
       try {
          dispatch(setLoading(true));
-         const data = await logout();
+         await logout();
+         localStorage.removeItem("token");
          dispatch(setUser(null));
          dispatch(setError(null));
       } catch (error) {
