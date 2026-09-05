@@ -10,6 +10,7 @@ import SellerProductDetail from "../features/products/pages/SellerProductDetail"
 import AppLayout from "./AppLayout";
 import PreventSeller from "../features/auth/components/PreventSeller";
 import Cart from "../features/cart/pages/Cart";
+import OrderSuccess from "../features/cart/pages/OrderSuccess";
 
 export const routes = createBrowserRouter([
    {
@@ -44,6 +45,14 @@ export const routes = createBrowserRouter([
             element: (
                <Protected role="buyer">
                   <Cart />
+               </Protected>
+            )
+         },
+         {
+            path: "/order-success/*",
+            element: (
+               <Protected role="buyer">
+                  <OrderSuccess />
                </Protected>
             )
          },
