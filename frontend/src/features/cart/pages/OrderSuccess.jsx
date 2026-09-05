@@ -120,6 +120,7 @@ const OrderSuccess = () => {
    const navigate = useNavigate();
    const params = useParams();
    const [isVisible, setIsVisible] = useState(false);
+   const [orderDetails, setOrderDetails] = useState(null);
 
    // Extract order ID from route param (format: order_Id=<id>)
    const rawParam = params['*'] || params.orderId || '';
@@ -132,6 +133,23 @@ const OrderSuccess = () => {
       const timer = setTimeout(() => setIsVisible(true), 80);
       return () => clearTimeout(timer);
    }, []);
+
+   useEffect(() => {
+      const fetchOrder = async () => {
+         if (orderId !== 'N/A') {
+            try {
+               const { getOrderDetails } = await import('../services/cart.api.js');
+               const data = await getOrderDetails(orderId);
+               if (data.success) {
+                  setOrderDetails(data.order);
+               }
+            } catch (err) {
+               console.error("Failed to fetch order details", err);
+            }
+         }
+      };
+      fetchOrder();
+   }, [orderId]);
 
    // Estimated delivery: today + 5 days
    const deliveryDate = new Date();
@@ -245,6 +263,53 @@ const OrderSuccess = () => {
                      <DetailRow label="Payment Status" value="Paid" badge />
                      <DetailRow label="Estimated Delivery" value={formattedDelivery} />
                      <DetailRow label="Shipping Method" value="Standard (3–5 Business Days)" />
+
+                     {/* Ordered Items Mini Card */}
+                     {orderDetails && orderDetails.orderItems && orderDetails.orderItems.length > 0 && (
+                        <div className="mt-8">
+                           <p className="text-[12px] uppercase tracking-[0.05em] text-[#999999] font-medium mb-3">
+                              Items Ordered
+                           </p>
+                           <div className="border border-[#e5e5e5] rounded-2xl overflow-hidden bg-[#fafafa] p-4 flex flex-col gap-4">
+                              {orderDetails.orderItems.map((item, index) => (
+                                 <div key={index} className="flex gap-4 items-center">
+                                    {/* Image */}
+                                    <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-white border border-[#e5e5e5]">
+                                       {item.images && item.images.length > 0 ? (
+                                          <img src={item.images[0].url} alt={item.title} className="w-full h-full object-cover" />
+                                       ) : (
+                                          <div className="w-full h-full flex items-center justify-center bg-[#f5f5f5]">
+                                             <PackageIcon />
+                                          </div>
+                                       )}
+                                    </div>
+                                    {/* Details */}
+                                    <div className="flex-grow flex justify-between items-center">
+                                       <div>
+                                          <p className="text-[14px] font-semibold text-[#000000]">{item.title}</p>
+                                          <p className="text-[12px] text-[#666666]">Qty: {item.quantity}</p>
+                                       </div>
+                                       <div className="text-right">
+                                          <p className="text-[14px] font-semibold text-[#000000]">
+                                             ₹{(item.price?.amount * item.quantity).toLocaleString('en-IN')}
+                                          </p>
+                                          <p className="text-[11px] text-[#999999]">
+                                             ₹{item.price?.amount?.toLocaleString('en-IN')} each
+                                          </p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              ))}
+
+                              <div className="border-t border-[#e5e5e5] pt-3 flex justify-between items-center">
+                                 <span className="text-[14px] font-medium text-[#666666]">Total Price</span>
+                                 <span className="text-[16px] font-semibold text-[#000000]">
+                                    ₹{orderDetails.price?.amount?.toLocaleString('en-IN')}
+                                 </span>
+                              </div>
+                           </div>
+                        </div>
+                     )}
                   </div>
 
 

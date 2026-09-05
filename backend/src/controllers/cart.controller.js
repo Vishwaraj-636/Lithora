@@ -373,9 +373,38 @@ export const verifyOrderController = async (req, res) => {
    payment.razorpay.signature = razorpay_signature;
    await payment.save();
 
+   // Clear the user's cart upon successful payment
+   const cart = await cartModel.findOne({ user: req.user._id });
+   if (cart) {
+      cart.items = [];
+      await cart.save();
+   }
+
    return res.status(200).json({
       message: "Payment verified successfully",
       success: true,
       payment
+   });
+}
+
+export const getOrderDetailsController = async (req, res) => {
+   const { orderId } = req.params;
+
+   const payment = await paymentModel.findOne({
+      "razorpay.orderId": orderId,
+      user: req.user._id
+   });
+
+   if (!payment) {
+      return res.status(404).json({
+         message: "Order not found",
+         success: false
+      });
+   }
+
+   return res.status(200).json({
+      message: "Order details fetched successfully",
+      success: true,
+      order: payment
    });
 }
