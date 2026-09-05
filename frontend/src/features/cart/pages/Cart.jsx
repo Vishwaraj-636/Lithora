@@ -60,41 +60,25 @@ const Cart = () => {
    const backendTotalPrice = useSelector((state) => state.cart.totalPrice) || 0;
    const estimatedTax = useSelector((state) => state.cart.tax) || 0;
    const total = useSelector((state) => state.cart.finalTotal) || 0;
-   const { handleGetCart, handleIncrementItemQuantity, handleDecreamentItemQuantity, handleRemoveItem, handleClearCart, handleCreateCartOrder } = useCart();
+   
+   const {
+      handleGetCart,
+      handleIncrementItemQuantity,
+      handleDecreamentItemQuantity,
+      handleRemoveItem,
+      handleClearCart,
+      handleCreateCartOrder,
+      handleVerifyCartOrder
+   } = useCart();
 
    const subtotal = backendTotalPrice;
 
    const user = useSelector((state) => state.auth.user);
 
-
+   
    async function handleCheckout() {
-     /*  const order = await handleCreateCartOrder();
+     const { order, key } = await handleCreateCartOrder();
       console.log(order)
-      const options = {
-         key: "rzp_test_TXxY1X6DYBEYGZ",
-         amount: order.amount,
-         currency: order.currency,
-         name: "Wearth",
-         description: "Test Transaction",
-         order_id: order.id, // Generate order_id on server
-         handler: (response) => {
-            console.log(response);
-            alert("Payment Successful!");
-         },
-         prefill: {
-            name: user?.fullname,
-            email: user?.email,
-            contact: user?.contact || "",
-         },
-         theme: {
-            color: "#F37254",
-         },
-      };
-
-      const razorpayInstance = new Razorpay(options);
-      razorpayInstance.open(); */
-      const { order, key } = await handleCreateCartOrder();
-
       const options = {
          key: "rzp_test_TXxY1X6DYBEYGZ",
          amount: order.amount,
@@ -102,9 +86,11 @@ const Cart = () => {
          name: "WEARTH",
          description: "Order Payment",
          order_id: order.id,
-         handler: (response) => {
-            console.log("Payment successful:", response);
-            alert("Payment Successful!");
+         handler: async (response) => {
+            const isValid = await handleVerifyCartOrder(response)
+            if (isValid) {
+               navigate(`/order-success/order_Id=${response?.razorpay_order_id}`)
+            }
          },
          prefill: {
             name: user.fullname,
@@ -119,7 +105,6 @@ const Cart = () => {
       const razorpayInstance = new Razorpay(options);
       razorpayInstance.open();
 
-      console.log(order)
    }
 
    useEffect(() => {
